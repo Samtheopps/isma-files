@@ -122,52 +122,52 @@ export default function BeatDetailPage() {
         {/* Back Button */}
         <button
           onClick={() => router.back()}
-          className="mb-6 flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
+          className="mb-6 flex items-center gap-2 font-mono text-matrix-green-glow hover:text-matrix-green transition-colors hover-flicker"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
           </svg>
-          Retour
+          &lt; RETOUR_
         </button>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Left Column - Beat Info */}
           <div className="space-y-6">
             {/* Cover Image */}
-            <Card padding="none" className="overflow-hidden">
+            <Card variant="terminal" padding="none" className="overflow-hidden dither">
               <div className="relative aspect-square">
                 <Image
                   src={beat.coverImage}
                   alt={beat.title}
                   fill
-                  className="object-cover"
+                  className="object-cover dither"
                   priority
                 />
               </div>
             </Card>
 
             {/* Beat Details */}
-            <Card>
-              <h1 className="text-3xl font-bold text-white mb-4">{beat.title}</h1>
+            <Card variant="terminal">
+              <h1 className="text-3xl font-mono uppercase tracking-wider text-matrix-green-light mb-4 glow-green">{beat.title}</h1>
 
               <div className="grid grid-cols-3 gap-4 mb-4">
                 <div>
-                  <p className="text-sm text-gray-400 mb-1">BPM</p>
-                  <p className="text-lg font-semibold text-white">{beat.bpm}</p>
+                  <p className="text-sm font-mono text-matrix-green-dim mb-1">&gt; BPM</p>
+                  <p className="text-lg font-mono font-semibold text-matrix-green glow-green">{beat.bpm}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-400 mb-1">Tonalité</p>
-                  <p className="text-lg font-semibold text-white">{beat.key}</p>
+                  <p className="text-sm font-mono text-matrix-green-dim mb-1">&gt; KEY</p>
+                  <p className="text-lg font-mono font-semibold text-matrix-green glow-green">{beat.key}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-400 mb-1">Lectures</p>
-                  <p className="text-lg font-semibold text-white">{beat.playCount}</p>
+                  <p className="text-sm font-mono text-matrix-green-dim mb-1">&gt; PLAYS</p>
+                  <p className="text-lg font-mono font-semibold text-matrix-green glow-green">{beat.playCount}</p>
                 </div>
               </div>
 
               <div className="space-y-3">
                 <div>
-                  <p className="text-sm text-gray-400 mb-2">Genres</p>
+                  <p className="text-sm font-mono text-matrix-green-dim mb-2">// GENRES</p>
                   <div className="flex flex-wrap gap-2">
                     {beat.genre.map((g, i) => (
                       <Badge key={i} variant="primary">
@@ -178,7 +178,7 @@ export default function BeatDetailPage() {
                 </div>
 
                 <div>
-                  <p className="text-sm text-gray-400 mb-2">Mood</p>
+                  <p className="text-sm font-mono text-matrix-green-dim mb-2">// MOOD</p>
                   <div className="flex flex-wrap gap-2">
                     {beat.mood.map((m, i) => (
                       <Badge key={i} variant="default">
@@ -190,7 +190,7 @@ export default function BeatDetailPage() {
 
                 {beat.tags.length > 0 && (
                   <div>
-                    <p className="text-sm text-gray-400 mb-2">Tags</p>
+                    <p className="text-sm font-mono text-matrix-green-dim mb-2">// TAGS</p>
                     <div className="flex flex-wrap gap-2">
                       {beat.tags.map((t, i) => (
                         <Badge key={i} variant="default" size="sm">
@@ -204,8 +204,8 @@ export default function BeatDetailPage() {
             </Card>
 
             {/* Player */}
-            <Card>
-              <h2 className="text-lg font-semibold text-white mb-4">Extrait audio</h2>
+            <Card variant="terminal">
+              <h2 className="text-lg font-mono uppercase tracking-wider text-matrix-green-light mb-4 glow-green">&gt; AUDIO PREVIEW</h2>
               <WaveformPlayer
                 beat={beat}
                 isPlaying={isCurrentBeat && isPlaying}
@@ -216,14 +216,14 @@ export default function BeatDetailPage() {
 
           {/* Right Column - Licenses */}
           <div className="space-y-6">
-            <Card>
+            <Card variant="terminal">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-semibold text-white">Choisir une licence</h2>
+                <h2 className="text-xl font-mono uppercase tracking-wider text-matrix-green-light glow-green">&gt; CHOOSE LICENSE</h2>
                 <button
                   onClick={() => setShowLicenseModal(true)}
-                  className="text-sm text-primary hover:text-primary-light transition-colors"
+                  className="text-sm font-mono text-matrix-green hover:text-matrix-green-light transition-colors hover-flicker"
                 >
-                  Détails des licences
+                  [DETAILS]
                 </button>
               </div>
 
@@ -235,21 +235,21 @@ export default function BeatDetailPage() {
             </Card>
 
             {/* Purchase Summary */}
-            <Card className="sticky top-8">
-              <h3 className="text-lg font-semibold text-white mb-4">Résumé</h3>
+            <Card variant="terminal" className="sticky top-8">
+              <h3 className="text-lg font-mono uppercase tracking-wider text-matrix-green-light mb-4 glow-green">// SUMMARY</h3>
               
               <div className="space-y-3 mb-6">
                 <div className="flex justify-between">
-                  <span className="text-gray-400">Beat</span>
-                  <span className="text-white font-medium">{beat.title}</span>
+                  <span className="font-mono text-matrix-green-dim">Beat</span>
+                  <span className="font-mono text-matrix-green font-medium">{beat.title}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-400">Licence</span>
-                  <span className="text-white font-medium capitalize">{selectedLicense}</span>
+                  <span className="font-mono text-matrix-green-dim">Licence</span>
+                  <span className="font-mono text-matrix-green font-medium capitalize">{selectedLicense}</span>
                 </div>
                 <div className="flex justify-between pt-3 border-t border-dark-border">
-                  <span className="text-lg font-semibold text-white">Total</span>
-                  <span className="text-2xl font-bold text-primary">
+                  <span className="text-lg font-mono font-semibold text-matrix-green-light glow-green">Total</span>
+                  <span className="text-2xl font-mono font-bold text-matrix-green glow-green-strong">
                     {((selectedLicenseData?.price || 0) / 100).toFixed(2)}€
                   </span>
                 </div>
@@ -262,11 +262,11 @@ export default function BeatDetailPage() {
                 onClick={handleAddToCart}
                 disabled={!selectedLicenseData?.available}
               >
-                Ajouter au panier
+                AJOUTER AU PANIER_
               </Button>
 
-              <p className="text-xs text-gray-400 text-center mt-4">
-                Paiement sécurisé via Stripe
+              <p className="text-xs font-mono text-matrix-green-dim text-center mt-4">
+                // PAIEMENT SÉCURISÉ VIA STRIPE
               </p>
             </Card>
           </div>

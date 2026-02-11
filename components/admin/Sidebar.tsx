@@ -69,33 +69,33 @@ export const Sidebar: React.FC = () => {
   };
 
   return (
-    <aside className="fixed left-0 top-0 h-screen w-64 bg-dark-card border-r border-dark-border flex flex-col">
+    <aside className="fixed left-0 top-0 h-screen w-64 bg-matrix-black border-r-2 border-matrix-green flex flex-col scanlines">
       {/* Header */}
-      <div className="p-6 border-b border-dark-border">
+      <div className="p-6 border-b-2 border-matrix-green-dim">
         <Link href="/admin" className="flex items-center space-x-3">
-          <div className="w-10 h-10 bg-gradient-to-br from-primary to-primary-dark rounded-lg flex items-center justify-center">
-            <span className="text-white font-bold text-xl">IF</span>
+          <div className="w-10 h-10 bg-matrix-black border-2 border-matrix-green flex items-center justify-center">
+            <span className="text-matrix-green font-bold text-xl">IF</span>
           </div>
           <div>
-            <h1 className="text-white font-bold text-lg">Isma Files</h1>
-            <p className="text-gray-400 text-xs">Admin Panel</p>
+            <h1 className="font-mono uppercase tracking-wider text-matrix-green-light text-lg glow-green">ISMA FILES</h1>
+            <p className="font-mono text-matrix-green-dim text-xs">// ADMIN TERMINAL</p>
           </div>
         </Link>
       </div>
 
       {/* User Info */}
-      <div className="p-4 border-b border-dark-border">
+      <div className="p-4 border-b border-matrix-green-dim">
         <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 bg-primary/20 rounded-full flex items-center justify-center">
-            <span className="text-primary font-semibold text-sm">
+          <div className="w-10 h-10 bg-matrix-black border-2 border-matrix-green flex items-center justify-center">
+            <span className="text-matrix-green font-semibold text-sm">
               {user?.firstName?.[0]}{user?.lastName?.[0]}
             </span>
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-white font-medium text-sm truncate">
+            <p className="font-mono text-matrix-green-light text-sm truncate glow-green">
               {user?.firstName} {user?.lastName}
             </p>
-            <p className="text-gray-400 text-xs truncate">{user?.email}</p>
+            <p className="font-mono text-matrix-green-dim text-xs truncate">{user?.email}</p>
           </div>
         </div>
       </div>
@@ -107,23 +107,23 @@ export const Sidebar: React.FC = () => {
             key={item.href}
             href={item.href}
             className={clsx(
-              'flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-200',
+              'flex items-center space-x-3 px-4 py-3 font-mono transition-all duration-200',
               isActive(item.href)
-                ? 'bg-primary text-white shadow-lg shadow-primary/20'
-                : 'text-gray-400 hover:bg-dark-border hover:text-white'
+                ? 'bg-matrix-green text-matrix-black shadow-glow-green'
+                : 'text-matrix-green-glow hover:bg-matrix-green-dim/20 hover:text-matrix-green border border-matrix-green-dim hover:border-matrix-green'
             )}
           >
             {item.icon}
-            <span className="font-medium">{item.label}</span>
+            <span className="uppercase tracking-wider">{item.label}</span>
           </Link>
         ))}
       </nav>
 
       {/* Footer */}
-      <div className="p-4 border-t border-dark-border">
+      <div className="p-4 border-t-2 border-matrix-green-dim">
         <button
           onClick={logout}
-          className="w-full flex items-center justify-center space-x-2 px-4 py-3 bg-dark-border hover:bg-red-600/20 text-gray-400 hover:text-red-400 rounded-lg transition-all duration-200"
+          className="w-full flex items-center justify-center space-x-2 px-4 py-3 font-mono uppercase tracking-wider bg-matrix-black border-2 border-matrix-green-dim hover:border-matrix-green text-matrix-green-glow hover:text-matrix-green transition-all duration-200 hover-flicker"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
@@ -133,7 +133,7 @@ export const Sidebar: React.FC = () => {
               d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
             />
           </svg>
-          <span className="font-medium">Déconnexion</span>
+          <span>LOGOUT_</span>
         </button>
       </div>
     </aside>

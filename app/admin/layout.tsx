@@ -18,7 +18,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-dark-bg flex items-center justify-center">
+      <div className="min-h-screen bg-matrix-black flex items-center justify-center scanlines">
         <Loader size="lg" />
       </div>
     );
@@ -29,10 +29,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   }
 
   return (
-    <div className="min-h-screen bg-dark-bg">
+    <div className="min-h-screen bg-matrix-black">
       <Sidebar />
       <main className="ml-64 min-h-screen">
-        <div className="p-8">{children}</div>
+        <div className="p-8 grain">{children}</div>
       </main>
     </div>
   );

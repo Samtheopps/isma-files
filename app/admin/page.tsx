@@ -92,8 +92,8 @@ export default function AdminDashboard() {
     <div className="space-y-8">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-white mb-2">Dashboard Admin</h1>
-        <p className="text-gray-400">Vue d'ensemble de votre plateforme</p>
+        <h1 className="text-3xl font-mono uppercase tracking-wider text-matrix-green-light mb-2 glow-green">ADMIN DASHBOARD</h1>
+        <p className="font-mono text-matrix-green-dim">// Vue d'ensemble de votre plateforme</p>
       </div>
 
       {/* Stats Cards */}
@@ -164,8 +164,8 @@ export default function AdminDashboard() {
       </div>
 
       {/* Revenue Chart (Simple) */}
-      <Card>
-        <h2 className="text-xl font-bold text-white mb-6">Revenus des 30 derniers jours</h2>
+      <Card variant="terminal">
+        <h2 className="text-xl font-mono uppercase tracking-wider text-matrix-green-light mb-6 glow-green">&gt; REVENUE - LAST 30 DAYS</h2>
         <div className="space-y-2">
           {stats.dailyRevenue.length > 0 ? (
             <div className="flex items-end space-x-1 h-48">
@@ -179,10 +179,10 @@ export default function AdminDashboard() {
                     className="flex-1 group relative"
                   >
                     <div
-                      className="bg-gradient-to-t from-primary to-primary-light rounded-t hover:opacity-80 transition-opacity"
+                      className="bg-matrix-green hover:opacity-80 transition-opacity"
                       style={{ height: `${height}%` }}
                     />
-                    <div className="hidden group-hover:block absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-dark-card border border-dark-border rounded text-xs text-white whitespace-nowrap">
+                    <div className="hidden group-hover:block absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-matrix-black border-2 border-matrix-green text-xs font-mono text-matrix-green whitespace-nowrap">
                       {formatDate(day.date)}: {formatCurrency(day.revenue)}
                     </div>
                   </div>
@@ -190,64 +190,64 @@ export default function AdminDashboard() {
               })}
             </div>
           ) : (
-            <p className="text-gray-400 text-center py-8">Aucune donnée disponible</p>
+            <p className="font-mono text-matrix-green-dim text-center py-8">Aucune donnée disponible</p>
           )}
         </div>
       </Card>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Top Beats */}
-        <Card>
-          <h2 className="text-xl font-bold text-white mb-6">Beats les plus vendus</h2>
+        <Card variant="terminal">
+          <h2 className="text-xl font-mono uppercase tracking-wider text-matrix-green-light mb-6 glow-green">&gt; TOP BEATS</h2>
           <div className="space-y-4">
             {stats.topBeats.length > 0 ? (
               stats.topBeats.map((beat, index) => (
                 <div
                   key={beat._id}
-                  className="flex items-center space-x-4 p-3 bg-dark-bg rounded-lg hover:bg-dark-border transition-colors"
+                  className="flex items-center space-x-4 p-3 bg-matrix-black border border-matrix-green-dim hover:border-matrix-green transition-colors"
                 >
-                  <div className="flex-shrink-0 w-8 h-8 bg-primary/20 rounded-full flex items-center justify-center">
-                    <span className="text-primary font-bold text-sm">#{index + 1}</span>
+                  <div className="flex-shrink-0 w-8 h-8 bg-matrix-black border-2 border-matrix-green flex items-center justify-center">
+                    <span className="text-matrix-green font-mono font-bold text-sm">#{index + 1}</span>
                   </div>
                   <img
                     src={beat.coverImage}
                     alt={beat.title}
-                    className="w-12 h-12 rounded object-cover"
+                    className="w-12 h-12 object-cover dither"
                   />
                   <div className="flex-1 min-w-0">
-                    <p className="text-white font-medium truncate">{beat.title}</p>
-                    <p className="text-gray-400 text-sm">{beat.salesCount} ventes</p>
+                    <p className="font-mono uppercase tracking-wider text-matrix-green-light truncate glow-green">{beat.title}</p>
+                    <p className="font-mono text-matrix-green-dim text-sm">{beat.salesCount} SALES</p>
                   </div>
                 </div>
               ))
             ) : (
-              <p className="text-gray-400 text-center py-8">Aucune vente encore</p>
+              <p className="font-mono text-matrix-green-dim text-center py-8">Aucune vente encore</p>
             )}
           </div>
         </Card>
 
         {/* Recent Orders */}
-        <Card>
-          <h2 className="text-xl font-bold text-white mb-6">Dernières commandes</h2>
+        <Card variant="terminal">
+          <h2 className="text-xl font-mono uppercase tracking-wider text-matrix-green-light mb-6 glow-green">&gt; RECENT ORDERS</h2>
           <div className="space-y-4">
             {stats.recentOrders.length > 0 ? (
               stats.recentOrders.map((order) => (
                 <div
                   key={order._id}
-                  className="flex items-center justify-between p-3 bg-dark-bg rounded-lg hover:bg-dark-border transition-colors"
+                  className="flex items-center justify-between p-3 bg-matrix-black border border-matrix-green-dim hover:border-matrix-green transition-colors"
                 >
                   <div className="flex-1 min-w-0">
-                    <p className="text-white font-medium">{order.orderNumber}</p>
-                    <p className="text-gray-400 text-sm truncate">{order.deliveryEmail}</p>
+                    <p className="font-mono uppercase tracking-wider text-matrix-green-light glow-green">{order.orderNumber}</p>
+                    <p className="font-mono text-matrix-green-dim text-sm truncate">{order.deliveryEmail}</p>
                   </div>
                   <div className="flex items-center space-x-3">
                     <Badge variant="success">{formatCurrency(order.totalAmount)}</Badge>
-                    <p className="text-gray-400 text-sm">{formatDate(order.createdAt)}</p>
+                    <p className="font-mono text-matrix-green-dim text-sm">{formatDate(order.createdAt)}</p>
                   </div>
                 </div>
               ))
             ) : (
-              <p className="text-gray-400 text-center py-8">Aucune commande encore</p>
+              <p className="font-mono text-matrix-green-dim text-center py-8">Aucune commande encore</p>
             )}
           </div>
         </Card>
