@@ -1,11 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ['res.cloudinary.com'], // Cloudinary images
+    domains: ['res.cloudinary.com', 'images.unsplash.com'], // Cloudinary + Unsplash images
   },
-  experimental: {
-    serverActions: true,
-  },
+  // Server Actions sont activés par défaut dans Next.js 14+
   env: {
     MONGODB_URI: process.env.MONGODB_URI,
     CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME,

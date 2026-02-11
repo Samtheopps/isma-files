@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/lib/db/mongodb';
 import Beat from '@/models/Beat';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(req: NextRequest) {
   try {
     await connectDB();
@@ -44,8 +46,7 @@ export async function GET(req: NextRequest) {
     ]);
 
     return NextResponse.json({
-      success: true,
-      beats,
+      data: beats,
       pagination: {
         page,
         limit,

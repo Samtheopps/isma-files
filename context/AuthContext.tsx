@@ -23,18 +23,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<IUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    checkAuth();
-  }, []);
-
   const checkAuth = async () => {
     try {
       const token = localStorage.getItem('token');
       if (!token) {
+        console.log('[AuthContext] No token found in localStorage');
         setIsLoading(false);
         return;
       }
 
+      console.log('[AuthContext] Checking auth with token...');
       const response = await fetch('/api/auth/me', {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -43,20 +41,40 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       if (response.ok) {
         const data = await response.json();
+        console.log('[AuthContext] User authenticated:', data.user.email, 'role:', data.user.role);
         setUser(data.user);
       } else {
+        console.warn('[AuthContext] Auth check failed:', response.status, await response.text());
         localStorage.removeItem('token');
       }
-    } catch (error) {
-      console.error('Auth check error:', error);
+    } catch (error: any) {
+      if (error.name === 'AbortError') {
+        console.log('[AuthContext] Auth check aborted');
+        return;
+      }
+      console.error('[AuthContext] Auth check error:', error);
       localStorage.removeItem('token');
     } finally {
+      console.log('[AuthContext] Auth check complete, isLoading = false');
       setIsLoading(false);
     }
   };
 
+  useEffect(() => {
+    let isMounted = true;
+
+    if (isMounted) {
+      checkAuth();
+    }
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   const login = async (email: string, password: string) => {
     try {
+      console.log('[AuthContext] Logging in:', email);
       const response = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -65,14 +83,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       if (!response.ok) {
         const error = await response.json();
+        console.error('[AuthContext] Login failed:', error);
         throw new Error(error.error || 'Login failed');
       }
 
       const data = await response.json();
+      console.log('[AuthContext] Login successful:', data.user.email, 'role:', data.user.role);
       localStorage.setItem('token', data.token);
       setUser(data.user);
     } catch (error) {
-      console.error('Login error:', error);
+      console.error('[AuthContext] Login error:', error);
       throw error;
     }
   };

@@ -19,11 +19,12 @@ export const generateToken = (payload: JWTPayload): string => {
   } as jwt.SignOptions);
 };
 
-export const verifyToken = (token: string): JWTPayload => {
+export const verifyToken = (token: string): JWTPayload | null => {
   try {
     return jwt.verify(token, JWT_SECRET) as JWTPayload;
   } catch (error) {
-    throw new Error('Invalid token');
+    console.error('Token verification failed:', error);
+    return null;
   }
 };
 

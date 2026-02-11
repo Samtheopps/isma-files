@@ -12,20 +12,26 @@ export default cloudinary;
  * Upload file to Cloudinary
  */
 export const uploadToCloudinary = async (
-  file: File | string,
+  file: File | string | Buffer,
   folder: string,
   resourceType: 'image' | 'video' | 'raw' | 'auto' = 'auto'
 ) => {
   try {
-    const result = await cloudinary.uploader.upload(file as string, {
+    let uploadSource: string;
+
+    // Si c'est un Buffer, le convertir en base64
+    if (Buffer.isBuffer(file)) {
+      uploadSource = `data:application/pdf;base64,${file.toString('base64')}`;
+    } else {
+      uploadSource = file as string;
+    }
+
+    const result = await cloudinary.uploader.upload(uploadSource, {
       folder: `isma-files/${folder}`,
       resource_type: resourceType,
     });
 
-    return {
-      url: result.secure_url,
-      publicId: result.public_id,
-    };
+    return result.secure_url;
   } catch (error) {
     console.error('Cloudinary upload error:', error);
     throw new Error('Failed to upload file');
