@@ -49,32 +49,51 @@ export const Modal: React.FC<ModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
-      {/* Overlay */}
+      {/* Overlay with Matrix effect */}
       <div
-        className="fixed inset-0 bg-black/80 backdrop-blur-sm transition-opacity"
+        className="fixed inset-0 bg-matrix-black/95 backdrop-blur-sm transition-opacity"
         onClick={onClose}
+        style={{
+          backgroundImage: `repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 2px,
+            rgba(0, 255, 65, 0.03) 2px,
+            rgba(0, 255, 65, 0.03) 4px
+          )`
+        }}
       />
 
       {/* Modal Container */}
       <div className="flex min-h-full items-center justify-center p-4">
         <div
           className={clsx(
-            'relative w-full bg-dark-card border border-dark-border rounded-lg shadow-xl animate-fade-in',
+            'relative w-full bg-matrix-black border-2 border-matrix-green shadow-glow-green animate-fade-in scanlines',
             sizes[size]
           )}
           onClick={(e) => e.stopPropagation()}
         >
+          {/* Corner brackets */}
+          <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-matrix-green"></div>
+          <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-matrix-green"></div>
+          <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-matrix-green"></div>
+          <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-matrix-green"></div>
+
           {/* Header */}
           {(title || showCloseButton) && (
-            <div className="flex items-center justify-between p-6 border-b border-dark-border">
-              {title && <h2 className="text-xl font-semibold text-white">{title}</h2>}
+            <div className="flex items-center justify-between p-6 border-b border-matrix-green-dim">
+              {title && (
+                <h2 className="text-xl font-mono uppercase tracking-wider text-matrix-green glow-green">
+                  {'// '}{title}
+                </h2>
+              )}
               {showCloseButton && (
                 <button
                   onClick={onClose}
-                  className="text-gray-400 hover:text-white transition-colors p-1 hover:bg-dark-border rounded"
+                  className="text-matrix-green-dim hover:text-matrix-green transition-colors p-1 hover:bg-matrix-green/10 border border-matrix-green-dim hover:border-matrix-green group"
                 >
                   <svg
-                    className="w-5 h-5"
+                    className="w-5 h-5 group-hover:rotate-90 transition-transform"
                     fill="none"
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -90,7 +109,7 @@ export const Modal: React.FC<ModalProps> = ({
           )}
 
           {/* Content */}
-          <div className="p-6">{children}</div>
+          <div className="p-6 relative z-10">{children}</div>
         </div>
       </div>
     </div>

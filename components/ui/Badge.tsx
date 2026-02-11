@@ -14,11 +14,11 @@ export const Badge: React.FC<BadgeProps> = ({
   ...props
 }) => {
   const variants = {
-    default: 'bg-dark-border text-gray-300',
-    primary: 'bg-primary/20 text-primary-light',
-    success: 'bg-green-500/20 text-green-400',
-    warning: 'bg-yellow-500/20 text-yellow-400',
-    danger: 'bg-red-500/20 text-red-400',
+    default: 'bg-matrix-black border border-matrix-green-dim text-matrix-green-glow',
+    primary: 'bg-matrix-green/10 border border-matrix-green text-matrix-green glow-green',
+    success: 'bg-green-500/10 border border-green-500 text-green-400',
+    warning: 'bg-yellow-500/10 border border-yellow-500 text-yellow-400',
+    danger: 'bg-red-500/10 border border-red-500 text-red-400',
   };
 
   const sizes = {
@@ -29,14 +29,14 @@ export const Badge: React.FC<BadgeProps> = ({
   return (
     <span
       className={clsx(
-        'inline-flex items-center font-medium rounded-full',
+        'inline-flex items-center font-mono uppercase tracking-wider relative',
         variants[variant],
         sizes[size],
         className
       )}
       {...props}
     >
-      {children}
+      <span className="relative z-10">[{children}]</span>
     </span>
   );
 };

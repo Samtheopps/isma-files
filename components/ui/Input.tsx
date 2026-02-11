@@ -14,14 +14,14 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className="w-full">
         {label && (
-          <label className="block text-sm font-medium text-gray-300 mb-1.5">
-            {label}
+          <label className="block text-sm font-mono uppercase tracking-wider text-matrix-green mb-2 glow-green">
+            &gt; {label}
           </label>
         )}
         
-        <div className="relative">
+        <div className="relative group">
           {leftIcon && (
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-matrix-green-dim">
               {leftIcon}
             </div>
           )}
@@ -29,9 +29,10 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           <input
             ref={ref}
             className={clsx(
-              'w-full px-4 py-2.5 bg-dark-card border rounded-lg text-white placeholder-gray-500 transition-colors duration-200',
-              'focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent',
-              error ? 'border-red-500' : 'border-dark-border hover:border-gray-600',
+              'w-full px-4 py-2.5 bg-matrix-black border-2 font-mono text-matrix-green-glow placeholder-matrix-green-dim transition-all duration-200',
+              'focus:outline-none focus:border-matrix-green focus:shadow-glow-green',
+              'caret-matrix-green',
+              error ? 'border-red-500' : 'border-matrix-green-dim hover:border-matrix-green/50',
               leftIcon && 'pl-10',
               rightIcon && 'pr-10',
               className
@@ -39,19 +40,22 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             {...props}
           />
           
+          {/* Terminal cursor blink effect when focused */}
+          <div className="absolute inset-0 pointer-events-none border border-matrix-green opacity-0 group-focus-within:opacity-100 transition-opacity"></div>
+          
           {rightIcon && (
-            <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-gray-400">
+            <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-matrix-green-dim">
               {rightIcon}
             </div>
           )}
         </div>
         
         {error && (
-          <p className="mt-1.5 text-sm text-red-500">{error}</p>
+          <p className="mt-1.5 text-sm font-mono text-red-400">[ERROR] {error}</p>
         )}
         
         {helperText && !error && (
-          <p className="mt-1.5 text-sm text-gray-400">{helperText}</p>
+          <p className="mt-1.5 text-xs font-mono text-matrix-green-dim opacity-70">// {helperText}</p>
         )}
       </div>
     );

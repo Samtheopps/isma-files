@@ -18,19 +18,19 @@ export const Button: React.FC<ButtonProps> = ({
   disabled,
   ...props
 }) => {
-  const baseStyles = 'inline-flex items-center justify-center font-medium transition-all duration-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-dark-bg disabled:opacity-50 disabled:cursor-not-allowed';
+  const baseStyles = 'inline-flex items-center justify-center font-mono uppercase tracking-wider transition-all duration-200 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden group hover-flicker';
   
   const variants = {
-    primary: 'bg-primary hover:bg-primary-dark text-white focus:ring-primary',
-    secondary: 'bg-dark-card hover:bg-dark-border text-white border border-dark-border focus:ring-dark-border',
-    ghost: 'bg-transparent hover:bg-dark-card text-white focus:ring-dark-border',
-    danger: 'bg-red-600 hover:bg-red-700 text-white focus:ring-red-500',
+    primary: 'bg-matrix-black border-2 border-matrix-green text-matrix-green hover:bg-matrix-green hover:text-matrix-black hover:shadow-glow-green focus:shadow-glow-green-strong',
+    secondary: 'bg-transparent border border-matrix-green-dim text-matrix-green-glow hover:border-matrix-green hover:shadow-glow-green',
+    ghost: 'bg-transparent text-matrix-green-glow hover:text-matrix-green hover:bg-matrix-black/50',
+    danger: 'bg-matrix-black border-2 border-red-500 text-red-400 hover:bg-red-500 hover:text-black hover:shadow-[0_0_10px_rgba(239,68,68,0.5)]',
   };
 
   const sizes = {
-    sm: 'px-3 py-1.5 text-sm',
-    md: 'px-4 py-2 text-base',
-    lg: 'px-6 py-3 text-lg',
+    sm: 'px-3 py-1.5 text-xs',
+    md: 'px-4 py-2 text-sm',
+    lg: 'px-6 py-3 text-base',
   };
 
   return (
@@ -43,8 +43,12 @@ export const Button: React.FC<ButtonProps> = ({
         className
       )}
       disabled={disabled || isLoading}
+      data-text={typeof children === 'string' ? children : ''}
       {...props}
     >
+      {/* Glitch overlay on hover */}
+      <span className="absolute inset-0 bg-gradient-to-r from-transparent via-matrix-green/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-500"></span>
+      
       {isLoading ? (
         <>
           <svg
@@ -67,10 +71,10 @@ export const Button: React.FC<ButtonProps> = ({
               d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
             />
           </svg>
-          Chargement...
+          <span className="glow-green">[LOADING...]</span>
         </>
       ) : (
-        children
+        <span className="relative z-10">{children}</span>
       )}
     </button>
   );
