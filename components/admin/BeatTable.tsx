@@ -3,7 +3,6 @@
 import React from 'react';
 import { IBeat } from '@/types';
 import { Badge } from '@/components/ui/Badge';
-import { Button } from '@/components/ui/Button';
 import { clsx } from 'clsx';
 
 interface BeatTableProps {
@@ -31,25 +30,25 @@ export const BeatTable: React.FC<BeatTableProps> = ({
     <div className="overflow-x-auto">
       {/* Desktop Table */}
       <table className="hidden md:table w-full">
-        <thead>
-          <tr className="border-b border-dark-border">
-            <th className="text-left py-4 px-4 text-gray-400 font-medium text-sm">Beat</th>
-            <th className="text-left py-4 px-4 text-gray-400 font-medium text-sm">BPM</th>
-            <th className="text-left py-4 px-4 text-gray-400 font-medium text-sm">Clé</th>
-            <th className="text-left py-4 px-4 text-gray-400 font-medium text-sm">Genre</th>
-            <th className="text-left py-4 px-4 text-gray-400 font-medium text-sm">Prix</th>
-            <th className="text-left py-4 px-4 text-gray-400 font-medium text-sm">Ventes</th>
-            <th className="text-left py-4 px-4 text-gray-400 font-medium text-sm">Statut</th>
-            <th className="text-right py-4 px-4 text-gray-400 font-medium text-sm">Actions</th>
+        <thead className="sticky top-0 bg-black/95 backdrop-blur-xl border-b border-white/5">
+          <tr>
+            <th className="text-left py-4 px-6 text-xs uppercase tracking-wider text-gray-400 font-semibold">Beat</th>
+            <th className="text-left py-4 px-6 text-xs uppercase tracking-wider text-gray-400 font-semibold">BPM</th>
+            <th className="text-left py-4 px-6 text-xs uppercase tracking-wider text-gray-400 font-semibold">Key</th>
+            <th className="text-left py-4 px-6 text-xs uppercase tracking-wider text-gray-400 font-semibold">Genre</th>
+            <th className="text-left py-4 px-6 text-xs uppercase tracking-wider text-gray-400 font-semibold">Price</th>
+            <th className="text-left py-4 px-6 text-xs uppercase tracking-wider text-gray-400 font-semibold">Sales</th>
+            <th className="text-center py-4 px-6 text-xs uppercase tracking-wider text-gray-400 font-semibold">Status</th>
+            <th className="text-right py-4 px-6 text-xs uppercase tracking-wider text-gray-400 font-semibold">Actions</th>
           </tr>
         </thead>
         <tbody>
           {beats.map((beat) => (
             <tr
               key={beat._id}
-              className="border-b border-dark-border hover:bg-dark-border/50 transition-colors"
+              className="border-b border-white/5 hover:bg-white/5 transition-all duration-200"
             >
-              <td className="py-4 px-4">
+              <td className="py-4 px-6">
                 <div className="flex items-center space-x-3">
                   <img
                     src={beat.coverImage}
@@ -58,13 +57,13 @@ export const BeatTable: React.FC<BeatTableProps> = ({
                   />
                   <div className="min-w-0">
                     <p className="text-white font-medium truncate">{beat.title}</p>
-                    <p className="text-gray-400 text-sm">{beat.playCount} écoutes</p>
+                    <p className="text-gray-400 text-xs font-mono">{beat.playCount} plays</p>
                   </div>
                 </div>
               </td>
-              <td className="py-4 px-4 text-white">{beat.bpm}</td>
-              <td className="py-4 px-4 text-white">{beat.key}</td>
-              <td className="py-4 px-4">
+              <td className="py-4 px-6 text-white font-mono">{beat.bpm}</td>
+              <td className="py-4 px-6 text-white font-mono">{beat.key}</td>
+              <td className="py-4 px-6">
                 <div className="flex flex-wrap gap-1">
                   {beat.genre.slice(0, 2).map((g, i) => (
                     <Badge key={i} variant="default" size="sm">
@@ -73,21 +72,27 @@ export const BeatTable: React.FC<BeatTableProps> = ({
                   ))}
                 </div>
               </td>
-              <td className="py-4 px-4 text-white">{formatPrice(beat.licenses)}</td>
-              <td className="py-4 px-4 text-white">{beat.salesCount}</td>
-              <td className="py-4 px-4">
-                <Badge variant={beat.isActive ? 'success' : 'default'}>
-                  {beat.isActive ? 'Actif' : 'Inactif'}
-                </Badge>
+              <td className="py-4 px-6 text-white font-mono text-sm">{formatPrice(beat.licenses)}</td>
+              <td className="py-4 px-6 text-white font-mono">{beat.salesCount}</td>
+              <td className="py-4 px-6 text-center">
+                <span
+                  className={`inline-flex px-3 py-1 text-xs font-semibold rounded-full ${
+                    beat.isActive
+                      ? 'bg-matrix-green/20 text-matrix-green border border-matrix-green/30'
+                      : 'bg-red-500/20 text-red-400 border border-red-500/30'
+                  }`}
+                >
+                  {beat.isActive ? 'Active' : 'Inactive'}
+                </span>
               </td>
-              <td className="py-4 px-4">
-                <div className="flex items-center justify-end space-x-2">
+              <td className="py-4 px-6">
+                <div className="flex items-center justify-end space-x-1">
                   <button
                     onClick={() => onEdit(beat._id)}
-                    className="p-2 text-gray-400 hover:text-primary transition-colors"
-                    title="Éditer"
+                    className="p-2 text-gray-400 hover:text-matrix-green hover:bg-white/5 rounded transition-all"
+                    title="Edit"
                   >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -99,14 +104,14 @@ export const BeatTable: React.FC<BeatTableProps> = ({
                   <button
                     onClick={() => onToggleActive(beat._id, beat.isActive)}
                     className={clsx(
-                      'p-2 transition-colors',
+                      'p-2 rounded transition-all',
                       beat.isActive
-                        ? 'text-gray-400 hover:text-yellow-400'
-                        : 'text-gray-400 hover:text-green-400'
+                        ? 'text-gray-400 hover:text-yellow-400 hover:bg-white/5'
+                        : 'text-gray-400 hover:text-green-400 hover:bg-white/5'
                     )}
-                    title={beat.isActive ? 'Désactiver' : 'Activer'}
+                    title={beat.isActive ? 'Deactivate' : 'Activate'}
                   >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -121,10 +126,10 @@ export const BeatTable: React.FC<BeatTableProps> = ({
                   </button>
                   <button
                     onClick={() => onDelete(beat._id)}
-                    className="p-2 text-gray-400 hover:text-red-400 transition-colors"
-                    title="Supprimer"
+                    className="p-2 text-gray-400 hover:text-red-400 hover:bg-white/5 rounded transition-all"
+                    title="Delete"
                   >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -141,9 +146,9 @@ export const BeatTable: React.FC<BeatTableProps> = ({
       </table>
 
       {/* Mobile Cards */}
-      <div className="md:hidden space-y-4">
+      <div className="md:hidden space-y-3 p-4">
         {beats.map((beat) => (
-          <div key={beat._id} className="bg-dark-card border border-dark-border rounded-lg p-4">
+          <div key={beat._id} className="bg-black/60 border border-white/5 rounded-lg p-4 hover:bg-white/5 transition-all">
             <div className="flex items-start space-x-3 mb-4">
               <img
                 src={beat.coverImage}
@@ -151,43 +156,54 @@ export const BeatTable: React.FC<BeatTableProps> = ({
                 className="w-16 h-16 rounded object-cover"
               />
               <div className="flex-1 min-w-0">
-                <h3 className="text-white font-medium mb-1">{beat.title}</h3>
-                <div className="flex items-center space-x-2 text-sm text-gray-400">
+                <h3 className="text-white font-medium mb-1 truncate">{beat.title}</h3>
+                <div className="flex items-center space-x-2 text-sm text-gray-400 font-mono">
                   <span>{beat.bpm} BPM</span>
                   <span>•</span>
                   <span>{beat.key}</span>
                 </div>
-                <Badge variant={beat.isActive ? 'success' : 'default'} className="mt-2">
-                  {beat.isActive ? 'Actif' : 'Inactif'}
-                </Badge>
+                <span
+                  className={`inline-flex px-2 py-1 text-xs font-semibold rounded mt-2 ${
+                    beat.isActive
+                      ? 'bg-matrix-green/20 text-matrix-green'
+                      : 'bg-red-500/20 text-red-400'
+                  }`}
+                >
+                  {beat.isActive ? 'Active' : 'Inactive'}
+                </span>
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-4 mb-4 text-sm">
               <div>
-                <p className="text-gray-400">Prix</p>
-                <p className="text-white font-medium">{formatPrice(beat.licenses)}</p>
+                <p className="text-gray-400 text-xs">Price</p>
+                <p className="text-white font-medium font-mono">{formatPrice(beat.licenses)}</p>
               </div>
               <div>
-                <p className="text-gray-400">Ventes</p>
-                <p className="text-white font-medium">{beat.salesCount}</p>
+                <p className="text-gray-400 text-xs">Sales</p>
+                <p className="text-white font-medium font-mono">{beat.salesCount}</p>
               </div>
             </div>
 
-            <div className="flex items-center justify-end space-x-2">
-              <Button size="sm" variant="ghost" onClick={() => onEdit(beat._id)}>
-                Éditer
-              </Button>
-              <Button
-                size="sm"
-                variant="ghost"
-                onClick={() => onToggleActive(beat._id, beat.isActive)}
+            <div className="flex items-center justify-end space-x-2 pt-3 border-t border-white/5">
+              <button
+                onClick={() => onEdit(beat._id)}
+                className="px-3 py-1.5 text-xs bg-white/5 hover:bg-white/10 text-white rounded transition-all"
               >
-                {beat.isActive ? 'Désactiver' : 'Activer'}
-              </Button>
-              <Button size="sm" variant="danger" onClick={() => onDelete(beat._id)}>
-                Supprimer
-              </Button>
+                Edit
+              </button>
+              <button
+                onClick={() => onToggleActive(beat._id, beat.isActive)}
+                className="px-3 py-1.5 text-xs bg-white/5 hover:bg-white/10 text-white rounded transition-all"
+              >
+                {beat.isActive ? 'Deactivate' : 'Activate'}
+              </button>
+              <button
+                onClick={() => onDelete(beat._id)}
+                className="px-3 py-1.5 text-xs bg-red-500/20 hover:bg-red-500/30 text-red-400 rounded transition-all"
+              >
+                Delete
+              </button>
             </div>
           </div>
         ))}

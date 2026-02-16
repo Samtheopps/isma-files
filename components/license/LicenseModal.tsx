@@ -24,7 +24,7 @@ export const LicenseModal: React.FC<LicenseModalProps> = ({ isOpen, onClose, lic
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-xl font-semibold text-white capitalize">{license.type}</h3>
               <div className="flex items-center gap-3">
-                <span className="text-2xl font-bold text-primary">{license.price}€</span>
+                <span className="text-2xl font-bold text-primary">{(license.price / 100).toFixed(2)}€</span>
                 {!license.available && (
                   <Badge variant="danger">Indisponible</Badge>
                 )}

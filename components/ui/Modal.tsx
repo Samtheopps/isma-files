@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useEffect, ReactNode } from 'react';
+import React, { useEffect, ReactNode, useRef } from 'react';
 import { clsx } from 'clsx';
+import gsap from 'gsap';
 
 interface ModalProps {
   isOpen: boolean;
@@ -20,6 +21,10 @@ export const Modal: React.FC<ModalProps> = ({
   size = 'md',
   showCloseButton = true,
 }) => {
+  const backdropRef = useRef<HTMLDivElement>(null);
+  const modalRef = useRef<HTMLDivElement>(null);
+  const previouslyOpenRef = useRef(false);
+
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
@@ -30,6 +35,31 @@ export const Modal: React.FC<ModalProps> = ({
     if (isOpen) {
       document.addEventListener('keydown', handleEscape);
       document.body.style.overflow = 'hidden';
+
+      // Animation d'entrée seulement si ce n'était pas ouvert avant
+      if (!previouslyOpenRef.current && backdropRef.current && modalRef.current) {
+        const ctx = gsap.context(() => {
+          // Backdrop fade in
+          gsap.fromTo(
+            backdropRef.current,
+            { opacity: 0 },
+            { opacity: 1, duration: 0.3, ease: 'power2.out' }
+          );
+
+          // Modal scale + fade in
+          gsap.fromTo(
+            modalRef.current,
+            { scale: 0.9, opacity: 0 },
+            { scale: 1, opacity: 1, duration: 0.3, ease: 'power2.out' }
+          );
+        });
+
+        previouslyOpenRef.current = true;
+
+        return () => ctx.revert();
+      }
+    } else {
+      previouslyOpenRef.current = false;
     }
 
     return () => {
@@ -37,6 +67,29 @@ export const Modal: React.FC<ModalProps> = ({
       document.body.style.overflow = 'unset';
     };
   }, [isOpen, onClose]);
+
+  // Animation de sortie
+  const handleClose = () => {
+    if (backdropRef.current && modalRef.current) {
+      gsap.to(backdropRef.current, {
+        opacity: 0,
+        duration: 0.2,
+        ease: 'power2.out',
+      });
+
+      gsap.to(modalRef.current, {
+        scale: 0.95,
+        opacity: 0,
+        duration: 0.2,
+        ease: 'power2.out',
+        onComplete: () => {
+          onClose();
+        },
+      });
+    } else {
+      onClose();
+    }
+  };
 
   if (!isOpen) return null;
 
@@ -49,51 +102,43 @@ export const Modal: React.FC<ModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
-      {/* Overlay with Matrix effect */}
+      {/* Overlay plus sombre et subtil */}
       <div
-        className="fixed inset-0 bg-matrix-black/95 backdrop-blur-sm transition-opacity"
-        onClick={onClose}
-        style={{
-          backgroundImage: `repeating-linear-gradient(
-            0deg,
-            transparent,
-            transparent 2px,
-            rgba(0, 255, 65, 0.03) 2px,
-            rgba(0, 255, 65, 0.03) 4px
-          )`
-        }}
+        ref={backdropRef}
+        className="fixed inset-0 bg-black/90 backdrop-blur-md"
+        onClick={handleClose}
+        style={{ opacity: 0 }}
       />
 
       {/* Modal Container */}
       <div className="flex min-h-full items-center justify-center p-4">
         <div
+          ref={modalRef}
           className={clsx(
-            'relative w-full bg-matrix-black border-2 border-matrix-green shadow-glow-green animate-fade-in scanlines',
+            'relative w-full bg-black/95 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl',
             sizes[size]
           )}
           onClick={(e) => e.stopPropagation()}
+          style={{ opacity: 0, willChange: 'transform, opacity' }}
         >
-          {/* Corner brackets */}
-          <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-matrix-green"></div>
-          <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-matrix-green"></div>
-          <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-matrix-green"></div>
-          <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-matrix-green"></div>
+          {/* Border glow subtil */}
+          <div className="absolute -inset-[1px] bg-gradient-to-r from-matrix-green/10 via-matrix-green/20 to-matrix-green/10 rounded-2xl opacity-30 blur-sm -z-10"></div>
 
           {/* Header */}
           {(title || showCloseButton) && (
-            <div className="flex items-center justify-between p-6 border-b border-matrix-green-dim">
+            <div className="flex items-center justify-between p-6 border-b border-white/10">
               {title && (
-                <h2 className="text-xl font-mono uppercase tracking-wider text-matrix-green glow-green">
-                  {'// '}{title}
+                <h2 className="text-xl font-semibold text-white">
+                  {title}
                 </h2>
               )}
               {showCloseButton && (
                 <button
-                  onClick={onClose}
-                  className="text-matrix-green-dim hover:text-matrix-green transition-colors p-1 hover:bg-matrix-green/10 border border-matrix-green-dim hover:border-matrix-green group"
+                  onClick={handleClose}
+                  className="text-gray-400 hover:text-white transition-colors p-2 hover:bg-white/5 rounded-lg group"
                 >
                   <svg
-                    className="w-5 h-5 group-hover:rotate-90 transition-transform"
+                    className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300"
                     fill="none"
                     strokeLinecap="round"
                     strokeLinejoin="round"

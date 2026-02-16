@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { IOrder } from '@/types';
-import { Badge } from '@/components/ui/Badge';
 
 type PopulatedOrder = IOrder & {
   userId?: {
@@ -38,15 +37,35 @@ export const OrderTable: React.FC<OrderTableProps> = ({ orders, onClick }) => {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'completed':
-        return <Badge variant="success">Complété</Badge>;
+        return (
+          <span className="inline-flex px-3 py-1 text-xs font-semibold rounded-full bg-matrix-green/20 text-matrix-green border border-matrix-green/30">
+            Completed
+          </span>
+        );
       case 'pending':
-        return <Badge variant="warning">En attente</Badge>;
+        return (
+          <span className="inline-flex px-3 py-1 text-xs font-semibold rounded-full bg-yellow-500/20 text-yellow-400 border border-yellow-500/30">
+            Pending
+          </span>
+        );
       case 'failed':
-        return <Badge variant="danger">Échoué</Badge>;
+        return (
+          <span className="inline-flex px-3 py-1 text-xs font-semibold rounded-full bg-red-500/20 text-red-400 border border-red-500/30">
+            Failed
+          </span>
+        );
       case 'refunded':
-        return <Badge variant="default">Remboursé</Badge>;
+        return (
+          <span className="inline-flex px-3 py-1 text-xs font-semibold rounded-full bg-gray-500/20 text-gray-400 border border-gray-500/30">
+            Refunded
+          </span>
+        );
       default:
-        return <Badge>{status}</Badge>;
+        return (
+          <span className="inline-flex px-3 py-1 text-xs font-semibold rounded-full bg-white/10 text-white border border-white/20">
+            {status}
+          </span>
+        );
     }
   };
 
@@ -54,14 +73,26 @@ export const OrderTable: React.FC<OrderTableProps> = ({ orders, onClick }) => {
     <div className="overflow-x-auto">
       {/* Desktop Table */}
       <table className="hidden md:table w-full">
-        <thead>
-          <tr className="border-b border-dark-border">
-            <th className="text-left py-4 px-4 text-gray-400 font-medium text-sm">N° Commande</th>
-            <th className="text-left py-4 px-4 text-gray-400 font-medium text-sm">Date</th>
-            <th className="text-left py-4 px-4 text-gray-400 font-medium text-sm">Client</th>
-            <th className="text-left py-4 px-4 text-gray-400 font-medium text-sm">Beats</th>
-            <th className="text-left py-4 px-4 text-gray-400 font-medium text-sm">Total</th>
-            <th className="text-left py-4 px-4 text-gray-400 font-medium text-sm">Statut</th>
+        <thead className="sticky top-0 bg-black/95 backdrop-blur-xl border-b border-white/5">
+          <tr>
+            <th className="text-left py-4 px-6 text-xs uppercase tracking-wider text-gray-400 font-semibold">
+              Order Number
+            </th>
+            <th className="text-left py-4 px-6 text-xs uppercase tracking-wider text-gray-400 font-semibold">
+              Date
+            </th>
+            <th className="text-left py-4 px-6 text-xs uppercase tracking-wider text-gray-400 font-semibold">
+              Customer
+            </th>
+            <th className="text-left py-4 px-6 text-xs uppercase tracking-wider text-gray-400 font-semibold">
+              Items
+            </th>
+            <th className="text-right py-4 px-6 text-xs uppercase tracking-wider text-gray-400 font-semibold">
+              Total
+            </th>
+            <th className="text-center py-4 px-6 text-xs uppercase tracking-wider text-gray-400 font-semibold">
+              Status
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -69,66 +100,66 @@ export const OrderTable: React.FC<OrderTableProps> = ({ orders, onClick }) => {
             <tr
               key={order._id}
               onClick={() => onClick(order)}
-              className="border-b border-dark-border hover:bg-dark-border/50 transition-colors cursor-pointer"
+              className="border-b border-white/5 hover:bg-white/5 transition-all duration-200 cursor-pointer"
             >
-              <td className="py-4 px-4">
-                <p className="text-white font-medium">{order.orderNumber}</p>
+              <td className="py-4 px-6">
+                <p className="text-white font-mono font-medium">{order.orderNumber}</p>
               </td>
-              <td className="py-4 px-4 text-gray-400 text-sm">{formatDate(order.createdAt)}</td>
-              <td className="py-4 px-4">
+              <td className="py-4 px-6 text-gray-400 text-sm">{formatDate(order.createdAt)}</td>
+              <td className="py-4 px-6">
                 <div>
-                  <p className="text-white font-medium">
+                  <p className="text-white font-medium text-sm">
                     {order.userId
                       ? `${order.userId.firstName} ${order.userId.lastName}`
                       : 'N/A'}
                   </p>
-                  <p className="text-gray-400 text-sm">
+                  <p className="text-gray-400 text-xs">
                     {order.userId?.email || order.deliveryEmail}
                   </p>
                 </div>
               </td>
-              <td className="py-4 px-4 text-white">{order.items.length} beat(s)</td>
-              <td className="py-4 px-4 text-white font-semibold">
-                {formatCurrency(order.totalAmount)}
+              <td className="py-4 px-6 text-white font-mono">{order.items.length} beat{order.items.length > 1 ? 's' : ''}</td>
+              <td className="py-4 px-6 text-right">
+                <p className="text-matrix-green font-bold font-mono">{formatCurrency(order.totalAmount)}</p>
               </td>
-              <td className="py-4 px-4">{getStatusBadge(order.status)}</td>
+              <td className="py-4 px-6 text-center">{getStatusBadge(order.status)}</td>
             </tr>
           ))}
         </tbody>
       </table>
 
       {/* Mobile Cards */}
-      <div className="md:hidden space-y-4">
+      <div className="md:hidden space-y-3 p-4">
         {orders.map((order) => (
           <div
             key={order._id}
             onClick={() => onClick(order)}
-            className="bg-dark-card border border-dark-border rounded-lg p-4 cursor-pointer hover:border-gray-600 transition-colors"
+            className="bg-black/60 border border-white/5 rounded-lg p-4 cursor-pointer hover:bg-white/5 transition-all"
           >
             <div className="flex items-start justify-between mb-3">
               <div>
-                <p className="text-white font-medium mb-1">{order.orderNumber}</p>
-                <p className="text-gray-400 text-sm">{formatDate(order.createdAt)}</p>
+                <p className="text-white font-mono font-medium text-sm">{order.orderNumber}</p>
+                <p className="text-gray-400 text-xs mt-1">{formatDate(order.createdAt)}</p>
               </div>
               {getStatusBadge(order.status)}
             </div>
 
             <div className="space-y-2 text-sm">
               <div className="flex items-center justify-between">
-                <span className="text-gray-400">Client</span>
-                <span className="text-white">
+                <span className="text-gray-400">Customer</span>
+                <span className="text-white text-xs">
                   {order.userId
                     ? `${order.userId.firstName} ${order.userId.lastName}`
                     : order.deliveryEmail}
                 </span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-gray-400">Beats</span>
-                <span className="text-white">{order.items.length}</span>
+                <span className="text-gray-400">Items</span>
+                <span className="text-white font-mono">{order.items.length}</span>
               </div>
-              <div className="flex items-center justify-between font-semibold">
+              <div className="flex items-center justify-between font-semibold pt-2 border-t border-white/5">
                 <span className="text-gray-400">Total</span>
-                <span className="text-primary">{formatCurrency(order.totalAmount)}</span>
+                <span className="text-matrix-green font-mono">{formatCurrency(order.totalAmount)}</span>
               </div>
             </div>
           </div>

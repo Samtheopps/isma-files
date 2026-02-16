@@ -1,10 +1,12 @@
+'use client';
+
 import React, { HTMLAttributes } from 'react';
 import { clsx } from 'clsx';
 
 interface CardProps extends HTMLAttributes<HTMLDivElement> {
   hover?: boolean;
   padding?: 'none' | 'sm' | 'md' | 'lg';
-  variant?: 'default' | 'terminal' | 'glow';
+  variant?: 'default' | 'glass' | 'glow';
 }
 
 export const Card: React.FC<CardProps> = ({
@@ -18,38 +20,27 @@ export const Card: React.FC<CardProps> = ({
   const paddingStyles = {
     none: '',
     sm: 'p-3',
-    md: 'p-4',
+    md: 'p-5',
     lg: 'p-6',
   };
 
   const variants = {
-    default: 'bg-matrix-black/80 border border-matrix-green-dim backdrop-blur-sm',
-    terminal: 'bg-matrix-black border-2 border-matrix-green shadow-glow-green',
-    glow: 'bg-matrix-black/90 border border-matrix-green box-glow-green',
+    default: 'bg-black/60 backdrop-blur-sm border border-white/5 shadow-lg',
+    glass: 'bg-black/80 backdrop-blur-sm border border-white/5 shadow-lg',
+    glow: 'bg-black/70 backdrop-blur-sm border border-matrix-green/30 shadow-xl shadow-matrix-green/5',
   };
 
   return (
     <div
       className={clsx(
-        'relative overflow-hidden transition-all duration-300',
+        'relative overflow-hidden rounded-lg transition-all duration-300',
         variants[variant],
-        hover && 'hover:border-matrix-green hover:shadow-glow-green hover:scale-[1.02] hover-flicker',
+        hover && 'hover:border-matrix-green/30 hover:shadow-xl cursor-pointer',
         paddingStyles[padding],
         className
       )}
       {...props}
     >
-      {/* Corner brackets effect */}
-      <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-matrix-green"></div>
-      <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-matrix-green"></div>
-      <div className="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2 border-matrix-green"></div>
-      <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-matrix-green"></div>
-      
-      {/* Scanline overlay */}
-      <div className="absolute inset-0 pointer-events-none opacity-10">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-matrix-green/5 to-transparent animate-pulse"></div>
-      </div>
-      
       <div className="relative z-10">
         {children}
       </div>

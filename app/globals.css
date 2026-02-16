@@ -2,18 +2,84 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Clash Display Font Family */
+@font-face {
+  font-family: 'Clash Display';
+  src: url('/fonts/clash-display/ClashDisplay-Variable.woff2') format('woff2');
+  font-weight: 200 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Clash Display';
+  src: url('/fonts/clash-display/ClashDisplay-Extralight.woff2') format('woff2');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Clash Display';
+  src: url('/fonts/clash-display/ClashDisplay-Light.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Clash Display';
+  src: url('/fonts/clash-display/ClashDisplay-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Clash Display';
+  src: url('/fonts/clash-display/ClashDisplay-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Clash Display';
+  src: url('/fonts/clash-display/ClashDisplay-Semibold.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Clash Display';
+  src: url('/fonts/clash-display/ClashDisplay-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@layer base {
+  body {
+    font-family: 'Clash Display', var(--font-inter), system-ui, sans-serif;
+  }
+  
+  code, pre, .font-mono {
+    font-family: var(--font-jetbrains), 'Courier New', monospace;
+  }
+}
+
 :root {
-  --background: #0D0208;
-  --foreground: #CCFFCC;
-  --matrix-green: #00FF41;
-  --matrix-green-dark: #008F11;
-  --matrix-black: #0D0208;
+  --background: #04161f;
+  --foreground: #cceeff;
+  --primary-blue: #00aaff;
+  --primary-blue-dark: #0088cc;
+  --ink-black: #04161f;
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: 'Share Tech Mono', 'Courier New', monospace;
   overflow-x: hidden;
 }
 
@@ -23,37 +89,37 @@ body {
   }
 }
 
-/* Matrix Custom Scrollbar */
+/* Premium Dark Scrollbar */
 ::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #0D0208;
-  border: 1px solid #003B00;
+  background: #04161f;
+  border: 1px solid #0d4059;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #00FF41 0%, #008F11 100%);
-  border-radius: 2px;
-  box-shadow: 0 0 5px rgba(0, 255, 65, 0.5);
+  background: linear-gradient(180deg, #00aaff 0%, #0088cc 100%);
+  border-radius: 4px;
+  box-shadow: 0 0 5px rgba(0, 170, 255, 0.3);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #00FF41;
-  box-shadow: 0 0 10px rgba(0, 255, 65, 0.8);
+  background: #00aaff;
+  box-shadow: 0 0 10px rgba(0, 170, 255, 0.5);
 }
 
 /* Selection Style */
 ::selection {
-  background: rgba(0, 255, 65, 0.3);
-  color: #00FF41;
+  background: rgba(0, 170, 255, 0.2);
+  color: #00aaff;
 }
 
 ::-moz-selection {
-  background: rgba(0, 255, 65, 0.3);
-  color: #00FF41;
+  background: rgba(0, 170, 255, 0.2);
+  color: #00aaff;
 }
 
 /* Animations */
@@ -68,23 +134,75 @@ body {
   }
 }
 
+@keyframes gradient {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(30px, -30px) scale(1.1);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
 .animate-fade-in {
   animation: fadeIn 0.3s ease-in-out;
 }
 
-/* Matrix Terminal Input Style */
+.animate-float {
+  animation: float 20s ease-in-out infinite;
+}
+
+.animate-shimmer {
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 0.3s ease-out;
+}
+
+/* Premium Terminal Input Style */
 input, textarea {
-  font-family: 'Share Tech Mono', monospace;
-  caret-color: #00FF41;
+  font-family: var(--font-jetbrains), monospace;
+  caret-color: #00aaff;
 }
 
 input:focus, textarea:focus {
-  box-shadow: 0 0 0 2px rgba(0, 255, 65, 0.5) !important;
+  box-shadow: 0 0 0 2px rgba(0, 170, 255, 0.3) !important;
 }
 
-/* Remove default focus rings, use Matrix glow instead */
+/* Remove default focus rings, use subtle blue glow */
 *:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 2px rgba(0, 255, 65, 0.5);
+  box-shadow: 0 0 0 2px rgba(0, 170, 255, 0.3);
 }
-

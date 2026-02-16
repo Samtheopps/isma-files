@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ['res.cloudinary.com', 'images.unsplash.com'], // Cloudinary + Unsplash images
+    domains: ['res.cloudinary.com', 'images.unsplash.com', 'i.pravatar.cc'], // Cloudinary + Unsplash + Pravatar images
   },
   // Server Actions sont activés par défaut dans Next.js 14+
   env: {

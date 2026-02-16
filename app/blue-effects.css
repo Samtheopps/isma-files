@@ -1,4 +1,4 @@
-/* Matrix Theme - CRT & Visual Effects */
+/* Premium Blue Theme - Visual Effects */
 
 /* CRT Screen Effect */
 @keyframes flicker {
@@ -153,40 +153,40 @@
 
 .glitch:hover::before {
   animation: glitch 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
-  color: #00ff41;
+  color: #00aaff;
   z-index: -1;
 }
 
 .glitch:hover::after {
   animation: glitch-2 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite reverse;
-  color: #00ffff;
+  color: #33bbff;
   z-index: -2;
 }
 
-/* Phosphor Glow */
+/* Blue Glow Effects */
 .glow-green {
   text-shadow: 
-    0 0 5px rgba(0, 255, 65, 0.5),
-    0 0 10px rgba(0, 255, 65, 0.3),
-    0 0 15px rgba(0, 255, 65, 0.2),
-    0 0 20px rgba(0, 255, 65, 0.1);
+    0 0 5px rgba(0, 170, 255, 0.5),
+    0 0 10px rgba(0, 170, 255, 0.3),
+    0 0 15px rgba(0, 170, 255, 0.2),
+    0 0 20px rgba(0, 170, 255, 0.1);
 }
 
 .glow-green-strong {
   text-shadow: 
-    0 0 5px rgba(0, 255, 65, 0.8),
-    0 0 10px rgba(0, 255, 65, 0.6),
-    0 0 20px rgba(0, 255, 65, 0.4),
-    0 0 30px rgba(0, 255, 65, 0.2),
-    0 0 40px rgba(0, 255, 65, 0.1);
+    0 0 5px rgba(0, 170, 255, 0.8),
+    0 0 10px rgba(0, 170, 255, 0.6),
+    0 0 20px rgba(0, 170, 255, 0.4),
+    0 0 30px rgba(0, 170, 255, 0.2),
+    0 0 40px rgba(0, 170, 255, 0.1);
 }
 
 .box-glow-green {
   box-shadow: 
-    0 0 5px rgba(0, 255, 65, 0.5),
-    0 0 10px rgba(0, 255, 65, 0.3),
-    0 0 15px rgba(0, 255, 65, 0.2),
-    inset 0 0 5px rgba(0, 255, 65, 0.1);
+    0 0 5px rgba(0, 170, 255, 0.5),
+    0 0 10px rgba(0, 170, 255, 0.3),
+    0 0 15px rgba(0, 170, 255, 0.2),
+    inset 0 0 5px rgba(0, 170, 255, 0.1);
 }
 
 /* Dither Effect for Images */
@@ -202,7 +202,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 4 4' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h1v1H0zm2 2h1v1H2z' fill='%2300FF41' fill-opacity='0.03'/%3E%3Cpath d='M1 0h1v1H1zM0 1h1v1H0zm2 0h1v1H2zM1 2h1v1H1zm2 0h1v1H3zM0 3h1v1H0zm2 0h1v1H2z' fill='black' fill-opacity='0.03'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 4 4' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h1v1H0zm2 2h1v1H2z' fill='%2300aaff' fill-opacity='0.03'/%3E%3Cpath d='M1 0h1v1H1zM0 1h1v1H0zm2 0h1v1H2zM1 2h1v1H1zm2 0h1v1H3zM0 3h1v1H0zm2 0h1v1H2z' fill='%2304161f' fill-opacity='0.03'/%3E%3C/svg%3E");
   background-size: 4px 4px;
   mix-blend-mode: overlay;
   pointer-events: none;
@@ -217,26 +217,26 @@
 .terminal-cursor::after {
   content: '▊';
   animation: blink 1s infinite;
-  color: #00ff41;
+  color: #00aaff;
   margin-left: 2px;
 }
 
-/* Matrix Border Animation */
+/* Blue Border Animation */
 @keyframes border-flow {
   0% {
-    border-image-source: linear-gradient(90deg, #00ff41 0%, transparent 50%, #00ff41 100%);
+    border-image-source: linear-gradient(90deg, #00aaff 0%, transparent 50%, #00aaff 100%);
   }
   50% {
-    border-image-source: linear-gradient(90deg, transparent 0%, #00ff41 50%, transparent 100%);
+    border-image-source: linear-gradient(90deg, transparent 0%, #00aaff 50%, transparent 100%);
   }
   100% {
-    border-image-source: linear-gradient(90deg, #00ff41 0%, transparent 50%, #00ff41 100%);
+    border-image-source: linear-gradient(90deg, #00aaff 0%, transparent 50%, #00aaff 100%);
   }
 }
 
 .border-matrix {
   border: 1px solid transparent;
-  border-image: linear-gradient(90deg, #00ff41 0%, transparent 50%, #00ff41 100%);
+  border-image: linear-gradient(90deg, #00aaff 0%, transparent 50%, #00aaff 100%);
   border-image-slice: 1;
   animation: border-flow 3s linear infinite;
 }

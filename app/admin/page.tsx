@@ -1,11 +1,10 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { StatCard } from '@/components/admin/StatCard';
-import { Card } from '@/components/ui/Card';
-import { Badge } from '@/components/ui/Badge';
 import { Loader } from '@/components/ui/Loader';
 import { IBeat, IOrder } from '@/types';
+import gsap from 'gsap';
 
 interface DashboardStats {
   overview: {
@@ -31,9 +30,32 @@ export default function AdminDashboard() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
 
+  const headerRef = useRef<HTMLDivElement>(null);
+  const statsRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     fetchStats();
   }, []);
+
+  useEffect(() => {
+    if (!isLoading && stats) {
+      const ctx = gsap.context(() => {
+        gsap.fromTo(
+          headerRef.current,
+          { y: -20, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.5, ease: 'power2.out' }
+        );
+
+        gsap.fromTo(
+          statsRef.current?.children || [],
+          { y: 20, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.6, delay: 0.2, stagger: 0.1, ease: 'power2.out' }
+        );
+      });
+
+      return () => ctx.revert();
+    }
+  }, [isLoading, stats]);
 
   const fetchStats = async () => {
     try {
@@ -68,7 +90,6 @@ export default function AdminDashboard() {
     return new Date(date).toLocaleDateString('fr-FR', {
       day: '2-digit',
       month: 'short',
-      year: 'numeric',
     });
   };
 
@@ -89,169 +110,131 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="p-6 max-w-7xl mx-auto space-y-8">
       {/* Header */}
-      <div>
-        <h1 className="text-3xl font-mono uppercase tracking-wider text-matrix-green-light mb-2 glow-green">ADMIN DASHBOARD</h1>
-        <p className="font-mono text-matrix-green-dim">// Vue d'ensemble de votre plateforme</p>
+      <div ref={headerRef}>
+        <h1 className="text-4xl font-bold text-white mb-2">Dashboard</h1>
+        <p className="text-gray-400 text-sm uppercase tracking-wider">Admin Overview</p>
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div ref={statsRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard
           title="Total Beats"
           value={stats.overview.totalBeats}
           icon={
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"
-              />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
             </svg>
           }
           variant="primary"
         />
 
         <StatCard
-          title="Chiffre d'Affaires"
+          title="Total Revenue"
           value={formatCurrency(stats.overview.totalRevenue)}
           icon={
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           }
           variant="success"
         />
 
         <StatCard
-          title="Commandes"
+          title="Total Orders"
           value={stats.overview.totalOrders}
           icon={
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
-              />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
             </svg>
           }
           variant="warning"
         />
 
         <StatCard
-          title="Utilisateurs"
+          title="Total Users"
           value={stats.overview.totalUsers}
           icon={
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
-              />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
             </svg>
           }
           variant="info"
         />
       </div>
 
-      {/* Revenue Chart (Simple) */}
-      <Card variant="terminal">
-        <h2 className="text-xl font-mono uppercase tracking-wider text-matrix-green-light mb-6 glow-green">&gt; REVENUE - LAST 30 DAYS</h2>
-        <div className="space-y-2">
-          {stats.dailyRevenue.length > 0 ? (
-            <div className="flex items-end space-x-1 h-48">
-              {stats.dailyRevenue.map((day, index) => {
-                const maxRevenue = Math.max(...stats.dailyRevenue.map((d) => d.revenue));
-                const height = (day.revenue / maxRevenue) * 100;
-                
-                return (
+      {/* Revenue Chart */}
+      <div className="bg-black/80 border border-white/5 rounded-lg p-6">
+        <h2 className="text-xl font-semibold text-white mb-6 uppercase tracking-wider text-sm">Revenue (30 days)</h2>
+        {stats.dailyRevenue.length > 0 ? (
+          <div className="flex items-end gap-1 h-40">
+            {stats.dailyRevenue.map((day, index) => {
+              const maxRevenue = Math.max(...stats.dailyRevenue.map((d) => d.revenue));
+              const height = maxRevenue > 0 ? (day.revenue / maxRevenue) * 100 : 0;
+              
+              return (
+                <div key={index} className="flex-1 flex flex-col justify-end group">
                   <div
-                    key={index}
-                    className="flex-1 group relative"
-                  >
-                    <div
-                      className="bg-matrix-green hover:opacity-80 transition-opacity"
-                      style={{ height: `${height}%` }}
-                    />
-                    <div className="hidden group-hover:block absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-matrix-black border-2 border-matrix-green text-xs font-mono text-matrix-green whitespace-nowrap">
-                      {formatDate(day.date)}: {formatCurrency(day.revenue)}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          ) : (
-            <p className="font-mono text-matrix-green-dim text-center py-8">Aucune donnée disponible</p>
-          )}
-        </div>
-      </Card>
+                    className="w-full bg-matrix-green/70 hover:bg-matrix-green transition-all duration-200 rounded-t"
+                    style={{ height: `${height}%`, minHeight: day.revenue > 0 ? '4px' : '0' }}
+                    title={`${formatDate(day.date)}: ${formatCurrency(day.revenue)}`}
+                  />
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <p className="text-gray-500 text-center py-12 text-sm">No revenue data</p>
+        )}
+      </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Top Beats */}
-        <Card variant="terminal">
-          <h2 className="text-xl font-mono uppercase tracking-wider text-matrix-green-light mb-6 glow-green">&gt; TOP BEATS</h2>
-          <div className="space-y-4">
+        <div className="bg-black/80 border border-white/5 rounded-lg p-6">
+          <h2 className="text-xl font-semibold text-white mb-6 uppercase tracking-wider text-sm">Top Beats</h2>
+          <div className="space-y-3">
             {stats.topBeats.length > 0 ? (
-              stats.topBeats.map((beat, index) => (
-                <div
-                  key={beat._id}
-                  className="flex items-center space-x-4 p-3 bg-matrix-black border border-matrix-green-dim hover:border-matrix-green transition-colors"
-                >
-                  <div className="flex-shrink-0 w-8 h-8 bg-matrix-black border-2 border-matrix-green flex items-center justify-center">
-                    <span className="text-matrix-green font-mono font-bold text-sm">#{index + 1}</span>
-                  </div>
-                  <img
-                    src={beat.coverImage}
-                    alt={beat.title}
-                    className="w-12 h-12 object-cover dither"
-                  />
+              stats.topBeats.slice(0, 5).map((beat, index) => (
+                <div key={beat._id} className="flex items-center gap-3 p-3 bg-black/40 border border-white/5 rounded-lg hover:border-white/10 transition-all">
+                  <span className="text-matrix-green font-mono text-sm font-bold w-8">#{index + 1}</span>
+                  <img src={beat.coverImage} alt={beat.title} className="w-12 h-12 object-cover rounded" />
                   <div className="flex-1 min-w-0">
-                    <p className="font-mono uppercase tracking-wider text-matrix-green-light truncate glow-green">{beat.title}</p>
-                    <p className="font-mono text-matrix-green-dim text-sm">{beat.salesCount} SALES</p>
+                    <p className="text-white text-sm font-medium truncate">{beat.title}</p>
+                    <p className="text-gray-400 text-xs font-mono">{beat.salesCount} sales</p>
                   </div>
                 </div>
               ))
             ) : (
-              <p className="font-mono text-matrix-green-dim text-center py-8">Aucune vente encore</p>
+              <p className="text-gray-500 text-center py-8 text-sm">No sales yet</p>
             )}
           </div>
-        </Card>
+        </div>
 
         {/* Recent Orders */}
-        <Card variant="terminal">
-          <h2 className="text-xl font-mono uppercase tracking-wider text-matrix-green-light mb-6 glow-green">&gt; RECENT ORDERS</h2>
-          <div className="space-y-4">
+        <div className="bg-black/80 border border-white/5 rounded-lg p-6">
+          <h2 className="text-xl font-semibold text-white mb-6 uppercase tracking-wider text-sm">Recent Orders</h2>
+          <div className="space-y-3">
             {stats.recentOrders.length > 0 ? (
-              stats.recentOrders.map((order) => (
-                <div
-                  key={order._id}
-                  className="flex items-center justify-between p-3 bg-matrix-black border border-matrix-green-dim hover:border-matrix-green transition-colors"
-                >
-                  <div className="flex-1 min-w-0">
-                    <p className="font-mono uppercase tracking-wider text-matrix-green-light glow-green">{order.orderNumber}</p>
-                    <p className="font-mono text-matrix-green-dim text-sm truncate">{order.deliveryEmail}</p>
+              stats.recentOrders.slice(0, 5).map((order) => (
+                <div key={order._id} className="flex items-center justify-between p-3 bg-black/40 border border-white/5 rounded-lg hover:border-white/10 transition-all">
+                  <div className="flex-1 min-w-0 mr-4">
+                    <p className="text-white text-sm font-mono font-medium">{order.orderNumber}</p>
+                    <p className="text-gray-400 text-xs truncate">{order.deliveryEmail}</p>
                   </div>
-                  <div className="flex items-center space-x-3">
-                    <Badge variant="success">{formatCurrency(order.totalAmount)}</Badge>
-                    <p className="font-mono text-matrix-green-dim text-sm">{formatDate(order.createdAt)}</p>
+                  <div className="text-right">
+                    <p className="text-matrix-green text-sm font-bold font-mono">{formatCurrency(order.totalAmount)}</p>
+                    <p className="text-gray-500 text-xs">{formatDate(order.createdAt)}</p>
                   </div>
                 </div>
               ))
             ) : (
-              <p className="font-mono text-matrix-green-dim text-center py-8">Aucune commande encore</p>
+              <p className="text-gray-500 text-center py-8 text-sm">No orders yet</p>
             )}
           </div>
-        </Card>
+        </div>
       </div>
     </div>
   );
 }
+

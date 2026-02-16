@@ -80,7 +80,7 @@ export const LicenseSelector: React.FC<LicenseSelectorProps> = ({
                 </div>
               </div>
               <div className="text-right">
-                <p className="text-2xl font-bold text-white">{license.price}€</p>
+                <p className="text-2xl font-bold text-white">{(license.price / 100).toFixed(2)}€</p>
               </div>
             </div>
 

@@ -1,120 +1,270 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
-import { Card, Button } from '@/components/ui';
+import { Button } from '@/components/ui';
+import { IOrder, IDownload } from '@/types';
+import gsap from 'gsap';
 
 export default function AccountPage() {
   const router = useRouter();
   const { user, logout } = useAuth();
+  const [orders, setOrders] = useState<IOrder[]>([]);
+  const [downloads, setDownloads] = useState<IDownload[]>([]);
+  const [isLoadingOrders, setIsLoadingOrders] = useState(true);
+  const [isLoadingDownloads, setIsLoadingDownloads] = useState(true);
+
+  const headerRef = useRef<HTMLDivElement>(null);
+  const profileRef = useRef<HTMLDivElement>(null);
+  const ordersRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        headerRef.current,
+        { y: -20, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.5, ease: 'power2.out' }
+      );
+
+      gsap.fromTo(
+        [profileRef.current, ordersRef.current],
+        { y: 20, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.6, delay: 0.2, stagger: 0.1, ease: 'power2.out' }
+      );
+    });
+
+    return () => ctx.revert();
+  }, []);
+
+  useEffect(() => {
+    fetchOrders();
+    fetchDownloads();
+  }, []);
+
+  const fetchOrders = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch('/api/orders', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setOrders(data.orders || []);
+      }
+    } catch (error) {
+      console.error('Error fetching orders:', error);
+    } finally {
+      setIsLoadingOrders(false);
+    }
+  };
+
+  const fetchDownloads = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch('/api/downloads', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setDownloads(data.downloads || []);
+      }
+    } catch (error) {
+      console.error('Error fetching downloads:', error);
+    } finally {
+      setIsLoadingDownloads(false);
+    }
+  };
 
   const handleLogout = () => {
     logout();
     router.push('/');
   };
 
-  return (
-    <div className="min-h-screen py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2">Mon compte</h1>
-          <p className="text-gray-400">Gérez votre compte et vos achats</p>
-        </div>
+  const formatDate = (date: string | Date) => {
+    return new Date(date).toLocaleDateString('fr-FR', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric',
+    });
+  };
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* User Info Card */}
-          <Card className="lg:col-span-2">
-            <h2 className="text-xl font-semibold text-white mb-4">Informations personnelles</h2>
-            
-            <div className="space-y-4">
+  const formatCurrency = (amount: number) => {
+    return (amount / 100).toFixed(2) + '€';
+  };
+
+  return (
+    <div className="min-h-screen pt-16 pb-32">
+      {/* Header */}
+      <div ref={headerRef} className="px-4 py-8 border-b border-white/5">
+        <div className="max-w-7xl mx-auto">
+          <h1 className="text-4xl font-bold text-white mb-2">My Account</h1>
+          <p className="text-gray-400">Manage your profile and purchases</p>
+        </div>
+      </div>
+
+      {/* Content */}
+      <section className="px-4 py-8">
+        <div className="max-w-7xl mx-auto space-y-8">
+          {/* Profile Section */}
+          <div ref={profileRef} className="bg-black/80 border border-white/5 rounded-lg p-6">
+            <h2 className="text-xl font-semibold text-white mb-6">Profile Information</h2>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               <div>
-                <label className="text-sm text-gray-400">Nom complet</label>
-                <p className="text-white font-medium mt-1">
+                <label className="text-sm text-gray-400 uppercase tracking-wider">Full Name</label>
+                <p className="text-white font-medium mt-2">
                   {user?.firstName} {user?.lastName}
                 </p>
               </div>
 
               <div>
-                <label className="text-sm text-gray-400">Email</label>
-                <p className="text-white font-medium mt-1">{user?.email}</p>
+                <label className="text-sm text-gray-400 uppercase tracking-wider">Email</label>
+                <p className="text-white font-medium mt-2">{user?.email}</p>
               </div>
 
               <div>
-                <label className="text-sm text-gray-400">Membre depuis</label>
-                <p className="text-white font-medium mt-1">
-                  {user?.createdAt ? new Date(user.createdAt).toLocaleDateString('fr-FR') : '-'}
+                <label className="text-sm text-gray-400 uppercase tracking-wider">Member Since</label>
+                <p className="text-white font-medium mt-2">
+                  {user?.createdAt ? formatDate(user.createdAt) : '-'}
                 </p>
               </div>
 
               <div>
-                <label className="text-sm text-gray-400">Rôle</label>
-                <p className="text-white font-medium mt-1 capitalize">{user?.role}</p>
+                <label className="text-sm text-gray-400 uppercase tracking-wider">Role</label>
+                <p className="text-white font-medium mt-2 capitalize">{user?.role}</p>
               </div>
             </div>
 
-            <div className="mt-6 pt-6 border-t border-dark-border">
-              <Button variant="danger" onClick={handleLogout}>
-                Se déconnecter
+            <div className="mt-6 pt-6 border-t border-white/5">
+              <Button variant="secondary" onClick={handleLogout}>
+                Logout
               </Button>
             </div>
-          </Card>
+          </div>
 
-          {/* Quick Actions */}
-          <div className="space-y-4">
-            <Card hover className="cursor-pointer" onClick={() => router.push('/account/purchases')}>
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center">
-                  <svg className="w-6 h-6 text-primary" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" />
+          {/* Orders Section */}
+          <div ref={ordersRef} className="bg-black/80 border border-white/5 rounded-lg overflow-hidden">
+            <div className="p-6 border-b border-white/5">
+              <h2 className="text-xl font-semibold text-white">Purchase History</h2>
+              <p className="text-sm text-gray-400 mt-1">{orders.length} order{orders.length > 1 ? 's' : ''}</p>
+            </div>
+
+            {/* Orders Table */}
+            {isLoadingOrders ? (
+              <div className="p-12 text-center">
+                <div className="w-8 h-8 border-2 border-matrix-green/20 border-t-matrix-green rounded-full animate-spin mx-auto mb-3"></div>
+                <p className="text-gray-500 text-sm">Loading orders...</p>
+              </div>
+            ) : orders.length === 0 ? (
+              <div className="p-12 text-center">
+                <div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <svg className="w-8 h-8 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                   </svg>
                 </div>
-                <div className="flex-1">
-                  <h3 className="font-semibold text-white">Mes achats</h3>
-                  <p className="text-sm text-gray-400">Historique des commandes</p>
-                </div>
-                <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
+                <p className="text-gray-400 mb-4">No orders yet</p>
+                <Button variant="primary" onClick={() => router.push('/beats')}>
+                  Browse Beats
+                </Button>
               </div>
-            </Card>
+            ) : (
+              <div className="overflow-x-auto">
+                {/* Desktop Table */}
+                <table className="hidden md:table w-full">
+                  <thead className="sticky top-0 bg-black/95 backdrop-blur-xl border-b border-white/5">
+                    <tr>
+                      <th className="text-left py-4 px-6 text-xs uppercase tracking-wider text-gray-400 font-semibold">
+                        Order
+                      </th>
+                      <th className="text-left py-4 px-6 text-xs uppercase tracking-wider text-gray-400 font-semibold">
+                        Date
+                      </th>
+                      <th className="text-left py-4 px-6 text-xs uppercase tracking-wider text-gray-400 font-semibold">
+                        Items
+                      </th>
+                      <th className="text-right py-4 px-6 text-xs uppercase tracking-wider text-gray-400 font-semibold">
+                        Total
+                      </th>
+                      <th className="text-center py-4 px-6 text-xs uppercase tracking-wider text-gray-400 font-semibold">
+                        Status
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {orders.map((order) => (
+                      <tr
+                        key={order._id}
+                        className="border-b border-white/5 hover:bg-white/5 transition-all duration-200 cursor-pointer"
+                        onClick={() => router.push(`/account/orders/${order._id}`)}
+                      >
+                        <td className="py-4 px-6">
+                          <p className="text-white font-mono font-medium">{order.orderNumber}</p>
+                        </td>
+                        <td className="py-4 px-6">
+                          <p className="text-gray-400 text-sm">{formatDate(order.createdAt)}</p>
+                        </td>
+                        <td className="py-4 px-6">
+                          <p className="text-white">{order.items.length} beat{order.items.length > 1 ? 's' : ''}</p>
+                        </td>
+                        <td className="py-4 px-6 text-right">
+                          <p className="text-matrix-green font-bold font-mono">{formatCurrency(order.totalAmount)}</p>
+                        </td>
+                        <td className="py-4 px-6 text-center">
+                          <span
+                            className={`inline-flex px-3 py-1 text-xs font-semibold rounded-full ${
+                              order.status === 'completed'
+                                ? 'bg-matrix-green/20 text-matrix-green border border-matrix-green/30'
+                                : order.status === 'pending'
+                                ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30'
+                                : 'bg-red-500/20 text-red-400 border border-red-500/30'
+                            }`}
+                          >
+                            {order.status}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
 
-            <Card hover className="cursor-pointer" onClick={() => router.push('/account/downloads')}>
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center">
-                  <svg className="w-6 h-6 text-primary" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
-                  </svg>
+                {/* Mobile Cards */}
+                <div className="md:hidden p-4 space-y-3">
+                  {orders.map((order) => (
+                    <div
+                      key={order._id}
+                      onClick={() => router.push(`/account/orders/${order._id}`)}
+                      className="bg-black/60 border border-white/5 rounded-lg p-4 hover:bg-white/5 transition-all cursor-pointer"
+                    >
+                      <div className="flex items-start justify-between mb-3">
+                        <div>
+                          <p className="text-white font-mono font-medium text-sm">{order.orderNumber}</p>
+                          <p className="text-gray-400 text-xs mt-1">{formatDate(order.createdAt)}</p>
+                        </div>
+                        <span
+                          className={`px-2 py-1 text-xs font-semibold rounded ${
+                            order.status === 'completed'
+                              ? 'bg-matrix-green/20 text-matrix-green'
+                              : order.status === 'pending'
+                              ? 'bg-yellow-500/20 text-yellow-400'
+                              : 'bg-red-500/20 text-red-400'
+                          }`}
+                        >
+                          {order.status}
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-gray-400">{order.items.length} item{order.items.length > 1 ? 's' : ''}</span>
+                        <span className="text-matrix-green font-bold font-mono">{formatCurrency(order.totalAmount)}</span>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-                <div className="flex-1">
-                  <h3 className="font-semibold text-white">Téléchargements</h3>
-                  <p className="text-sm text-gray-400">Accéder aux fichiers</p>
-                </div>
-                <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
               </div>
-            </Card>
-
-            <Card hover className="cursor-pointer" onClick={() => router.push('/beats')}>
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center">
-                  <svg className="w-6 h-6 text-primary" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M18 3a1 1 0 00-1.447-.894L8.763 6H5a3 3 0 000 6h.28l1.771 5.316A1 1 0 008 18h1a1 1 0 001-1v-4.382l6.553 3.276A1 1 0 0018 15V3z" clipRule="evenodd" />
-                  </svg>
-                </div>
-                <div className="flex-1">
-                  <h3 className="font-semibold text-white">Catalogue</h3>
-                  <p className="text-sm text-gray-400">Parcourir les beats</p>
-                </div>
-                <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </div>
-            </Card>
+            )}
           </div>
         </div>
-      </div>
+      </section>
     </div>
   );
 }

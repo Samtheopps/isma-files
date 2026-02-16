@@ -1,15 +1,14 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { IBeat, LicenseType } from '@/types';
 import { WaveformPlayer } from '@/components/player/WaveformPlayer';
-import { LicenseSelector } from '@/components/license/LicenseSelector';
-import { LicenseModal } from '@/components/license/LicenseModal';
-import { Badge, Button, Card, Loader } from '@/components/ui';
+import { Badge, Button } from '@/components/ui';
 import { usePlayer } from '@/context/PlayerContext';
 import { useCart } from '@/context/CartContext';
+import gsap from 'gsap';
 
 export default function BeatDetailPage() {
   const params = useParams();
@@ -20,7 +19,10 @@ export default function BeatDetailPage() {
   const [beat, setBeat] = useState<IBeat | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedLicense, setSelectedLicense] = useState<LicenseType>('basic');
-  const [showLicenseModal, setShowLicenseModal] = useState(false);
+
+  const headerRef = useRef<HTMLDivElement>(null);
+  const leftColRef = useRef<HTMLDivElement>(null);
+  const rightColRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -50,10 +52,7 @@ export default function BeatDetailPage() {
           router.push('/beats');
         }
       } catch (error: any) {
-        if (error.name === 'AbortError') {
-          console.log('Fetch aborted');
-          return;
-        }
+        if (error.name === 'AbortError') return;
         console.error('Error fetching beat:', error);
         if (isMounted) {
           router.push('/beats');
@@ -74,6 +73,33 @@ export default function BeatDetailPage() {
       abortController.abort();
     };
   }, [params.id, router]);
+
+  // Entrance animations
+  useEffect(() => {
+    if (!isLoading && beat) {
+      const ctx = gsap.context(() => {
+        gsap.fromTo(
+          headerRef.current,
+          { y: -20, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.5, ease: 'power2.out' }
+        );
+        
+        gsap.fromTo(
+          leftColRef.current,
+          { x: -30, opacity: 0 },
+          { x: 0, opacity: 1, duration: 0.6, delay: 0.2, ease: 'power2.out' }
+        );
+        
+        gsap.fromTo(
+          rightColRef.current,
+          { x: 30, opacity: 0 },
+          { x: 0, opacity: 1, duration: 0.6, delay: 0.3, ease: 'power2.out' }
+        );
+      });
+
+      return () => ctx.revert();
+    }
+  }, [isLoading, beat]);
 
   const handlePlayPause = () => {
     if (!beat) return;
@@ -101,184 +127,263 @@ export default function BeatDetailPage() {
     }
   };
 
+  // License description helper
+  const getLicenseDescription = (type: LicenseType): string => {
+    const descriptions: Record<LicenseType, string> = {
+      basic: 'MP3 only, limited distribution',
+      standard: 'MP3 + WAV, standard distribution',
+      pro: 'MP3 + WAV + Stems, unlimited streams',
+      unlimited: 'All files, unlimited distribution',
+      exclusive: 'Full rights, exclusive ownership',
+    };
+    return descriptions[type];
+  };
+
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader size="lg" text="Chargement du beat..." />
+      <div className="min-h-screen flex items-center justify-center pt-16">
+        <div className="text-center">
+          <div className="w-12 h-12 border-2 border-matrix-green/20 border-t-matrix-green rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-500">Loading beat...</p>
+        </div>
       </div>
     );
   }
 
-  if (!beat) {
-    return null;
-  }
+  if (!beat) return null;
 
   const isCurrentBeat = currentBeat?._id === beat._id;
   const selectedLicenseData = beat.licenses.find((l) => l.type === selectedLicense);
 
   return (
-    <div className="min-h-screen py-8">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Back Button */}
-        <button
-          onClick={() => router.back()}
-          className="mb-6 flex items-center gap-2 font-mono text-matrix-green-glow hover:text-matrix-green transition-colors hover-flicker"
-        >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-          </svg>
-          &lt; RETOUR_
-        </button>
+    <main className="min-h-screen pt-16 pb-32">
+      {/* Back Button */}
+      <div ref={headerRef} className="px-4 py-6 border-b border-white/5">
+        <div className="max-w-6xl mx-auto">
+          <button
+            onClick={() => router.push('/beats')}
+            className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+            Back to Catalog
+          </button>
+        </div>
+      </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Left Column - Beat Info */}
-          <div className="space-y-6">
-            {/* Cover Image */}
-            <Card variant="terminal" padding="none" className="overflow-hidden dither">
-              <div className="relative aspect-square">
+      {/* Content */}
+      <section className="px-4 py-8">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* Left Column - Cover + Info */}
+            <div ref={leftColRef} className="space-y-6">
+              {/* Cover Image */}
+              <div className="relative aspect-square rounded-lg overflow-hidden border border-white/5">
                 <Image
                   src={beat.coverImage}
                   alt={beat.title}
                   fill
-                  className="object-cover dither"
+                  className="object-cover"
                   priority
                 />
               </div>
-            </Card>
 
-            {/* Beat Details */}
-            <Card variant="terminal">
-              <h1 className="text-3xl font-mono uppercase tracking-wider text-matrix-green-light mb-4 glow-green">{beat.title}</h1>
+              {/* Beat Title & Info */}
+              <div>
+                <h1 className="text-4xl font-bold text-white mb-3">{beat.title}</h1>
+                <p className="text-gray-400 text-sm mb-4">Produced by Isma Files</p>
+                
+                <div className="flex items-center gap-6 text-sm font-mono">
+                  <div>
+                    <span className="text-gray-500">BPM: </span>
+                    <span className="text-white">{beat.bpm}</span>
+                  </div>
+                  <div>
+                    <span className="text-gray-500">Key: </span>
+                    <span className="text-white">{beat.key}</span>
+                  </div>
+                  <div>
+                    <span className="text-gray-500">Plays: </span>
+                    <span className="text-white">{beat.playCount}</span>
+                  </div>
+                </div>
+              </div>
 
-              <div className="grid grid-cols-3 gap-4 mb-4">
-                <div>
-                  <p className="text-sm font-mono text-matrix-green-dim mb-1">&gt; BPM</p>
-                  <p className="text-lg font-mono font-semibold text-matrix-green glow-green">{beat.bpm}</p>
+              {/* Play Button */}
+              <button
+                onClick={handlePlayPause}
+                className="w-full px-6 py-4 bg-matrix-green/10 hover:bg-matrix-green/20 border border-matrix-green/30 rounded-lg flex items-center justify-center gap-3 transition-all group"
+              >
+                {isCurrentBeat && isPlaying ? (
+                  <>
+                    <svg className="w-6 h-6 text-matrix-green" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" />
+                    </svg>
+                    <span className="text-matrix-green font-semibold">Pause Preview</span>
+                  </>
+                ) : (
+                  <>
+                    <svg className="w-6 h-6 text-matrix-green" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                    <span className="text-matrix-green font-semibold">Play Preview</span>
+                  </>
+                )}
+              </button>
+
+              {/* Waveform */}
+              <div className="bg-black/60 border border-white/5 rounded-lg p-6">
+                <WaveformPlayer
+                  beat={beat}
+                  isPlaying={isCurrentBeat && isPlaying}
+                  onPlayPause={handlePlayPause}
+                />
+              </div>
+
+              {/* Details */}
+              <div className="bg-black/60 border border-white/5 rounded-lg p-6 space-y-4">
+                <h3 className="text-sm uppercase tracking-wider text-gray-500 font-semibold">Details</h3>
+                
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2 text-sm">
+                    <svg className="w-4 h-4 text-matrix-green" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                    <span className="text-gray-300">MP3 + WAV + Stems included</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm">
+                    <svg className="w-4 h-4 text-matrix-green" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                    <span className="text-gray-300">Instant download after purchase</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm">
+                    <svg className="w-4 h-4 text-matrix-green" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                    <span className="text-gray-300">PDF license contract included</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm">
+                    <svg className="w-4 h-4 text-matrix-green" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                    <span className="text-gray-300">Commercial use allowed</span>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-sm font-mono text-matrix-green-dim mb-1">&gt; KEY</p>
-                  <p className="text-lg font-mono font-semibold text-matrix-green glow-green">{beat.key}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-mono text-matrix-green-dim mb-1">&gt; PLAYS</p>
-                  <p className="text-lg font-mono font-semibold text-matrix-green glow-green">{beat.playCount}</p>
+              </div>
+
+              {/* Tags */}
+              <div className="space-y-3">
+                <h3 className="text-sm uppercase tracking-wider text-gray-500 font-semibold">Genre</h3>
+                <div className="flex flex-wrap gap-2">
+                  {beat.genre.map((g, i) => (
+                    <Badge key={i} variant="primary" size="sm">{g}</Badge>
+                  ))}
                 </div>
               </div>
 
               <div className="space-y-3">
-                <div>
-                  <p className="text-sm font-mono text-matrix-green-dim mb-2">// GENRES</p>
-                  <div className="flex flex-wrap gap-2">
-                    {beat.genre.map((g, i) => (
-                      <Badge key={i} variant="primary">
-                        {g}
-                      </Badge>
-                    ))}
-                  </div>
+                <h3 className="text-sm uppercase tracking-wider text-gray-500 font-semibold">Mood</h3>
+                <div className="flex flex-wrap gap-2">
+                  {beat.mood.map((m, i) => (
+                    <Badge key={i} variant="default" size="sm">{m}</Badge>
+                  ))}
                 </div>
-
-                <div>
-                  <p className="text-sm font-mono text-matrix-green-dim mb-2">// MOOD</p>
-                  <div className="flex flex-wrap gap-2">
-                    {beat.mood.map((m, i) => (
-                      <Badge key={i} variant="default">
-                        {m}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-
-                {beat.tags.length > 0 && (
-                  <div>
-                    <p className="text-sm font-mono text-matrix-green-dim mb-2">// TAGS</p>
-                    <div className="flex flex-wrap gap-2">
-                      {beat.tags.map((t, i) => (
-                        <Badge key={i} variant="default" size="sm">
-                          {t}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-                )}
               </div>
-            </Card>
 
-            {/* Player */}
-            <Card variant="terminal">
-              <h2 className="text-lg font-mono uppercase tracking-wider text-matrix-green-light mb-4 glow-green">&gt; AUDIO PREVIEW</h2>
-              <WaveformPlayer
-                beat={beat}
-                isPlaying={isCurrentBeat && isPlaying}
-                onPlayPause={handlePlayPause}
-              />
-            </Card>
-          </div>
+              {beat.tags.length > 0 && (
+                <div className="space-y-3">
+                  <h3 className="text-sm uppercase tracking-wider text-gray-500 font-semibold">Tags</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {beat.tags.map((t, i) => (
+                      <Badge key={i} variant="default" size="sm">{t}</Badge>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
 
-          {/* Right Column - Licenses */}
-          <div className="space-y-6">
-            <Card variant="terminal">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-mono uppercase tracking-wider text-matrix-green-light glow-green">&gt; CHOOSE LICENSE</h2>
-                <button
-                  onClick={() => setShowLicenseModal(true)}
-                  className="text-sm font-mono text-matrix-green hover:text-matrix-green-light transition-colors hover-flicker"
+            {/* Right Column - License Selection */}
+            <div ref={rightColRef}>
+              <div className="bg-black/80 border border-white/5 rounded-lg p-6 sticky top-24">
+                <h2 className="text-xl font-semibold text-white mb-6">Choose License</h2>
+
+                {/* License Radio Buttons */}
+                <div className="space-y-3 mb-6">
+                  {beat.licenses.map((license) => (
+                    <button
+                      key={license.type}
+                      onClick={() => license.available && setSelectedLicense(license.type)}
+                      disabled={!license.available}
+                      className={`w-full p-4 rounded-lg border-2 transition-all text-left ${
+                        selectedLicense === license.type
+                          ? 'border-matrix-green bg-matrix-green/10'
+                          : 'border-white/10 bg-black/40 hover:border-white/20'
+                      } ${!license.available && 'opacity-50 cursor-not-allowed'}`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                            selectedLicense === license.type
+                              ? 'border-matrix-green'
+                              : 'border-gray-500'
+                          }`}>
+                            {selectedLicense === license.type && (
+                              <div className="w-3 h-3 rounded-full bg-matrix-green"></div>
+                            )}
+                          </div>
+                          <div>
+                            <p className="font-semibold text-white capitalize">{license.type}</p>
+                            <p className="text-xs text-gray-500">{getLicenseDescription(license.type)}</p>
+                          </div>
+                        </div>
+                        <span className="text-lg font-bold text-matrix-green">
+                          {(license.price / 100).toFixed(0)}€
+                        </span>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+
+                {/* Summary */}
+                <div className="border-t border-white/5 pt-6 mb-6">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-gray-400">Subtotal</span>
+                    <span className="text-white">{((selectedLicenseData?.price || 0) / 100).toFixed(2)}€</span>
+                  </div>
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="text-gray-400">Tax (20%)</span>
+                    <span className="text-white">{(((selectedLicenseData?.price || 0) * 0.2) / 100).toFixed(2)}€</span>
+                  </div>
+                  <div className="flex items-center justify-between text-xl">
+                    <span className="font-semibold text-white">Total</span>
+                    <span className="font-bold text-matrix-green">
+                      {(((selectedLicenseData?.price || 0) * 1.2) / 100).toFixed(2)}€
+                    </span>
+                  </div>
+                </div>
+
+                {/* Add to Cart */}
+                <Button
+                  variant="primary"
+                  size="lg"
+                  fullWidth
+                  onClick={handleAddToCart}
+                  disabled={!selectedLicenseData?.available}
                 >
-                  [DETAILS]
-                </button>
+                  Add to Cart
+                </Button>
+
+                <p className="text-xs text-gray-500 text-center mt-4">
+                  Secure payment powered by Stripe
+                </p>
               </div>
-
-              <LicenseSelector
-                licenses={beat.licenses}
-                selectedLicense={selectedLicense}
-                onSelect={setSelectedLicense}
-              />
-            </Card>
-
-            {/* Purchase Summary */}
-            <Card variant="terminal" className="sticky top-8">
-              <h3 className="text-lg font-mono uppercase tracking-wider text-matrix-green-light mb-4 glow-green">// SUMMARY</h3>
-              
-              <div className="space-y-3 mb-6">
-                <div className="flex justify-between">
-                  <span className="font-mono text-matrix-green-dim">Beat</span>
-                  <span className="font-mono text-matrix-green font-medium">{beat.title}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="font-mono text-matrix-green-dim">Licence</span>
-                  <span className="font-mono text-matrix-green font-medium capitalize">{selectedLicense}</span>
-                </div>
-                <div className="flex justify-between pt-3 border-t border-dark-border">
-                  <span className="text-lg font-mono font-semibold text-matrix-green-light glow-green">Total</span>
-                  <span className="text-2xl font-mono font-bold text-matrix-green glow-green-strong">
-                    {((selectedLicenseData?.price || 0) / 100).toFixed(2)}€
-                  </span>
-                </div>
-              </div>
-
-              <Button
-                variant="primary"
-                size="lg"
-                fullWidth
-                onClick={handleAddToCart}
-                disabled={!selectedLicenseData?.available}
-              >
-                AJOUTER AU PANIER_
-              </Button>
-
-              <p className="text-xs font-mono text-matrix-green-dim text-center mt-4">
-                // PAIEMENT SÉCURISÉ VIA STRIPE
-              </p>
-            </Card>
+            </div>
           </div>
         </div>
-      </div>
-
-      {/* License Modal */}
-      <LicenseModal
-        isOpen={showLicenseModal}
-        onClose={() => setShowLicenseModal(false)}
-        licenses={beat.licenses}
-      />
-    </div>
+      </section>
+    </main>
   );
 }
+

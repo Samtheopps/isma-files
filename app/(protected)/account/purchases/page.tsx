@@ -129,7 +129,7 @@ export default function PurchasesPage() {
 
                   <div className="flex items-center gap-4">
                     <div className="text-right">
-                      <p className="text-2xl font-bold text-white">{order.totalAmount}€</p>
+                      <p className="text-2xl font-bold text-white">{(order.totalAmount / 100).toFixed(2)}€</p>
                     </div>
 
                     {order.status === 'completed' && (

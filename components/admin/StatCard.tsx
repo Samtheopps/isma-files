@@ -1,17 +1,11 @@
 'use client';
 
 import React from 'react';
-import { Card } from '@/components/ui/Card';
-import { clsx } from 'clsx';
 
 interface StatCardProps {
   title: string;
   value: string | number;
   icon: React.ReactNode;
-  trend?: {
-    value: number;
-    isPositive: boolean;
-  };
   variant?: 'primary' | 'success' | 'warning' | 'info';
 }
 
@@ -19,81 +13,26 @@ export const StatCard: React.FC<StatCardProps> = ({
   title,
   value,
   icon,
-  trend,
   variant = 'primary',
 }) => {
-  const gradients = {
-    primary: 'from-matrix-green/10 to-matrix-green-dim/20',
-    success: 'from-matrix-green/10 to-matrix-green-light/20',
-    warning: 'from-matrix-green-dim/10 to-matrix-green/20',
-    info: 'from-matrix-green-light/10 to-matrix-green/20',
-  };
-
-  const iconColors = {
-    primary: 'text-matrix-green',
-    success: 'text-matrix-green',
-    warning: 'text-matrix-green',
-    info: 'text-matrix-green',
+  const colors = {
+    primary: 'text-blue-400 bg-blue-500/10 border-blue-500/20',
+    success: 'text-matrix-green bg-matrix-green/10 border-matrix-green/20',
+    warning: 'text-orange-400 bg-orange-500/10 border-orange-500/20',
+    info: 'text-purple-400 bg-purple-500/10 border-purple-500/20',
   };
 
   return (
-    <Card variant="terminal" hover className="relative overflow-hidden">
-      <div className={clsx('absolute inset-0 bg-gradient-to-br opacity-50', gradients[variant])} />
-      
-      <div className="relative">
-        <div className="flex items-start justify-between">
-          <div className="flex-1">
-            <p className="font-mono uppercase tracking-wider text-matrix-green-dim text-sm mb-1">&gt; {title}</p>
-            <p className="font-mono text-matrix-green text-3xl font-bold mb-2 glow-green">{value}</p>
-            
-            {trend && (
-              <div className="flex items-center space-x-1">
-                {trend.isPositive ? (
-                  <svg
-                    className="w-4 h-4 text-green-400"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
-                    />
-                  </svg>
-                ) : (
-                  <svg
-                    className="w-4 h-4 text-red-400"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"
-                    />
-                  </svg>
-                )}
-                <span
-                  className={clsx(
-                    'text-sm font-medium',
-                    trend.isPositive ? 'text-green-400' : 'text-red-400'
-                  )}
-                >
-                  {trend.value}%
-                </span>
-              </div>
-            )}
-          </div>
-
-          <div className={clsx('p-3 bg-matrix-black border-2 border-matrix-green', iconColors[variant])}>
-            {icon}
-          </div>
+    <div className="bg-black/80 border border-white/5 rounded-lg p-6 hover:border-white/10 transition-all duration-200">
+      <div className="flex items-start justify-between">
+        <div className="flex-1">
+          <p className="text-gray-400 text-xs uppercase tracking-wider mb-3">{title}</p>
+          <p className="text-white text-3xl font-bold">{value}</p>
+        </div>
+        <div className={`p-3 rounded-lg border ${colors[variant]}`}>
+          {icon}
         </div>
       </div>
-    </Card>
+    </div>
   );
 };

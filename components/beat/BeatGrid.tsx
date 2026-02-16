@@ -17,14 +17,15 @@ export const BeatGrid: React.FC<BeatGridProps> = ({ beats, onPageChange }) => {
   if (beats.data.length === 0) {
     return (
       <div className="text-center py-12">
-        <p className="text-gray-400 text-lg">Aucun beat trouvé</p>
+        <p className="text-steel-blue-400 text-lg">Aucun beat trouvé</p>
       </div>
     );
   }
 
   return (
     <div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      {/* Grid responsive optimisé - cards plus larges */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-8 auto-rows-fr">
         {beats.data.map((beat) => (
           <BeatCard
             key={beat._id}
