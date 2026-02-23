@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@/navigation';
+import { useTranslations } from 'next-intl';
 import { useCart } from '@/context/CartContext';
 import { Button } from '@/components/ui';
 import { formatPrice, formatPriceRounded } from '@/lib/utils/formatPrice';
@@ -14,6 +15,7 @@ interface CartDrawerProps {
 export const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose }) => {
   const router = useRouter();
   const { items, totalAmount, itemCount, clearCart, removeFromCart } = useCart();
+  const t = useTranslations('cart');
 
   useEffect(() => {
     if (isOpen) {
@@ -50,12 +52,13 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose }) => {
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-white/5">
           <div>
-            <h2 className="text-xl font-semibold text-white">Cart</h2>
-            <p className="text-sm text-gray-400 font-mono">{itemCount} item{itemCount > 1 ? 's' : ''}</p>
+            <h2 className="text-xl font-semibold text-white">{t('title')}</h2>
+            <p className="text-sm text-gray-400 font-mono">{t('itemCount', { count: itemCount })}</p>
           </div>
           <button
             onClick={onClose}
             className="text-gray-400 hover:text-white transition-colors p-2 hover:bg-white/5 rounded-lg"
+            aria-label="Close"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -72,9 +75,9 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose }) => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                 </svg>
               </div>
-              <p className="text-gray-400 mb-4">Your cart is empty</p>
+              <p className="text-gray-400 mb-4">{t('empty')}</p>
               <Button variant="primary" onClick={() => { onClose(); router.push('/beats'); }}>
-                Browse Beats
+                {t('continueShopping')}
               </Button>
             </div>
           ) : (
@@ -98,7 +101,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose }) => {
                         {item.beat.title}
                       </p>
                       <p className="text-xs text-gray-400 capitalize mb-2">
-                        {item.licenseType} License
+                        {t('item.license', { type: item.licenseType })}
                       </p>
                       <p className="text-sm font-bold text-matrix-green font-mono">
                         {formatPriceRounded(item.price)}
@@ -109,7 +112,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose }) => {
                     <button
                       onClick={() => removeFromCart(item.beatId, item.licenseType)}
                       className="text-gray-500 hover:text-red-400 transition-colors p-1 h-8"
-                      aria-label="Remove"
+                      aria-label={t('item.remove')}
                     >
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -128,21 +131,21 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose }) => {
             {/* Totals */}
             <div className="space-y-2 text-sm">
               <div className="flex justify-between text-gray-400">
-                <span>Subtotal</span>
+                <span>{t('summary.subtotal')}</span>
                 <span className="font-mono">{formatPrice(subtotal)}</span>
               </div>
               <div className="flex justify-between text-lg pt-2 border-t border-white/5">
-                <span className="font-semibold text-white">Total</span>
+                <span className="font-semibold text-white">{t('summary.total')}</span>
                 <span className="font-bold text-matrix-green">{formatPrice(total)}</span>
               </div>
             </div>
 
             <div className="space-y-2">
               <Button variant="primary" size="lg" fullWidth onClick={handleCheckout}>
-                Checkout
+                {t('summary.checkout')}
               </Button>
               <Button variant="ghost" fullWidth onClick={clearCart}>
-                Clear Cart
+                {t('clearCart')}
               </Button>
             </div>
           </div>

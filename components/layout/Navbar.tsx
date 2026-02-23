@@ -1,8 +1,9 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { Link } from '@/navigation';
+import { useRouter } from '@/navigation';
+import { useTranslations } from 'next-intl';
 import { useAuth } from '@/context/AuthContext';
 import { useCart } from '@/context/CartContext';
 import { CartDrawer } from '@/components/cart/CartDrawer';
@@ -22,6 +23,7 @@ export const Navbar: React.FC<NavbarProps> = ({ disableScrollAnimation = false }
   const router = useRouter();
   const { user, logout } = useAuth();
   const { itemCount } = useCart();
+  const t = useTranslations('nav');
   const [showCart, setShowCart] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   
@@ -135,8 +137,8 @@ export const Navbar: React.FC<NavbarProps> = ({ disableScrollAnimation = false }
               </div>
               
               <div className="flex flex-col">
-                <span className="text-xl font-semibold text-white group-hover:text-matrix-green/90 transition-colors duration-300">Isma Files</span>
-                <span className="text-xs text-gray-500 font-mono tracking-wider group-hover:text-gray-400 transition-colors duration-300">{'// PREMIUM_BEATS'}</span>
+                <span className="text-xl font-semibold text-white group-hover:text-matrix-green/90 transition-colors duration-300">{t('logo')}</span>
+                <span className="text-xs text-gray-500 font-mono tracking-wider group-hover:text-gray-400 transition-colors duration-300">{t('tagline')}</span>
               </div>
             </Link>
 
@@ -146,7 +148,7 @@ export const Navbar: React.FC<NavbarProps> = ({ disableScrollAnimation = false }
                 href="/beats" 
                 className="text-gray-400 hover:text-matrix-green/80 transition-colors duration-300 font-medium"
               >
-                Beats
+                {t('beats')}
               </Link>
               
               {user?.role === 'admin' && (
@@ -154,7 +156,7 @@ export const Navbar: React.FC<NavbarProps> = ({ disableScrollAnimation = false }
                   href="/admin" 
                   className="text-red-400 hover:text-red-300 transition-colors font-medium px-3 py-1 rounded-lg border border-red-500/30 bg-red-500/10"
                 >
-                  Admin
+                  {t('admin')}
                 </Link>
               )}
 
@@ -162,6 +164,7 @@ export const Navbar: React.FC<NavbarProps> = ({ disableScrollAnimation = false }
               <button
                 onClick={() => setShowCart(true)}
                 className="relative p-2 text-gray-400 hover:text-matrix-green/80 transition-all duration-300 rounded-lg hover:bg-white/5 group"
+                aria-label={t('cart')}
               >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
@@ -184,23 +187,23 @@ export const Navbar: React.FC<NavbarProps> = ({ disableScrollAnimation = false }
                   </div>
                   <Link href="/account">
                     <Button variant="ghost" size="sm">
-                      Account
+                      {t('account')}
                     </Button>
                   </Link>
                   <Button variant="secondary" size="sm" onClick={handleLogout}>
-                    Logout
+                    {t('logout')}
                   </Button>
                 </div>
               ) : (
                 <div className="flex items-center gap-3">
                   <Link href="/auth/login">
                     <Button variant="ghost" size="sm">
-                      Login
+                      {t('login')}
                     </Button>
                   </Link>
                   <Link href="/auth/register">
                     <Button variant="primary" size="sm">
-                      Register
+                      {t('register')}
                     </Button>
                   </Link>
                 </div>
@@ -231,7 +234,7 @@ export const Navbar: React.FC<NavbarProps> = ({ disableScrollAnimation = false }
                   className="text-gray-400 hover:text-matrix-green/80 transition-colors duration-300"
                   onClick={() => setShowMobileMenu(false)}
                 >
-                  Beats
+                  {t('beats')}
                 </Link>
                 
                 {user?.role === 'admin' && (
@@ -240,7 +243,7 @@ export const Navbar: React.FC<NavbarProps> = ({ disableScrollAnimation = false }
                     className="text-red-400 hover:text-red-300 transition-colors"
                     onClick={() => setShowMobileMenu(false)}
                   >
-                    Admin
+                    {t('admin')}
                   </Link>
                 )}
 
@@ -248,26 +251,26 @@ export const Navbar: React.FC<NavbarProps> = ({ disableScrollAnimation = false }
                   <>
                     <Link href="/account" onClick={() => setShowMobileMenu(false)}>
                       <Button variant="ghost" size="sm" fullWidth>
-                        Account
+                        {t('account')}
                       </Button>
                     </Link>
                     <Button variant="secondary" size="sm" fullWidth onClick={() => {
                       handleLogout();
                       setShowMobileMenu(false);
                     }}>
-                      Logout
+                      {t('logout')}
                     </Button>
                   </>
                 ) : (
                   <>
                     <Link href="/auth/login" onClick={() => setShowMobileMenu(false)}>
                       <Button variant="ghost" size="sm" fullWidth>
-                        Login
+                        {t('login')}
                       </Button>
                     </Link>
                     <Link href="/auth/register" onClick={() => setShowMobileMenu(false)}>
                       <Button variant="primary" size="sm" fullWidth>
-                        Register
+                        {t('register')}
                       </Button>
                     </Link>
                   </>

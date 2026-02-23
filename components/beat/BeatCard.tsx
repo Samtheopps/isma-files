@@ -2,6 +2,7 @@
 
 import React, { useRef, useEffect } from 'react';
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 import { IBeat } from '@/types';
 import { Card, Badge, Button } from '@/components/ui';
 import { usePlayer } from '@/context/PlayerContext';
@@ -18,6 +19,7 @@ interface BeatCardProps {
 export const BeatCard: React.FC<BeatCardProps> = ({ beat, onClick }) => {
   const { play, pause, currentBeat, isPlaying } = usePlayer();
   const { addToCart } = useCart();
+  const t = useTranslations('beats.card');
   
   const cardRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
@@ -206,7 +208,7 @@ export const BeatCard: React.FC<BeatCardProps> = ({ beat, onClick }) => {
                 <div className="w-0.5 h-3 bg-ink-black-950 animate-waveform" style={{ animationDelay: '150ms' }} />
                 <div className="w-0.5 h-3 bg-ink-black-950 animate-waveform" style={{ animationDelay: '300ms' }} />
               </div>
-              <span className="text-xs font-semibold text-ink-black-950">Playing</span>
+              <span className="text-xs font-semibold text-ink-black-950">{t('playing')}</span>
             </div>
           )}
         </div>
@@ -242,7 +244,8 @@ export const BeatCard: React.FC<BeatCardProps> = ({ beat, onClick }) => {
             <button
               onClick={handleAddToCart}
               className="p-2.5 bg-fresh-sky-500/10 hover:bg-fresh-sky-500/20 rounded-lg transition-all group/btn flex-shrink-0"
-              title="Add to cart"
+              title={t('addToCart')}
+              aria-label={t('addToCart')}
             >
               <svg className="w-5 h-5 text-fresh-sky-500 group-hover/btn:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
