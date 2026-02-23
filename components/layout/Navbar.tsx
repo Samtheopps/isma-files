@@ -7,6 +7,7 @@ import { useTranslations } from 'next-intl';
 import { useAuth } from '@/context/AuthContext';
 import { useCart } from '@/context/CartContext';
 import { CartDrawer } from '@/components/cart/CartDrawer';
+import { LanguageSwitcher } from './LanguageSwitcher';
 import { Button, Badge } from '@/components/ui';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -160,6 +161,9 @@ export const Navbar: React.FC<NavbarProps> = ({ disableScrollAnimation = false }
                 </Link>
               )}
 
+              {/* Language Switcher */}
+              <LanguageSwitcher />
+
               {/* Cart Button - Premium Style */}
               <button
                 onClick={() => setShowCart(true)}
@@ -229,6 +233,11 @@ export const Navbar: React.FC<NavbarProps> = ({ disableScrollAnimation = false }
           {showMobileMenu && (
             <div className="md:hidden py-4 border-t border-white/5 bg-black/98 backdrop-blur-xl">
               <div className="flex flex-col gap-4">
+                {/* Language Switcher at Top */}
+                <div className="px-6">
+                  <LanguageSwitcher />
+                </div>
+                
                 <Link 
                   href="/beats" 
                   className="text-gray-400 hover:text-matrix-green/80 transition-colors duration-300"

@@ -619,16 +619,16 @@
     "nowPlaying": "En lecture"
   },
   "email": {
-    "orderConfirmation": {
+    "order": {
       "subject": "Confirmation de commande - {orderNumber}",
       "title": "ISMA FILES",
-      "greeting": "Merci pour votre achat ! 🎵",
-      "orderConfirmed": "Votre commande <strong>{orderNumber}</strong> a été confirmée.",
+      "thanks": "Merci pour votre achat ! 🎵",
+      "orderConfirmed": "Votre commande {orderNumber} a été confirmée.",
       "orderDetails": "Détails de la commande :",
-      "total": "Total : {amount}€",
+      "total": "Total : {amount}",
       "guestNotice": {
         "title": "ℹ️ Important :",
-        "message": "Ce lien de téléchargement est valable pendant <strong>30 jours</strong> avec des <strong>téléchargements illimités</strong>. Nous vous recommandons de créer un compte pour conserver un accès permanent à vos achats."
+        "message": "Ce lien de téléchargement est valable pendant 30 jours avec des téléchargements illimités. Nous vous recommandons de créer un compte pour conserver un accès permanent à vos achats."
       },
       "downloadCta": "Vous pouvez télécharger vos fichiers en cliquant sur le bouton ci-dessous :",
       "downloadButton": "Télécharger mes fichiers",
@@ -640,73 +640,83 @@
     }
   },
   "pdf": {
-    "title": "CONTRAT DE LICENCE MUSICALE",
-    "sections": {
-      "parties": "PARTIES",
-      "musicalWork": "ŒUVRE MUSICALE",
-      "licenseTerms": "TERMES DE LA LICENCE",
-      "generalConditions": "CONDITIONS GÉNÉRALES"
-    },
-    "labels": {
+    "license": {
+      "title": "CONTRAT DE LICENCE MUSICALE",
+      "licenseNumber": "Numéro de licence",
+      "beat": "Beat",
       "producer": "Producteur",
-      "licensee": "Licensee",
-      "email": "Email",
-      "title": "Titre",
       "licenseType": "Type de licence",
       "price": "Prix",
-      "orderNumber": "N°"
-    },
-    "conditions": {
-      "acceptance": "Le Licensee reconnaît avoir lu et accepté les termes de cette licence.",
-      "nonTransferable": "Cette licence est non-transférable et commence à la date d'achat.",
-      "credit": "Le crédit du producteur doit apparaître comme suit: \"(prod. Isma)\"",
-      "platforms": "sur toutes les plateformes de distribution."
-    },
-    "footer": {
+      "buyer": "Acheteur",
+      "purchaseDate": "Date d'achat",
+      "email": "Email",
+      "orderNumber": "N°",
+      "rights": {
+        "title": "DROITS ACCORDÉS",
+        "usage": "Usage",
+        "streams": "Streams autorisés",
+        "distribution": "Copies distribuées",
+        "musicVideos": "Vidéos musicales",
+        "radioStations": "Stations de radio",
+        "unlimited": "Illimité"
+      },
+      "footer": "Ce document constitue un contrat légal entre le producteur et l'acheteur. Conservez-le précieusement.",
       "copyright": "© {year} ISMA-FILES • Tous droits réservés • www.isma-files.com",
-      "validity": "Document généré automatiquement - Valeur contractuelle"
-    },
-    "licenseTerms": {
-      "basic": [
-        "Fichier MP3 haute qualité inclus",
-        "Jusqu'à 50,000 streams autorisés",
-        "Jusqu'à 500 ventes physiques autorisées",
-        "L'instrumental reste disponible à la vente",
-        "Crédit obligatoire du producteur",
-        "Licence non-exclusive"
-      ],
-      "standard": [
-        "Fichiers MP3 et WAV haute qualité inclus",
-        "Jusqu'à 100,000 streams autorisés",
-        "Jusqu'à 1,000 ventes physiques autorisées",
-        "L'instrumental reste disponible à la vente",
-        "Crédit obligatoire du producteur",
-        "Licence non-exclusive"
-      ],
-      "pro": [
-        "Fichiers MP3, WAV et pistes séparées (stems) inclus",
-        "Jusqu'à 250,000 streams autorisés",
-        "Jusqu'à 2,500 ventes physiques autorisées",
-        "L'instrumental reste disponible à la vente",
-        "Crédit obligatoire du producteur",
-        "Licence non-exclusive"
-      ],
-      "unlimited": [
-        "Fichiers MP3, WAV et pistes séparées (stems) inclus",
-        "Streams illimités",
-        "Ventes physiques illimitées",
-        "L'instrumental reste disponible à la vente",
-        "Crédit obligatoire du producteur",
-        "Licence non-exclusive"
-      ],
-      "exclusive": [
-        "Fichiers MP3, WAV et pistes séparées (stems) inclus",
-        "Streams et ventes illimités",
-        "L'instrumental est retiré de la vente",
-        "Crédit obligatoire du producteur",
-        "Licence EXCLUSIVE - Vous êtes le seul à pouvoir utiliser cet instrumental",
-        "Droits exclusifs permanents"
-      ]
+      "validity": "Document généré automatiquement - Valeur contractuelle",
+      "sections": {
+        "parties": "PARTIES",
+        "musicalWork": "ŒUVRE MUSICALE",
+        "licenseTerms": "TERMES DE LA LICENCE",
+        "generalConditions": "CONDITIONS GÉNÉRALES"
+      },
+      "conditions": {
+        "acceptance": "Le Licensee reconnaît avoir lu et accepté les termes de cette licence.",
+        "nonTransferable": "Cette licence est non-transférable et commence à la date d'achat.",
+        "credit": "Le crédit du producteur doit apparaître comme suit: \"(prod. Isma)\"",
+        "platforms": "sur toutes les plateformes de distribution."
+      },
+      "terms": {
+        "basic": [
+          "Fichier MP3 haute qualité inclus",
+          "Jusqu'à 50,000 streams autorisés",
+          "Jusqu'à 500 ventes physiques autorisées",
+          "L'instrumental reste disponible à la vente",
+          "Crédit obligatoire du producteur",
+          "Licence non-exclusive"
+        ],
+        "standard": [
+          "Fichiers MP3 et WAV haute qualité inclus",
+          "Jusqu'à 100,000 streams autorisés",
+          "Jusqu'à 1,000 ventes physiques autorisées",
+          "L'instrumental reste disponible à la vente",
+          "Crédit obligatoire du producteur",
+          "Licence non-exclusive"
+        ],
+        "pro": [
+          "Fichiers MP3, WAV et pistes séparées (stems) inclus",
+          "Jusqu'à 250,000 streams autorisés",
+          "Jusqu'à 2,500 ventes physiques autorisées",
+          "L'instrumental reste disponible à la vente",
+          "Crédit obligatoire du producteur",
+          "Licence non-exclusive"
+        ],
+        "unlimited": [
+          "Fichiers MP3, WAV et pistes séparées (stems) inclus",
+          "Streams illimités",
+          "Ventes physiques illimitées",
+          "L'instrumental reste disponible à la vente",
+          "Crédit obligatoire du producteur",
+          "Licence non-exclusive"
+        ],
+        "exclusive": [
+          "Fichiers MP3, WAV et pistes séparées (stems) inclus",
+          "Streams et ventes illimités",
+          "L'instrumental est retiré de la vente",
+          "Crédit obligatoire du producteur",
+          "Licence EXCLUSIVE - Vous êtes le seul à pouvoir utiliser cet instrumental",
+          "Droits exclusifs permanents"
+        ]
+      }
     }
   },
   "errors": {

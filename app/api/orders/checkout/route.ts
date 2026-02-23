@@ -11,6 +11,10 @@ interface CheckoutItem {
 
 export async function POST(req: NextRequest) {
   try {
+    // Détecter la locale depuis le referer (la page qui a fait l'appel)
+    const referer = req.headers.get('referer') || '';
+    const locale = referer.includes('/fr/') ? 'fr' : 'en';
+    
     // Vérifier l'authentification (optionnelle pour guest checkout)
     const token = req.headers.get('authorization')?.replace('Bearer ', '');
     
@@ -103,6 +107,7 @@ export async function POST(req: NextRequest) {
         ...(decoded && { userId: decoded.userId }),
         isGuest: isGuest.toString(),
         ...(isGuest && { guestEmail }),
+        locale,
       },
     });
 

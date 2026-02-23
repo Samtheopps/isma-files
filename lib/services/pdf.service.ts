@@ -1,4 +1,5 @@
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
+import { getTranslations } from 'next-intl/server';
 import { LicenseType } from '@/types';
 
 interface GenerateLicenseContractParams {
@@ -9,12 +10,16 @@ interface GenerateLicenseContractParams {
   licenseType: LicenseType;
   price: number;
   date: Date;
+  locale?: string;
 }
 
 export const generateLicenseContract = async (
   params: GenerateLicenseContractParams
 ): Promise<Buffer> => {
   try {
+    const locale = params.locale || 'en';
+    const t = await getTranslations({ locale, namespace: 'pdf.license' });
+    
     // Créer un nouveau document PDF
     const pdfDoc = await PDFDocument.create();
     
@@ -51,7 +56,7 @@ export const generateLicenseContract = async (
       color: darkBlueGray,
     });
 
-    page.drawText('CONTRAT DE LICENCE MUSICALE', {
+    page.drawText(t('title'), {
       x: 50,
       y: height - 65,
       size: 16,
@@ -61,7 +66,7 @@ export const generateLicenseContract = async (
 
     // Numéro de commande et date à droite
     const rightMargin = width - 50;
-    page.drawText(`N° ${params.orderNumber}`, {
+    page.drawText(`${t('orderNumber')} ${params.orderNumber}`, {
       x: rightMargin - 150,
       y: height - 40,
       size: 11,
@@ -69,7 +74,8 @@ export const generateLicenseContract = async (
       color: darkGray,
     });
 
-    page.drawText(params.date.toLocaleDateString('fr-FR'), {
+    const dateFormat = locale === 'fr' ? 'fr-FR' : 'en-US';
+    page.drawText(params.date.toLocaleDateString(dateFormat), {
       x: rightMargin - 150,
       y: height - 60,
       size: 10,
@@ -80,7 +86,7 @@ export const generateLicenseContract = async (
     let yPosition = height - 130;
     
     // Section PARTIES
-    page.drawText('PARTIES', {
+    page.drawText(t('sections.parties'), {
       x: 50,
       y: yPosition,
       size: 14,
@@ -89,16 +95,17 @@ export const generateLicenseContract = async (
     });
     
     // Ligne de soulignement
+    const partiesWidth = helveticaBold.widthOfTextAtSize(t('sections.parties'), 14);
     page.drawLine({
       start: { x: 50, y: yPosition - 2 },
-      end: { x: 130, y: yPosition - 2 },
+      end: { x: 50 + partiesWidth, y: yPosition - 2 },
       thickness: 2,
       color: cyan,
     });
     
     yPosition -= 25;
     
-    page.drawText(`Producteur: Isma`, {
+    page.drawText(`${t('producer')}: Isma`, {
       x: 50,
       y: yPosition,
       size: 11,
@@ -108,7 +115,7 @@ export const generateLicenseContract = async (
     
     yPosition -= 20;
     
-    page.drawText(`Licensee: ${params.customerName}`, {
+    page.drawText(`${t('buyer')}: ${params.customerName}`, {
       x: 50,
       y: yPosition,
       size: 11,
@@ -118,7 +125,7 @@ export const generateLicenseContract = async (
     
     yPosition -= 20;
     
-    page.drawText(`Email: ${params.customerEmail}`, {
+    page.drawText(`${t('email')}: ${params.customerEmail}`, {
       x: 50,
       y: yPosition,
       size: 11,
@@ -141,7 +148,7 @@ export const generateLicenseContract = async (
     yPosition -= 10;
     
     // Section ŒUVRE MUSICALE
-    page.drawText('ŒUVRE MUSICALE', {
+    page.drawText(t('sections.musicalWork'), {
       x: 50,
       y: yPosition,
       size: 14,
@@ -149,16 +156,17 @@ export const generateLicenseContract = async (
       color: darkBlueGray,
     });
     
+    const musicalWorkWidth = helveticaBold.widthOfTextAtSize(t('sections.musicalWork'), 14);
     page.drawLine({
       start: { x: 50, y: yPosition - 2 },
-      end: { x: 190, y: yPosition - 2 },
+      end: { x: 50 + musicalWorkWidth, y: yPosition - 2 },
       thickness: 2,
       color: cyan,
     });
     
     yPosition -= 25;
     
-    page.drawText(`Titre: ${params.beatTitle}`, {
+    page.drawText(`${t('beat')}: ${params.beatTitle}`, {
       x: 50,
       y: yPosition,
       size: 11,
@@ -168,7 +176,7 @@ export const generateLicenseContract = async (
     
     yPosition -= 20;
     
-    page.drawText(`Type de licence: ${params.licenseType.toUpperCase()}`, {
+    page.drawText(`${t('licenseType')}: ${params.licenseType.toUpperCase()}`, {
       x: 50,
       y: yPosition,
       size: 11,
@@ -178,7 +186,7 @@ export const generateLicenseContract = async (
     
     yPosition -= 20;
     
-    page.drawText(`Prix: ${(params.price / 100).toFixed(2)}€`, {
+    page.drawText(`${t('price')}: ${(params.price / 100).toFixed(2)}€`, {
       x: 50,
       y: yPosition,
       size: 11,
@@ -189,7 +197,7 @@ export const generateLicenseContract = async (
     yPosition -= 40;
     
     // Section TERMES DE LA LICENCE
-    page.drawText('TERMES DE LA LICENCE', {
+    page.drawText(t('sections.licenseTerms'), {
       x: 50,
       y: yPosition,
       size: 14,
@@ -197,16 +205,17 @@ export const generateLicenseContract = async (
       color: darkBlueGray,
     });
     
+    const licenseTermsWidth = helveticaBold.widthOfTextAtSize(t('sections.licenseTerms'), 14);
     page.drawLine({
       start: { x: 50, y: yPosition - 2 },
-      end: { x: 230, y: yPosition - 2 },
+      end: { x: 50 + licenseTermsWidth, y: yPosition - 2 },
       thickness: 2,
       color: cyan,
     });
     
     yPosition -= 25;
     
-    const licenseTerms = getLicenseTerms(params.licenseType);
+    const licenseTerms = await getLicenseTerms(params.licenseType, locale);
     
     for (const term of licenseTerms) {
       page.drawText(`• ${term}`, {
@@ -222,7 +231,7 @@ export const generateLicenseContract = async (
     yPosition -= 20;
     
     // Section CONDITIONS GÉNÉRALES
-    page.drawText('CONDITIONS GÉNÉRALES', {
+    page.drawText(t('sections.generalConditions'), {
       x: 50,
       y: yPosition,
       size: 14,
@@ -230,9 +239,10 @@ export const generateLicenseContract = async (
       color: darkBlueGray,
     });
     
+    const conditionsWidth = helveticaBold.widthOfTextAtSize(t('sections.generalConditions'), 14);
     page.drawLine({
       start: { x: 50, y: yPosition - 2 },
-      end: { x: 240, y: yPosition - 2 },
+      end: { x: 50 + conditionsWidth, y: yPosition - 2 },
       thickness: 2,
       color: cyan,
     });
@@ -240,10 +250,7 @@ export const generateLicenseContract = async (
     yPosition -= 25;
     
     // Texte multiligne pour les conditions générales
-    const condition1 = 'Le Licensee reconnaît avoir lu et accepté les termes de cette licence.';
-    const condition2 = 'Cette licence est non-transférable et commence à la date d\'achat.';
-    
-    page.drawText(condition1, {
+    page.drawText(t('conditions.acceptance'), {
       x: 50,
       y: yPosition,
       size: 11,
@@ -254,7 +261,7 @@ export const generateLicenseContract = async (
     
     yPosition -= 20;
     
-    page.drawText(condition2, {
+    page.drawText(t('conditions.nonTransferable'), {
       x: 50,
       y: yPosition,
       size: 11,
@@ -265,10 +272,7 @@ export const generateLicenseContract = async (
     
     yPosition -= 30;
     
-    const creditText = `Le crédit du producteur doit apparaître comme suit: "(prod. Isma)"`;
-    const creditText2 = 'sur toutes les plateformes de distribution.';
-    
-    page.drawText(creditText, {
+    page.drawText(t('conditions.credit'), {
       x: 50,
       y: yPosition,
       size: 11,
@@ -279,7 +283,7 @@ export const generateLicenseContract = async (
     
     yPosition -= 20;
     
-    page.drawText(creditText2, {
+    page.drawText(t('conditions.platforms'), {
       x: 50,
       y: yPosition,
       size: 11,
@@ -296,7 +300,8 @@ export const generateLicenseContract = async (
     });
 
     // Footer text
-    const footerText = `© ${new Date().getFullYear()} ISMA-FILES • Tous droits réservés • www.isma-files.com`;
+    const currentYear = new Date().getFullYear();
+    const footerText = t('copyright', { year: currentYear });
     const footerWidth = helvetica.widthOfTextAtSize(footerText, 9);
 
     page.drawText(footerText, {
@@ -308,7 +313,7 @@ export const generateLicenseContract = async (
     });
 
     // Petit texte de validation
-    page.drawText('Document généré automatiquement - Valeur contractuelle', {
+    page.drawText(t('validity'), {
       x: 50,
       y: 20,
       size: 8,
@@ -327,49 +332,13 @@ export const generateLicenseContract = async (
   }
 };
 
-const getLicenseTerms = (licenseType: LicenseType): string[] => {
-  const terms: Record<LicenseType, string[]> = {
-    basic: [
-      'Fichier MP3 haute qualité inclus',
-      'Jusqu\'à 50,000 streams autorisés',
-      'Jusqu\'à 500 ventes physiques autorisées',
-      'L\'instrumental reste disponible à la vente',
-      'Crédit obligatoire du producteur',
-      'Licence non-exclusive',
-    ],
-    standard: [
-      'Fichiers MP3 et WAV haute qualité inclus',
-      'Jusqu\'à 100,000 streams autorisés',
-      'Jusqu\'à 1,000 ventes physiques autorisées',
-      'L\'instrumental reste disponible à la vente',
-      'Crédit obligatoire du producteur',
-      'Licence non-exclusive',
-    ],
-    pro: [
-      'Fichiers MP3, WAV et pistes séparées (stems) inclus',
-      'Jusqu\'à 250,000 streams autorisés',
-      'Jusqu\'à 2,500 ventes physiques autorisées',
-      'L\'instrumental reste disponible à la vente',
-      'Crédit obligatoire du producteur',
-      'Licence non-exclusive',
-    ],
-    unlimited: [
-      'Fichiers MP3, WAV et pistes séparées (stems) inclus',
-      'Streams illimités',
-      'Ventes physiques illimitées',
-      'L\'instrumental reste disponible à la vente',
-      'Crédit obligatoire du producteur',
-      'Licence non-exclusive',
-    ],
-    exclusive: [
-      'Fichiers MP3, WAV et pistes séparées (stems) inclus',
-      'Streams et ventes illimités',
-      'L\'instrumental est retiré de la vente',
-      'Crédit obligatoire du producteur',
-      'Licence EXCLUSIVE - Vous êtes le seul à pouvoir utiliser cet instrumental',
-      'Droits exclusifs permanents',
-    ],
-  };
-
-  return terms[licenseType];
+const getLicenseTerms = async (licenseType: LicenseType, locale: string): Promise<string[]> => {
+  const t = await getTranslations({ locale, namespace: 'pdf.license' });
+  
+  // Get the terms array from translations
+  const termsKey = `terms.${licenseType}` as const;
+  const terms = t.raw(termsKey);
+  
+  // Return the array directly (it's already in the correct language)
+  return Array.isArray(terms) ? terms : [];
 };

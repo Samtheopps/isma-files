@@ -626,16 +626,16 @@
     "nowPlaying": "Now Playing"
   },
   "email": {
-    "orderConfirmation": {
+    "order": {
       "subject": "Order Confirmation - {orderNumber}",
       "title": "ISMA FILES",
-      "greeting": "Thank you for your purchase! 🎵",
-      "orderConfirmed": "Your order <strong>{orderNumber}</strong> has been confirmed.",
-      "orderDetails": "Order Details:",
-      "total": "Total: {amount}€",
+      "thanks": "Thank you for your purchase! 🎵",
+      "orderConfirmed": "Your order {orderNumber} has been confirmed.",
+      "orderDetails": "Order details:",
+      "total": "Total: {amount}",
       "guestNotice": {
         "title": "ℹ️ Important:",
-        "message": "This download link is valid for <strong>30 days</strong> with <strong>unlimited downloads</strong>. We recommend creating an account to keep permanent access to your purchases."
+        "message": "This download link is valid for 30 days with unlimited downloads. We recommend creating an account to keep permanent access to your purchases."
       },
       "downloadCta": "You can download your files by clicking the button below:",
       "downloadButton": "Download My Files",
@@ -647,73 +647,83 @@
     }
   },
   "pdf": {
-    "title": "MUSIC LICENSE CONTRACT",
-    "sections": {
-      "parties": "PARTIES",
-      "musicalWork": "MUSICAL WORK",
-      "licenseTerms": "LICENSE TERMS",
-      "generalConditions": "GENERAL CONDITIONS"
-    },
-    "labels": {
+    "license": {
+      "title": "MUSIC LICENSE AGREEMENT",
+      "licenseNumber": "License Number",
+      "beat": "Beat",
       "producer": "Producer",
-      "licensee": "Licensee",
-      "email": "Email",
-      "title": "Title",
       "licenseType": "License Type",
       "price": "Price",
-      "orderNumber": "Order #"
-    },
-    "conditions": {
-      "acceptance": "Licensee acknowledges having read and accepted the terms of this license.",
-      "nonTransferable": "This license is non-transferable and begins on the purchase date.",
-      "credit": "Producer credit must appear as follows: \"(prod. Isma)\"",
-      "platforms": "on all distribution platforms."
-    },
-    "footer": {
+      "buyer": "Buyer",
+      "purchaseDate": "Purchase Date",
+      "email": "Email",
+      "orderNumber": "Order #",
+      "rights": {
+        "title": "RIGHTS GRANTED",
+        "usage": "Usage",
+        "streams": "Permitted Streams",
+        "distribution": "Distributed Copies",
+        "musicVideos": "Music Videos",
+        "radioStations": "Radio Stations",
+        "unlimited": "Unlimited"
+      },
+      "footer": "This document constitutes a legal contract between the producer and the buyer. Keep it safe.",
       "copyright": "© {year} ISMA-FILES • All rights reserved • www.isma-files.com",
-      "validity": "Automatically generated document - Contractual value"
-    },
-    "licenseTerms": {
-      "basic": [
-        "High-quality MP3 file included",
-        "Up to 50,000 authorized streams",
-        "Up to 500 authorized physical sales",
-        "Beat remains available for sale",
-        "Producer credit required",
-        "Non-exclusive license"
-      ],
-      "standard": [
-        "High-quality MP3 and WAV files included",
-        "Up to 100,000 authorized streams",
-        "Up to 1,000 authorized physical sales",
-        "Beat remains available for sale",
-        "Producer credit required",
-        "Non-exclusive license"
-      ],
-      "pro": [
-        "MP3, WAV and stems files included",
-        "Up to 250,000 authorized streams",
-        "Up to 2,500 authorized physical sales",
-        "Beat remains available for sale",
-        "Producer credit required",
-        "Non-exclusive license"
-      ],
-      "unlimited": [
-        "MP3, WAV and stems files included",
-        "Unlimited streams",
-        "Unlimited physical sales",
-        "Beat remains available for sale",
-        "Producer credit required",
-        "Non-exclusive license"
-      ],
-      "exclusive": [
-        "MP3, WAV and stems files included",
-        "Unlimited streams and sales",
-        "Beat is removed from sale",
-        "Producer credit required",
-        "EXCLUSIVE License - You are the only one who can use this beat",
-        "Permanent exclusive rights"
-      ]
+      "validity": "Automatically generated document - Contractual value",
+      "sections": {
+        "parties": "PARTIES",
+        "musicalWork": "MUSICAL WORK",
+        "licenseTerms": "LICENSE TERMS",
+        "generalConditions": "GENERAL CONDITIONS"
+      },
+      "conditions": {
+        "acceptance": "Licensee acknowledges having read and accepted the terms of this license.",
+        "nonTransferable": "This license is non-transferable and begins on the purchase date.",
+        "credit": "Producer credit must appear as follows: \"(prod. Isma)\"",
+        "platforms": "on all distribution platforms."
+      },
+      "terms": {
+        "basic": [
+          "High-quality MP3 file included",
+          "Up to 50,000 authorized streams",
+          "Up to 500 authorized physical sales",
+          "Beat remains available for sale",
+          "Producer credit required",
+          "Non-exclusive license"
+        ],
+        "standard": [
+          "High-quality MP3 and WAV files included",
+          "Up to 100,000 authorized streams",
+          "Up to 1,000 authorized physical sales",
+          "Beat remains available for sale",
+          "Producer credit required",
+          "Non-exclusive license"
+        ],
+        "pro": [
+          "MP3, WAV and stems files included",
+          "Up to 250,000 authorized streams",
+          "Up to 2,500 authorized physical sales",
+          "Beat remains available for sale",
+          "Producer credit required",
+          "Non-exclusive license"
+        ],
+        "unlimited": [
+          "MP3, WAV and stems files included",
+          "Unlimited streams",
+          "Unlimited physical sales",
+          "Beat remains available for sale",
+          "Producer credit required",
+          "Non-exclusive license"
+        ],
+        "exclusive": [
+          "MP3, WAV and stems files included",
+          "Unlimited streams and sales",
+          "Beat is removed from sale",
+          "Producer credit required",
+          "EXCLUSIVE License - You are the only one who can use this beat",
+          "Permanent exclusive rights"
+        ]
+      }
     }
   },
   "errors": {

@@ -81,6 +81,7 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
     const itemsString = session.metadata?.items;
     const isGuest = session.metadata?.isGuest === 'true';
     const guestEmail = session.metadata?.guestEmail;
+    const locale = session.metadata?.locale || 'en';
 
     if (!itemsString) {
       throw new Error('Métadonnées items manquantes dans la session');
@@ -164,6 +165,7 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
         licenseType: item.licenseType,
         price: item.price,
         date: new Date(),
+        locale,
       });
       console.log(`[WEBHOOK] PDF généré, taille: ${pdfBuffer.length} bytes`);
 
@@ -249,6 +251,7 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
       totalAmount: order.totalAmount,
       downloadUrl,
       isGuest,
+      locale,
     });
     
     console.log(`[WEBHOOK] Email envoyé avec succès`);
