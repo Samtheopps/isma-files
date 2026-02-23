@@ -132,7 +132,7 @@ export default function BeatsPage() {
   };
 
   return (
-    <main className="min-h-screen pt-16 pb-32">
+    <main className="min-h-screen pt-20 pb-32">
       {/* Page Header */}
       <section ref={headerRef} className="px-4 py-8 border-b border-white/5">
         <div className="max-w-7xl mx-auto">

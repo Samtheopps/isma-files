@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { BeatForm } from '@/components/admin/BeatForm';
 import { Loader } from '@/components/ui/Loader';
+import { Button } from '@/components/ui/Button';
 import { IBeat } from '@/types';
 
 export default function EditBeatPage() {
@@ -84,9 +85,19 @@ export default function EditBeatPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold text-white mb-2">Éditer le beat</h1>
-        <p className="text-gray-400">Modifiez les informations de votre beat</p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-white mb-2">Éditer le beat</h1>
+          <p className="text-gray-400">Modifiez les informations de votre beat</p>
+        </div>
+        
+        {/* Bouton d'accès à l'upload */}
+        <Button
+          variant="secondary"
+          onClick={() => router.push(`/admin/beats/${params.id}/upload`)}
+        >
+          📁 Uploader les fichiers audio
+        </Button>
       </div>
 
       <BeatForm initialData={beat} onSubmit={handleSubmit} isEdit />

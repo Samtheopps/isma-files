@@ -75,7 +75,7 @@ export const BeatFiltersBar: React.FC<BeatFiltersBarProps> = ({
     filters.search !== '';
 
   return (
-    <div className="sticky top-16 z-20 bg-black/95 backdrop-blur-xl border-b border-white/5">
+    <div className="sticky top-20 z-30 bg-black/95 backdrop-blur-xl border-b border-white/5">
       <div className="max-w-7xl mx-auto px-4 py-4">
         <div className="flex flex-wrap items-center gap-3">
           {/* Genre */}

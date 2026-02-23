@@ -54,13 +54,14 @@ export async function GET(
       );
     }
 
-    // Check download limit
-    if (download.downloadCount >= download.maxDownloads) {
-      return NextResponse.json(
-        { error: 'Limite de téléchargements atteinte' },
-        { status: 429 }
-      );
-    }
+    // Limite de téléchargements désactivée
+    // Les clients peuvent télécharger autant de fois qu'ils veulent pendant la période de validité
+    // if (download.downloadCount >= download.maxDownloads) {
+    //   return NextResponse.json(
+    //     { error: 'Limite de téléchargements atteinte' },
+    //     { status: 429 }
+    //   );
+    // }
 
     const { fileType } = params;
     const validTypes = ['mp3', 'wav', 'stems', 'contract'];
@@ -97,14 +98,36 @@ export async function GET(
       );
     }
 
-    // Increment download count
-    download.downloadCount += 1;
-    await download.save();
+    // Increment download count de manière asynchrone (non-bloquant)
+    // Ne pas attendre la sauvegarde pour renvoyer la réponse
+    Download.findByIdAndUpdate(
+      params.id,
+      { $inc: { downloadCount: 1 } },
+      { new: false }
+    ).catch(err => console.error('Erreur incrémentation download count:', err));
 
-    return NextResponse.json({
-      success: true,
-      url: fileUrl,
-    });
+    // Optimisation Cloudinary : Ajout de fl_attachment pour forcer le download
+    // Parsing simplifié avec replace() au lieu de URL parsing
+    let optimizedUrl = fileUrl;
+    if (fileUrl.includes('cloudinary.com/') && fileUrl.includes('/upload/')) {
+      // Insertion directe après /upload/ (plus rapide que URL parsing)
+      optimizedUrl = fileUrl.replace('/upload/', '/upload/fl_attachment/');
+    }
+
+    // Headers HTTP avec cache agressif (15 minutes)
+    // Permet au navigateur de réutiliser les vérifications pour les downloads répétés
+    return NextResponse.json(
+      {
+        success: true,
+        url: optimizedUrl,
+      },
+      {
+        headers: {
+          'Cache-Control': 'private, max-age=900', // 15 min
+          'X-Download-Optimized': 'true',
+        },
+      }
+    );
   } catch (error) {
     console.error('Error processing download:', error);
     return NextResponse.json(

@@ -1,23 +1,20 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui';
-import ASCIIText from '@/components/effects/ASCIIText';
+import BlurText from '@/components/effects/BlurText';
 import { useCounter } from '@/lib/hooks/useCounter';
 import { useFadeInScroll } from '@/lib/hooks/useScrollTrigger';
 import { useParallax } from '@/lib/hooks/useScrollTrigger';
-import gsap from 'gsap';
+import { gsap } from 'gsap';
 
 export default function HomePage() {
-  const [fontSize, setFontSize] = useState(200);
-  
   // Refs pour les animations
   const heroRef = useRef<HTMLDivElement>(null);
   const badgeRef = useRef<HTMLDivElement>(null);
   const subtitleRef = useRef<HTMLParagraphElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
-  
   // Stats counters
   const stat1Ref = useRef<HTMLParagraphElement>(null);
   const stat2Ref = useRef<HTMLParagraphElement>(null);
@@ -27,18 +24,6 @@ export default function HomePage() {
   const section1Ref = useRef<HTMLDivElement>(null);
   const section2Ref = useRef<HTMLDivElement>(null);
   const section3Ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth < 640) setFontSize(25);
-      else if (window.innerWidth < 1024) setFontSize(35);
-      else setFontSize(45);
-    };
-    
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
 
   // Parallax background
   useParallax(heroRef, { y: 100 }, { scrub: true });
@@ -117,15 +102,14 @@ export default function HomePage() {
             <span className="text-sm text-gray-400 font-medium">Premium Beat Marketplace</span>
           </div>
 
-          {/* Main Title with ASCII Effect */}
-          <div className="relative w-screen left-1/2 -translate-x-1/2 mb-2 h-[400px] sm:h-[450px] md:h-[500px] lg:h-[550px]">
-            <ASCIIText
+          {/* Main Title with BlurText Effect */}
+          <div className="relative mb-12">
+            <BlurText
               text="ISMA FILES"
-              enableWaves={true}
-              asciiFontSize={8}
-              textFontSize={fontSize}
-              textColor="#00FF88"
-              planeBaseHeight={8}
+              delay={100}
+              animateBy="letters"
+              direction="top"
+              className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-bold text-matrix-green block"
             />
           </div>
 
@@ -134,8 +118,7 @@ export default function HomePage() {
             ref={subtitleRef}
             className="text-xl md:text-2xl text-gray-400 mb-12 max-w-3xl mx-auto font-light leading-relaxed"
           >
-            Where artists discover premium beats crafted with precision. 
-            <span className="text-white font-normal"> Professional quality</span>, crystal-clear licensing, instant delivery.
+            <span className="text-white font-normal">Professional quality</span>, crystal-clear licensing, instant delivery.
           </p>
 
           {/* CTA Buttons avec spacing augmenté */}

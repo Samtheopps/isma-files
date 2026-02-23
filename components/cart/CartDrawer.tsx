@@ -4,6 +4,7 @@ import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useCart } from '@/context/CartContext';
 import { Button } from '@/components/ui';
+import { formatPrice, formatPriceRounded } from '@/lib/utils/formatPrice';
 
 interface CartDrawerProps {
   isOpen: boolean;
@@ -34,8 +35,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   const subtotal = totalAmount;
-  const tax = Math.round(totalAmount * 0.2);
-  const total = subtotal + tax;
+  const total = subtotal;
 
   return (
     <div className="fixed inset-0 z-50">
@@ -101,7 +101,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose }) => {
                         {item.licenseType} License
                       </p>
                       <p className="text-sm font-bold text-matrix-green font-mono">
-                        {(item.price / 100).toFixed(0)}€
+                        {formatPriceRounded(item.price)}
                       </p>
                     </div>
 
@@ -129,15 +129,11 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose }) => {
             <div className="space-y-2 text-sm">
               <div className="flex justify-between text-gray-400">
                 <span>Subtotal</span>
-                <span className="font-mono">{(subtotal / 100).toFixed(2)}€</span>
-              </div>
-              <div className="flex justify-between text-gray-400">
-                <span>Tax (20%)</span>
-                <span className="font-mono">{(tax / 100).toFixed(2)}€</span>
+                <span className="font-mono">{formatPrice(subtotal)}</span>
               </div>
               <div className="flex justify-between text-lg pt-2 border-t border-white/5">
                 <span className="font-semibold text-white">Total</span>
-                <span className="font-bold text-matrix-green">{(total / 100).toFixed(2)}€</span>
+                <span className="font-bold text-matrix-green">{formatPrice(total)}</span>
               </div>
             </div>
 

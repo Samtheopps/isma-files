@@ -13,10 +13,8 @@ export default function CartPage() {
   const { items, totalAmount } = useCart();
   const headerRef = useRef<HTMLDivElement>(null);
 
-  // Calculate tax and total
-  const TAX_RATE = 0.20; // 20% VAT
-  const tax = Math.round(totalAmount * TAX_RATE);
-  const total = totalAmount + tax;
+  // Total without tax
+  const total = totalAmount;
 
   // Header animation
   useEffect(() => {
@@ -81,7 +79,6 @@ export default function CartPage() {
             <div>
               <CartSummary 
                 subtotal={totalAmount}
-                tax={tax}
                 total={total}
               />
             </div>

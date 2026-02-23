@@ -3,8 +3,9 @@
 import React, { useEffect, useState } from 'react';
 import { OrderTable } from '@/components/admin/OrderTable';
 import { OrderDetailModal } from '@/components/admin/OrderDetailModal';
-import { Input } from '@/components/ui/Input';
 import { Loader } from '@/components/ui/Loader';
+import { Input } from '@/components/ui/Input';
+import { formatPriceIntl } from '@/lib/utils/formatPrice';
 import { Button } from '@/components/ui/Button';
 import { IOrder } from '@/types';
 
@@ -98,13 +99,6 @@ export default function AdminOrdersPage() {
 
   const stats = calculateStats();
 
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('fr-FR', {
-      style: 'currency',
-      currency: 'EUR',
-    }).format(amount / 100);
-  };
-
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -125,7 +119,7 @@ export default function AdminOrdersPage() {
         </div>
         <div className="bg-dark-card border border-dark-border rounded-lg p-6">
           <p className="text-gray-400 text-sm mb-1">Revenu Total</p>
-          <p className="text-primary text-3xl font-bold">{formatCurrency(stats.totalRevenue)}</p>
+          <p className="text-primary text-3xl font-bold">{formatPriceIntl(stats.totalRevenue)}</p>
         </div>
       </div>
 

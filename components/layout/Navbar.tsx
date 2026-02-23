@@ -14,7 +14,11 @@ if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-export const Navbar: React.FC = () => {
+interface NavbarProps {
+  disableScrollAnimation?: boolean;
+}
+
+export const Navbar: React.FC<NavbarProps> = ({ disableScrollAnimation = false }) => {
   const router = useRouter();
   const { user, logout } = useAuth();
   const { itemCount } = useCart();
@@ -29,8 +33,11 @@ export const Navbar: React.FC = () => {
     router.push('/');
   };
 
-  // GSAP: Hide/show navbar au scroll
+  // GSAP: Hide/show navbar au scroll (désactivé sur /beats)
   useEffect(() => {
+    // Si l'animation est désactivée, on skip tout le useEffect
+    if (disableScrollAnimation) return;
+    
     if (typeof window === 'undefined' || !navRef.current) return;
 
     const nav = navRef.current;
@@ -81,7 +88,7 @@ export const Navbar: React.FC = () => {
     return () => {
       window.removeEventListener('scroll', onScroll);
     };
-  }, []);
+  }, [disableScrollAnimation]);
 
   // GSAP: Bounce animation sur badge cart quand itemCount change
   useEffect(() => {

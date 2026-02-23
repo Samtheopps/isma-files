@@ -8,6 +8,7 @@ import { usePlayer } from '@/context/PlayerContext';
 import { useCart } from '@/context/CartContext';
 import gsap from 'gsap';
 import { useFadeInScroll } from '@/lib/hooks/useScrollTrigger';
+import { formatPriceRounded } from '@/lib/utils/formatPrice';
 
 interface BeatCardProps {
   beat: IBeat;
@@ -145,7 +146,6 @@ export const BeatCard: React.FC<BeatCardProps> = ({ beat, onClick }) => {
   };
 
   const minPrice = Math.min(...beat.licenses.filter((l) => l.available).map((l) => l.price));
-  const formattedPrice = (minPrice / 100).toFixed(0); // Sans décimales
 
   return (
     <div ref={cardRef} className="will-change-transform min-w-[240px] max-w-[340px] w-full mx-auto" style={{ transformStyle: 'preserve-3d' }}>
@@ -218,7 +218,7 @@ export const BeatCard: React.FC<BeatCardProps> = ({ beat, onClick }) => {
             <h3 className="font-semibold text-white text-base leading-tight mb-1.5 line-clamp-2 group-hover:text-fresh-sky-400 transition-colors">
               {beat.title}
             </h3>
-            <p className="text-xs text-steel-blue-400 truncate">Isma Files</p>
+            <p className="text-xs text-steel-blue-400 truncate">Isma</p>
           </div>
 
           {/* Metadata inline */}
@@ -237,7 +237,7 @@ export const BeatCard: React.FC<BeatCardProps> = ({ beat, onClick }) => {
           {/* Price + Cart */}
           <div className="flex items-center justify-between pt-3 border-t border-ink-black-800/30">
             <span ref={priceRef} className="text-fresh-sky-500 font-bold text-xl whitespace-nowrap">
-              {formattedPrice}€
+              {formatPriceRounded(minPrice)}
             </span>
             <button
               onClick={handleAddToCart}

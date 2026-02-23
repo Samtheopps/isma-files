@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
 import { CartItem } from '@/types';
 
 interface CartContextType {
@@ -10,6 +10,7 @@ interface CartContextType {
   clearCart: () => void;
   totalAmount: number;
   itemCount: number;
+  isLoading: boolean;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -18,6 +19,8 @@ const CART_STORAGE_KEY = 'isma-files-cart';
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [items, setItems] = useState<CartItem[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isInitialized, setIsInitialized] = useState(false);
 
   // Load cart from localStorage on mount
   useEffect(() => {
@@ -29,14 +32,17 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         console.error('Failed to parse cart from localStorage:', error);
       }
     }
+    setIsInitialized(true);
+    setIsLoading(false);
   }, []);
 
   // Save cart to localStorage whenever it changes
   useEffect(() => {
+    if (!isInitialized) return; // Ne pas sauvegarder pendant le chargement initial
     localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(items));
-  }, [items]);
+  }, [items, isInitialized]);
 
-  const addToCart = (newItem: Omit<CartItem, 'id'>) => {
+  const addToCart = useCallback((newItem: Omit<CartItem, 'id'>) => {
     setItems((prevItems) => {
       // Check if item already exists (same beat + license type)
       const existingIndex = prevItems.findIndex(
@@ -50,18 +56,18 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
       return [...prevItems, newItem as CartItem];
     });
-  };
+  }, []);
 
-  const removeFromCart = (beatId: string, licenseType: string) => {
+  const removeFromCart = useCallback((beatId: string, licenseType: string) => {
     setItems((prevItems) =>
       prevItems.filter((item) => !(item.beatId === beatId && item.licenseType === licenseType))
     );
-  };
+  }, []);
 
-  const clearCart = () => {
+  const clearCart = useCallback(() => {
     setItems([]);
     localStorage.removeItem(CART_STORAGE_KEY);
-  };
+  }, []);
 
   const totalAmount = items.reduce((sum, item) => sum + item.price, 0);
   const itemCount = items.length;
@@ -75,6 +81,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         clearCart,
         totalAmount,
         itemCount,
+        isLoading,
       }}
     >
       {children}

@@ -47,12 +47,14 @@ export const sendOrderConfirmationEmail = async ({
   items,
   totalAmount,
   downloadUrl,
+  isGuest = false,
 }: {
   email: string;
   orderNumber: string;
   items: { beatTitle: string; licenseType: string; price: number }[];
   totalAmount: number;
   downloadUrl: string;
+  isGuest?: boolean;
 }) => {
   const itemsList = items
     .map(
@@ -60,6 +62,18 @@ export const sendOrderConfirmationEmail = async ({
         `<li>${item.beatTitle} - ${item.licenseType.toUpperCase()} License (${item.price}€)</li>`
     )
     .join('');
+
+  const guestNotice = isGuest
+    ? `
+    <div style="background: #FFF3CD; border: 1px solid #FFC107; padding: 15px; border-radius: 5px; margin: 20px 0;">
+      <p style="margin: 0; color: #856404;"><strong>⚠️ Important :</strong></p>
+      <p style="margin: 5px 0 0 0; color: #856404;">
+        Ce lien de téléchargement est valable pendant <strong>30 jours</strong> et permet <strong>3 téléchargements maximum</strong>.
+        Nous vous recommandons de créer un compte pour conserver un accès permanent à vos achats.
+      </p>
+    </div>
+    `
+    : '';
 
   const html = `
     <!DOCTYPE html>
@@ -95,10 +109,16 @@ export const sendOrderConfirmationEmail = async ({
             <ul>${itemsList}</ul>
             <p><strong>Total : ${totalAmount}€</strong></p>
             
+            ${guestNotice}
+            
             <p>Vous pouvez télécharger vos fichiers en cliquant sur le bouton ci-dessous :</p>
             <a href="${downloadUrl}" class="button">Télécharger mes fichiers</a>
             
-            <p><small>Ce lien est valable pendant 30 jours. Vous pouvez télécharger vos fichiers jusqu'à 3 fois.</small></p>
+            <p><small>${
+              isGuest
+                ? 'Lien valable 30 jours - 3 téléchargements maximum'
+                : 'Ce lien est valable pendant 30 jours. Vous pouvez télécharger vos fichiers jusqu\'à 3 fois.'
+            }</small></p>
           </div>
           <div class="footer">
             <p>© ${new Date().getFullYear()} ${process.env.NEXT_PUBLIC_APP_NAME}. Tous droits réservés.</p>

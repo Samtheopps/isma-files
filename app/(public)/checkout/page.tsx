@@ -3,18 +3,23 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useCart } from '@/context/CartContext';
+import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui';
 import gsap from 'gsap';
+import { formatPrice, formatPriceRounded } from '@/lib/utils/formatPrice';
 
 export default function CheckoutPage() {
   const router = useRouter();
-  const { items, totalAmount, itemCount } = useCart();
+  const { items, totalAmount, itemCount, isLoading: isCartLoading } = useCart();
+  const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
   const headerRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLDivElement>(null);
   const summaryRef = useRef<HTMLDivElement>(null);
+
+  const isGuest = !user;
 
   const [formData, setFormData] = useState({
     email: '',
@@ -23,11 +28,25 @@ export default function CheckoutPage() {
     country: 'FR',
   });
 
+  // Pré-remplir l'email si l'utilisateur est connecté
   useEffect(() => {
-    if (items.length === 0) {
+    if (user) {
+      setFormData((prev) => ({
+        ...prev,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+      }));
+    }
+  }, [user]);
+
+  // Rediriger uniquement si le chargement est terminé ET le panier est vide
+  useEffect(() => {
+    console.log('[Checkout] isCartLoading:', isCartLoading, 'items.length:', items.length);
+    if (!isCartLoading && items.length === 0) {
       router.push('/cart');
     }
-  }, [items, router]);
+  }, [isCartLoading, items, router]);
 
   // Entrance animations
   useEffect(() => {
@@ -55,8 +74,7 @@ export default function CheckoutPage() {
   }, []);
 
   const subtotal = totalAmount;
-  const tax = Math.round(totalAmount * 0.2);
-  const total = subtotal + tax;
+  const total = subtotal;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -65,7 +83,13 @@ export default function CheckoutPage() {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('/api/checkout', {
+      
+      // Si mode guest, valider l'email
+      if (isGuest && (!formData.email || !formData.email.includes('@'))) {
+        throw new Error('Veuillez entrer une adresse email valide');
+      }
+
+      const response = await fetch('/api/orders/checkout', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -77,6 +101,7 @@ export default function CheckoutPage() {
             licenseType: item.licenseType,
             price: item.price,
           })),
+          ...(isGuest && { guestEmail: formData.email }),
           billingInfo: formData,
         }),
       });
@@ -97,6 +122,19 @@ export default function CheckoutPage() {
     }
   };
 
+  // Afficher un loader pendant le chargement du panier
+  if (isCartLoading) {
+    return (
+      <main className="min-h-screen pt-16 pb-32 flex items-center justify-center">
+        <div className="text-center">
+          <div className="inline-block w-16 h-16 border-4 border-matrix-green/20 border-t-matrix-green rounded-full animate-spin mb-4"></div>
+          <p className="text-gray-400 font-mono">Loading cart...</p>
+        </div>
+      </main>
+    );
+  }
+
+  // Ne rien afficher si le panier est vide (la redirection va se déclencher)
   if (items.length === 0) return null;
 
   return (
@@ -145,18 +183,37 @@ export default function CheckoutPage() {
                   </div>
                 )}
 
+                {/* Guest Notice */}
+                {isGuest && (
+                  <div className="bg-blue-500/10 border border-blue-500/50 rounded-lg p-4">
+                    <div className="flex items-start gap-3">
+                      <svg className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                      </svg>
+                      <div>
+                        <p className="text-blue-400 text-sm font-semibold mb-1">Achat en tant qu'invité</p>
+                        <p className="text-blue-300 text-sm">
+                          Vous recevrez un email avec un lien de téléchargement valable 30 jours (3 téléchargements max). 
+                          Créez un compte pour conserver un accès permanent à vos achats.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
                 {/* Form Fields */}
                 <div className="bg-black/60 border border-white/5 rounded-lg p-6 space-y-4">
                   <div>
                     <label className="block text-sm text-gray-400 uppercase tracking-wider mb-2">
-                      Email *
+                      Email * {isGuest && <span className="text-blue-400">(pour recevoir vos fichiers)</span>}
                     </label>
                     <input
                       type="email"
                       required
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder:text-gray-500 focus:border-matrix-green/50 focus:bg-white/10 transition-all duration-200 focus:outline-none"
+                      disabled={!isGuest}
+                      className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder:text-gray-500 focus:border-matrix-green/50 focus:bg-white/10 transition-all duration-200 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
                       placeholder="your@email.com"
                     />
                   </div>
@@ -280,7 +337,7 @@ export default function CheckoutPage() {
                         <p className="text-sm text-gray-400 capitalize">{item.licenseType} License</p>
                       </div>
                       <div className="text-right">
-                        <p className="text-white font-semibold">{(item.price / 100).toFixed(0)}€</p>
+                        <p className="text-white font-semibold">{formatPriceRounded(item.price)}</p>
                       </div>
                     </div>
                   ))}
@@ -290,15 +347,11 @@ export default function CheckoutPage() {
                 <div className="space-y-3 border-t border-white/5 pt-6">
                   <div className="flex items-center justify-between text-gray-400">
                     <span>Subtotal ({itemCount} item{itemCount > 1 ? 's' : ''})</span>
-                    <span className="font-mono">{(subtotal / 100).toFixed(2)}€</span>
-                  </div>
-                  <div className="flex items-center justify-between text-gray-400">
-                    <span>Tax (20%)</span>
-                    <span className="font-mono">{(tax / 100).toFixed(2)}€</span>
+                    <span className="font-mono">{formatPrice(subtotal)}</span>
                   </div>
                   <div className="flex items-center justify-between text-xl pt-3 border-t border-white/5">
                     <span className="font-semibold text-white">Total</span>
-                    <span className="font-bold text-matrix-green">{(total / 100).toFixed(2)}€</span>
+                    <span className="font-bold text-matrix-green">{formatPrice(total)}</span>
                   </div>
                 </div>
 

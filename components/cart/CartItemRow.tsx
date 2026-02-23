@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { CartItem as CartItemType } from '@/types';
 import { useCart } from '@/context/CartContext';
 import { useFadeInScroll } from '@/lib/hooks/useScrollTrigger';
+import { formatPriceRounded } from '@/lib/utils/formatPrice';
 
 interface CartItemProps {
   item: CartItemType;
@@ -15,8 +16,6 @@ export const CartItemRow: React.FC<CartItemProps> = ({ item }) => {
   const rowRef = useRef<HTMLDivElement>(null);
 
   useFadeInScroll(rowRef, { y: 10, duration: 0.4 });
-
-  const price = (item.price / 100).toFixed(0);
 
   return (
     <div
@@ -50,7 +49,7 @@ export const CartItemRow: React.FC<CartItemProps> = ({ item }) => {
 
       {/* Price */}
       <div className="text-sm font-semibold text-matrix-green whitespace-nowrap">
-        {price}€
+        {formatPriceRounded(item.price)}
       </div>
 
       {/* Remove Button */}

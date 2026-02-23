@@ -3,7 +3,7 @@ import { LicenseType, OrderStatus } from '@/types';
 
 export interface IOrderDocument extends Document {
   orderNumber: string;
-  userId: mongoose.Types.ObjectId;
+  userId?: mongoose.Types.ObjectId;
   items: {
     beatId: mongoose.Types.ObjectId;
     beatTitle: string;
@@ -16,6 +16,11 @@ export interface IOrderDocument extends Document {
   status: OrderStatus;
   licenseContract: string;
   deliveryEmail: string;
+  isGuestOrder: boolean;
+  guestEmail?: string;
+  downloadToken?: string;
+  downloadCount: number;
+  downloadExpiry?: Date;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -24,13 +29,14 @@ const OrderSchema = new Schema<IOrderDocument>(
   {
     orderNumber: {
       type: String,
-      required: true,
+      required: false, // Généré automatiquement par le pre-save hook
       unique: true,
+      sparse: true, // Index unique uniquement pour les valeurs non-null
     },
     userId: {
       type: Schema.Types.ObjectId,
       ref: 'User',
-      required: true,
+      required: false,
     },
     items: [
       {
@@ -80,6 +86,28 @@ const OrderSchema = new Schema<IOrderDocument>(
       type: String,
       required: true,
     },
+    isGuestOrder: {
+      type: Boolean,
+      default: false,
+    },
+    guestEmail: {
+      type: String,
+      required: false,
+    },
+    downloadToken: {
+      type: String,
+      required: false,
+      unique: true,
+      sparse: true, // Index unique uniquement pour les valeurs non-null
+    },
+    downloadCount: {
+      type: Number,
+      default: 0,
+    },
+    downloadExpiry: {
+      type: Date,
+      required: false,
+    },
   },
   {
     timestamps: true,
@@ -103,5 +131,7 @@ OrderSchema.pre('save', async function (next) {
 OrderSchema.index({ userId: 1, createdAt: -1 });
 OrderSchema.index({ orderNumber: 1 });
 OrderSchema.index({ status: 1 });
+OrderSchema.index({ downloadToken: 1 });
+OrderSchema.index({ guestEmail: 1 });
 
 export default mongoose.models.Order || mongoose.model<IOrderDocument>('Order', OrderSchema);

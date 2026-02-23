@@ -77,7 +77,7 @@ export const StickyPlayer: React.FC = () => {
             </div>
             <div className="flex-1 min-w-0">
               <h4 className="text-sm font-medium text-white truncate">{currentBeat.title}</h4>
-              <p className="text-xs text-gray-500 truncate">Isma Files</p>
+              <p className="text-xs text-gray-500 truncate">Isma</p>
             </div>
           </div>
 

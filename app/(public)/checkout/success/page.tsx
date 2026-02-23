@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useCart } from '@/context/CartContext';
+import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui';
 import gsap from 'gsap';
 
@@ -10,14 +11,32 @@ export default function CheckoutSuccessPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { clearCart } = useCart();
+  const { user } = useAuth();
   const sessionId = searchParams.get('session_id');
 
   const containerRef = useRef<HTMLDivElement>(null);
+  const [guestEmail, setGuestEmail] = useState('');
+  const [hasCleared, setHasCleared] = useState(false);
+
+  const isGuest = !user;
 
   useEffect(() => {
-    // Clear cart on successful payment
-    clearCart();
-  }, [clearCart]);
+    // Clear cart on successful payment (only once)
+    if (!hasCleared) {
+      clearCart();
+      setHasCleared(true);
+      
+      // Si guest, récupérer l'email du localStorage (si disponible)
+      if (isGuest) {
+        const storedEmail = localStorage.getItem('guestCheckoutEmail');
+        if (storedEmail) {
+          setGuestEmail(storedEmail);
+          localStorage.removeItem('guestCheckoutEmail');
+        }
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -59,13 +78,21 @@ export default function CheckoutSuccessPage() {
                   <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
                   <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
                 </svg>
-                <span className="text-sm">A confirmation email has been sent with all order details</span>
+                <span className="text-sm">
+                  {isGuest 
+                    ? `A confirmation email has been sent to ${guestEmail || 'your email'} with your download link`
+                    : 'A confirmation email has been sent with all order details'}
+                </span>
               </li>
               <li className="flex items-start gap-3">
                 <svg className="w-5 h-5 text-matrix-green flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
                 </svg>
-                <span className="text-sm">Your files are available immediately in your downloads section</span>
+                <span className="text-sm">
+                  {isGuest
+                    ? 'Check your email for the download link (valid for 30 days, 3 downloads max)'
+                    : 'Your files are available immediately in your downloads section'}
+                </span>
               </li>
               <li className="flex items-start gap-3">
                 <svg className="w-5 h-5 text-matrix-green flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
@@ -77,6 +104,26 @@ export default function CheckoutSuccessPage() {
             </ul>
           </div>
 
+          {/* Guest Notice */}
+          {isGuest && (
+            <div className="bg-blue-500/10 border border-blue-500/50 rounded-lg p-6 mb-6">
+              <div className="flex items-start gap-3">
+                <svg className="w-6 h-6 text-blue-400 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                </svg>
+                <div className="flex-1">
+                  <h3 className="text-blue-400 font-semibold mb-2">💡 Create an account to keep your files forever</h3>
+                  <p className="text-blue-300 text-sm mb-4">
+                    Guest downloads expire after 30 days. Create a free account to get unlimited access to your purchases anytime, anywhere.
+                  </p>
+                  <Button variant="primary" size="sm" onClick={() => router.push('/auth/register')}>
+                    Create My Account
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Session ID (if available) */}
           {sessionId && (
             <div className="mb-6 text-sm text-gray-400">
@@ -87,12 +134,22 @@ export default function CheckoutSuccessPage() {
 
           {/* Actions */}
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Button variant="primary" onClick={() => router.push('/account')}>
-              View My Downloads
-            </Button>
-            <Button variant="secondary" onClick={() => router.push('/beats')}>
-              Browse More Beats
-            </Button>
+            {!isGuest ? (
+              <>
+                <Button variant="primary" onClick={() => router.push('/account')}>
+                  View My Downloads
+                </Button>
+                <Button variant="secondary" onClick={() => router.push('/beats')}>
+                  Browse More Beats
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button variant="secondary" onClick={() => router.push('/beats')}>
+                  Browse More Beats
+                </Button>
+              </>
+            )}
           </div>
 
           {/* Support */}

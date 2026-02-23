@@ -3,6 +3,7 @@
 import React from 'react';
 import { License } from '@/types';
 import { Modal, Badge } from '@/components/ui';
+import { formatPrice } from '@/lib/utils/formatPrice';
 
 interface LicenseModalProps {
   isOpen: boolean;
@@ -24,7 +25,7 @@ export const LicenseModal: React.FC<LicenseModalProps> = ({ isOpen, onClose, lic
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-xl font-semibold text-white capitalize">{license.type}</h3>
               <div className="flex items-center gap-3">
-                <span className="text-2xl font-bold text-primary">{(license.price / 100).toFixed(2)}€</span>
+                <span className="text-2xl font-bold text-primary">{formatPrice(license.price)}</span>
                 {!license.available && (
                   <Badge variant="danger">Indisponible</Badge>
                 )}

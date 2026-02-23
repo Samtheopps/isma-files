@@ -40,7 +40,7 @@ export const createCheckoutSession = async ({
           name: `${item.beatTitle} - ${item.licenseType.toUpperCase()} License`,
           description: `Beat: ${item.beatTitle}`,
         },
-        unit_amount: Math.round(item.price * 100), // Convert to cents
+        unit_amount: item.price, // Already in cents from database
       },
       quantity: 1,
     }));

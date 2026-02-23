@@ -6,6 +6,7 @@ import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui';
 import { IOrder, IDownload } from '@/types';
 import gsap from 'gsap';
+import { formatPrice } from '@/lib/utils/formatPrice';
 
 export default function AccountPage() {
   const router = useRouter();
@@ -87,10 +88,6 @@ export default function AccountPage() {
       month: 'short',
       year: 'numeric',
     });
-  };
-
-  const formatCurrency = (amount: number) => {
-    return (amount / 100).toFixed(2) + '€';
   };
 
   return (
@@ -208,7 +205,7 @@ export default function AccountPage() {
                           <p className="text-white">{order.items.length} beat{order.items.length > 1 ? 's' : ''}</p>
                         </td>
                         <td className="py-4 px-6 text-right">
-                          <p className="text-matrix-green font-bold font-mono">{formatCurrency(order.totalAmount)}</p>
+                          <p className="text-matrix-green font-bold font-mono">{formatPrice(order.totalAmount)}</p>
                         </td>
                         <td className="py-4 px-6 text-center">
                           <span
@@ -255,7 +252,7 @@ export default function AccountPage() {
                       </div>
                       <div className="flex items-center justify-between">
                         <span className="text-sm text-gray-400">{order.items.length} item{order.items.length > 1 ? 's' : ''}</span>
-                        <span className="text-matrix-green font-bold font-mono">{formatCurrency(order.totalAmount)}</span>
+                        <span className="text-matrix-green font-bold font-mono">{formatPrice(order.totalAmount)}</span>
                       </div>
                     </div>
                   ))}

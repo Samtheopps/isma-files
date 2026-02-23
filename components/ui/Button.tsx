@@ -3,7 +3,6 @@
 import React, { ButtonHTMLAttributes, useRef, useEffect } from 'react';
 import { clsx } from 'clsx';
 import gsap from 'gsap';
-import { useQuickTo } from '@/lib/hooks/useGSAP';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary' | 'ghost' | 'danger';
@@ -27,14 +26,15 @@ export const Button: React.FC<ButtonProps> = ({
   const buttonRef = useRef<HTMLButtonElement>(null);
   const glowRef = useRef<HTMLSpanElement>(null);
 
-  // GSAP quickTo pour magnetic effect ultra-fluide
-  const xTo = useQuickTo(buttonRef.current, 'x', { duration: 0.3, ease: 'power2.out' });
-  const yTo = useQuickTo(buttonRef.current, 'y', { duration: 0.3, ease: 'power2.out' });
-
+  // Magnetic effect avec GSAP quickTo (créé dans le useEffect pour éviter null)
   useEffect(() => {
     if (!buttonRef.current || !magnetic || disabled || isLoading) return;
 
     const button = buttonRef.current;
+
+    // Créer quickTo APRÈS que le ref soit monté
+    const xTo = gsap.quickTo(button, 'x', { duration: 0.3, ease: 'power2.out' });
+    const yTo = gsap.quickTo(button, 'y', { duration: 0.3, ease: 'power2.out' });
 
     const handleMouseMove = (e: MouseEvent) => {
       const rect = button.getBoundingClientRect();
@@ -67,7 +67,7 @@ export const Button: React.FC<ButtonProps> = ({
       button.removeEventListener('mousemove', handleMouseMove);
       button.removeEventListener('mouseleave', handleMouseLeave);
     };
-  }, [magnetic, disabled, isLoading, xTo, yTo]);
+  }, [magnetic, disabled, isLoading]);
 
   // Glow effect au hover (subtil)
   useEffect(() => {

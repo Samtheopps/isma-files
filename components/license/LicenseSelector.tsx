@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { License, LicenseType } from '@/types';
 import { Badge } from '@/components/ui';
 import { clsx } from 'clsx';
+import { formatPrice } from '@/lib/utils/formatPrice';
 
 interface LicenseSelectorProps {
   licenses: License[];
@@ -80,7 +81,7 @@ export const LicenseSelector: React.FC<LicenseSelectorProps> = ({
                 </div>
               </div>
               <div className="text-right">
-                <p className="text-2xl font-bold text-white">{(license.price / 100).toFixed(2)}€</p>
+                <p className="text-2xl font-bold text-white">{formatPrice(license.price)}</p>
               </div>
             </div>
 

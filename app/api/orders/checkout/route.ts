@@ -11,33 +11,50 @@ interface CheckoutItem {
 
 export async function POST(req: NextRequest) {
   try {
-    // Vérifier l'authentification
+    // Vérifier l'authentification (optionnelle pour guest checkout)
     const token = req.headers.get('authorization')?.replace('Bearer ', '');
     
-    if (!token) {
-      return NextResponse.json(
-        { error: 'Non authentifié' },
-        { status: 401 }
-      );
-    }
+    let decoded: any = null;
+    let isGuest = false;
+    let guestEmail = '';
 
-    const decoded = verifyToken(token);
-    if (!decoded) {
-      return NextResponse.json(
-        { error: 'Token invalide' },
-        { status: 401 }
-      );
+    if (token) {
+      // Mode utilisateur connecté
+      decoded = verifyToken(token);
+      if (!decoded) {
+        return NextResponse.json(
+          { error: 'Token invalide' },
+          { status: 401 }
+        );
+      }
+    } else {
+      // Mode guest
+      isGuest = true;
     }
 
     // Récupérer les données du panier
     const body = await req.json();
-    const { items } = body as { items: CheckoutItem[] };
+    const { items, guestEmail: bodyGuestEmail } = body as { 
+      items: CheckoutItem[];
+      guestEmail?: string;
+    };
 
     if (!items || items.length === 0) {
       return NextResponse.json(
         { error: 'Panier vide' },
         { status: 400 }
       );
+    }
+
+    // Si mode guest, valider l'email
+    if (isGuest) {
+      if (!bodyGuestEmail || !bodyGuestEmail.includes('@')) {
+        return NextResponse.json(
+          { error: 'Email invalide' },
+          { status: 400 }
+        );
+      }
+      guestEmail = bodyGuestEmail;
     }
 
     // Connexion DB
@@ -75,14 +92,17 @@ export async function POST(req: NextRequest) {
 
     // Créer la session Stripe Checkout
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+    const customerEmail = isGuest ? guestEmail : decoded.email;
     
     const session = await createCheckoutSession({
       items: checkoutItems,
-      customerEmail: decoded.email,
+      customerEmail,
       successUrl: `${appUrl}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
       cancelUrl: `${appUrl}/cart`,
       metadata: {
-        userId: decoded.userId,
+        ...(decoded && { userId: decoded.userId }),
+        isGuest: isGuest.toString(),
+        ...(isGuest && { guestEmail }),
       },
     });
 

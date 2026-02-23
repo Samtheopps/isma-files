@@ -71,14 +71,20 @@ export function useGSAPTimeline(config?: gsap.TimelineVars) {
  * Hook pour créer un quickTo (animation ultra-performante)
  * Utile pour suivre la souris ou animer en temps réel
  * 
- * @example
- * const xTo = useQuickTo('.cursor', 'x', { duration: 0.3, ease: 'power2.out' });
- * const yTo = useQuickTo('.cursor', 'y', { duration: 0.3, ease: 'power2.out' });
+ * @deprecated Utiliser gsap.quickTo directement dans useEffect pour éviter les refs null
  * 
- * const handleMouseMove = (e: MouseEvent) => {
- *   xTo(e.clientX);
- *   yTo(e.clientY);
- * };
+ * @example
+ * // ❌ Ne pas faire (cause warnings null)
+ * const xTo = useQuickTo(ref.current, 'x', { duration: 0.3 });
+ * 
+ * // ✅ Faire plutôt :
+ * useEffect(() => {
+ *   if (!ref.current) return;
+ *   const xTo = gsap.quickTo(ref.current, 'x', { duration: 0.3 });
+ *   const handleMove = (e) => xTo(e.clientX);
+ *   window.addEventListener('mousemove', handleMove);
+ *   return () => window.removeEventListener('mousemove', handleMove);
+ * }, []);
  */
 export function useQuickTo(
   target: gsap.TweenTarget,
@@ -88,6 +94,12 @@ export function useQuickTo(
   const quickToRef = useRef<((value: number) => void) | null>(null);
 
   useEffect(() => {
+    // Vérifier que target existe avant de créer quickTo
+    if (!target) {
+      console.warn('[useQuickTo] Target is null/undefined. Skipping animation.');
+      return;
+    }
+
     quickToRef.current = gsap.quickTo(target, property, vars) as (value: number) => void;
 
     return () => {

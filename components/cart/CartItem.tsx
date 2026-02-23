@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { CartItem as CartItemType } from '@/types';
 import { Badge, Card } from '@/components/ui';
 import { useCart } from '@/context/CartContext';
+import { formatPrice } from '@/lib/utils/formatPrice';
 
 interface CartItemProps {
   item: CartItemType;
@@ -12,8 +13,6 @@ interface CartItemProps {
 
 export const CartItem: React.FC<CartItemProps> = ({ item }) => {
   const { removeFromCart } = useCart();
-
-  const formatPrice = (price: number) => (price / 100).toFixed(2);
 
   return (
     <Card variant="glass" className="flex gap-4 p-4">
@@ -51,7 +50,7 @@ export const CartItem: React.FC<CartItemProps> = ({ item }) => {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
-        <p className="text-lg font-semibold text-matrix-green">{formatPrice(item.price)}€</p>
+        <p className="text-lg font-semibold text-matrix-green">{formatPrice(item.price)}</p>
       </div>
     </Card>
   );

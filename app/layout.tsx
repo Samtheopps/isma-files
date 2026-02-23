@@ -4,7 +4,7 @@ import './globals.css';
 import './blue-effects.css';
 import './ascii-text.css';
 import { Providers } from './providers';
-import { Navbar } from '@/components/layout/Navbar';
+import { NavbarWrapper } from '@/components/layout/NavbarWrapper';
 import { SmoothScroll } from '@/components/effects';
 
 // JetBrains Mono pour le code uniquement
@@ -32,7 +32,7 @@ export default function RootLayout({
           {/* Main content layer */}
           <div className="relative z-10">
             <Providers>
-              <Navbar />
+              <NavbarWrapper />
               {children}
             </Providers>
           </div>

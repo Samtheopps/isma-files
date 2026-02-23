@@ -1,16 +1,15 @@
 'use client';
 
 import React from 'react';
+import { formatPrice } from '@/lib/utils/formatPrice';
 
 interface CartSummaryProps {
   subtotal: number;
-  tax: number;
+  tax?: number;
   total: number;
 }
 
 export const CartSummary: React.FC<CartSummaryProps> = ({ subtotal, tax, total }) => {
-  const formatPrice = (cents: number) => (cents / 100).toFixed(2);
-
   return (
     <div className="bg-black/80 border border-white/5 rounded-lg p-6 sticky top-24">
       <h3 className="text-lg font-semibold text-white mb-4">Order Summary</h3>
@@ -21,10 +20,12 @@ export const CartSummary: React.FC<CartSummaryProps> = ({ subtotal, tax, total }
           <span className="text-white font-medium">{formatPrice(subtotal)}€</span>
         </div>
         
-        <div className="flex items-center justify-between text-sm">
-          <span className="text-gray-400">Tax (20%)</span>
-          <span className="text-white font-medium">{formatPrice(tax)}€</span>
-        </div>
+        {tax !== undefined && (
+          <div className="flex items-center justify-between text-sm">
+            <span className="text-gray-400">Tax (20%)</span>
+            <span className="text-white font-medium">{formatPrice(tax)}€</span>
+          </div>
+        )}
         
         <div className="border-t border-white/5 pt-3">
           <div className="flex items-center justify-between">

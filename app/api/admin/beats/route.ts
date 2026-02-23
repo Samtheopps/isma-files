@@ -74,7 +74,7 @@ export async function GET(request: NextRequest) {
 
 /**
  * POST /api/admin/beats
- * Créer un nouveau beat
+ * Créer un nouveau beat avec upload vers Cloudinary
  */
 export async function POST(request: NextRequest) {
   try {
@@ -91,9 +91,9 @@ export async function POST(request: NextRequest) {
       genre,
       mood,
       tags,
-      previewUrl,
-      coverImage,
-      files,
+      previewUrl, // base64
+      coverImage, // base64
+      files, // { mp3: base64, wav: base64, stems: base64 }
       licenses,
       waveformData,
     } = body;
@@ -106,7 +106,26 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Créer le beat
+    console.log('Starting file uploads to Cloudinary...');
+
+    // Upload tous les fichiers vers Cloudinary en parallèle
+    const [
+      uploadedPreviewUrl,
+      uploadedCoverImage,
+      uploadedMp3,
+      uploadedWav,
+      uploadedStems,
+    ] = await Promise.all([
+      uploadToCloudinary(previewUrl, 'previews', 'auto'),
+      uploadToCloudinary(coverImage, 'covers', 'image'),
+      uploadToCloudinary(files.mp3, 'beats/mp3', 'auto'),
+      uploadToCloudinary(files.wav, 'beats/wav', 'auto'),
+      uploadToCloudinary(files.stems, 'beats/stems', 'auto'),
+    ]);
+
+    console.log('All files uploaded successfully');
+
+    // Créer le beat avec les URLs Cloudinary
     const beat = await Beat.create({
       title,
       bpm,
@@ -114,12 +133,12 @@ export async function POST(request: NextRequest) {
       genre: Array.isArray(genre) ? genre : [genre],
       mood: mood || [],
       tags: tags || [],
-      previewUrl,
-      coverImage,
+      previewUrl: uploadedPreviewUrl,
+      coverImage: uploadedCoverImage,
       files: {
-        mp3: files.mp3,
-        wav: files.wav,
-        stems: files.stems,
+        mp3: uploadedMp3,
+        wav: uploadedWav,
+        stems: uploadedStems,
       },
       licenses,
       waveformData: waveformData || { peaks: [], duration: 0 },
@@ -127,6 +146,8 @@ export async function POST(request: NextRequest) {
       playCount: 0,
       salesCount: 0,
     });
+
+    console.log('Beat created successfully:', beat._id);
 
     return NextResponse.json({
       success: true,

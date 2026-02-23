@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { IOrder } from '@/types';
+import { formatPriceIntl } from '@/lib/utils/formatPrice';
 
 type PopulatedOrder = IOrder & {
   userId?: {
@@ -17,13 +18,6 @@ interface OrderTableProps {
 }
 
 export const OrderTable: React.FC<OrderTableProps> = ({ orders, onClick }) => {
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('fr-FR', {
-      style: 'currency',
-      currency: 'EUR',
-    }).format(amount / 100);
-  };
-
   const formatDate = (date: string | Date) => {
     return new Date(date).toLocaleDateString('fr-FR', {
       day: '2-digit',
@@ -120,7 +114,7 @@ export const OrderTable: React.FC<OrderTableProps> = ({ orders, onClick }) => {
               </td>
               <td className="py-4 px-6 text-white font-mono">{order.items.length} beat{order.items.length > 1 ? 's' : ''}</td>
               <td className="py-4 px-6 text-right">
-                <p className="text-matrix-green font-bold font-mono">{formatCurrency(order.totalAmount)}</p>
+                <p className="text-matrix-green font-bold font-mono">{formatPriceIntl(order.totalAmount)}</p>
               </td>
               <td className="py-4 px-6 text-center">{getStatusBadge(order.status)}</td>
             </tr>
@@ -159,7 +153,7 @@ export const OrderTable: React.FC<OrderTableProps> = ({ orders, onClick }) => {
               </div>
               <div className="flex items-center justify-between font-semibold pt-2 border-t border-white/5">
                 <span className="text-gray-400">Total</span>
-                <span className="text-matrix-green font-mono">{formatCurrency(order.totalAmount)}</span>
+                <span className="text-matrix-green font-mono">{formatPriceIntl(order.totalAmount)}</span>
               </div>
             </div>
           </div>

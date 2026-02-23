@@ -5,6 +5,7 @@ import { StatCard } from '@/components/admin/StatCard';
 import { Loader } from '@/components/ui/Loader';
 import { IBeat, IOrder } from '@/types';
 import gsap from 'gsap';
+import { formatPriceIntl } from '@/lib/utils/formatPrice';
 
 interface DashboardStats {
   overview: {
@@ -33,58 +34,42 @@ export default function AdminDashboard() {
   const headerRef = useRef<HTMLDivElement>(null);
   const statsRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    fetchStats();
-  }, []);
-
-  useEffect(() => {
-    if (!isLoading && stats) {
-      const ctx = gsap.context(() => {
-        gsap.fromTo(
-          headerRef.current,
-          { y: -20, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.5, ease: 'power2.out' }
-        );
-
-        gsap.fromTo(
-          statsRef.current?.children || [],
-          { y: 20, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.6, delay: 0.2, stagger: 0.1, ease: 'power2.out' }
-        );
-      });
-
-      return () => ctx.revert();
-    }
-  }, [isLoading, stats]);
-
   const fetchStats = async () => {
     try {
+      setIsLoading(true);
+      setError('');
+      
+      // Récupérer le token
       const token = localStorage.getItem('token');
+      if (!token) {
+        setError('Unauthorized - Please login');
+        setIsLoading(false);
+        return;
+      }
+      
       const response = await fetch('/api/admin/stats', {
         headers: {
-          Authorization: `Bearer ${token}`,
+          'Authorization': `Bearer ${token}`,
         },
       });
-
+      
+      const result = await response.json();
+      
       if (!response.ok) {
-        throw new Error('Failed to fetch stats');
+        throw new Error(result.error || 'Failed to fetch stats');
       }
-
-      const data = await response.json();
-      setStats(data.data);
+      
+      setStats(result.data);
     } catch (err: any) {
-      setError(err.message);
+      setError(err.message || 'An error occurred while fetching stats');
     } finally {
       setIsLoading(false);
     }
   };
 
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('fr-FR', {
-      style: 'currency',
-      currency: 'EUR',
-    }).format(amount / 100);
-  };
+  useEffect(() => {
+    fetchStats();
+  }, []);
 
   const formatDate = (date: string | Date) => {
     return new Date(date).toLocaleDateString('fr-FR', {
@@ -132,7 +117,7 @@ export default function AdminDashboard() {
 
         <StatCard
           title="Total Revenue"
-          value={formatCurrency(stats.overview.totalRevenue)}
+          value={formatPriceIntl(stats.overview.totalRevenue)}
           icon={
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -178,7 +163,7 @@ export default function AdminDashboard() {
                   <div
                     className="w-full bg-matrix-green/70 hover:bg-matrix-green transition-all duration-200 rounded-t"
                     style={{ height: `${height}%`, minHeight: day.revenue > 0 ? '4px' : '0' }}
-                    title={`${formatDate(day.date)}: ${formatCurrency(day.revenue)}`}
+                    title={`${formatDate(day.date)}: ${formatPriceIntl(day.revenue)}`}
                   />
                 </div>
               );
@@ -223,7 +208,7 @@ export default function AdminDashboard() {
                     <p className="text-gray-400 text-xs truncate">{order.deliveryEmail}</p>
                   </div>
                   <div className="text-right">
-                    <p className="text-matrix-green text-sm font-bold font-mono">{formatCurrency(order.totalAmount)}</p>
+                    <p className="text-matrix-green text-sm font-bold font-mono">{formatPriceIntl(order.totalAmount)}</p>
                     <p className="text-gray-500 text-xs">{formatDate(order.createdAt)}</p>
                   </div>
                 </div>

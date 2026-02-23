@@ -206,3 +206,26 @@ input:focus, textarea:focus {
   outline: none;
   box-shadow: 0 0 0 2px rgba(0, 170, 255, 0.3);
 }
+
+/* SplitText Animation Styles */
+.split-parent {
+  display: block;
+  overflow: visible;
+}
+
+.split-char,
+.split-word,
+.split-line {
+  display: inline-block;
+  transform-origin: center bottom;
+  will-change: transform, opacity;
+}
+
+/* Prevent text flash before animation */
+.split-parent:not(.split-initialized) {
+  opacity: 0;
+}
+
+.split-parent.split-initialized {
+  opacity: 1;
+}

@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import clsx from 'clsx';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Card } from '@/components/ui/Card';
@@ -156,8 +157,16 @@ export const BeatForm: React.FC<BeatFormProps> = ({ initialData, onSubmit, isEdi
   };
 
   const onFormSubmit = async (data: BeatFormData) => {
-    if (!files.preview || !files.mp3 || !files.wav || !files.stems || !files.cover) {
-      alert('Veuillez uploader tous les fichiers requis');
+    // Vérifier les fichiers manquants
+    const missingFiles = [];
+    if (!files.preview) missingFiles.push('Preview MP3');
+    if (!files.mp3) missingFiles.push('MP3 complet');
+    if (!files.wav) missingFiles.push('WAV');
+    if (!files.stems) missingFiles.push('Stems (ZIP)');
+    if (!files.cover) missingFiles.push('Image de couverture');
+
+    if (missingFiles.length > 0) {
+      alert(`Fichiers manquants :\n• ${missingFiles.join('\n• ')}`);
       return;
     }
 
@@ -213,7 +222,32 @@ export const BeatForm: React.FC<BeatFormProps> = ({ initialData, onSubmit, isEdi
   ];
 
   return (
-    <form onSubmit={handleSubmit(onFormSubmit)} className="space-y-6">
+    <form onSubmit={handleSubmit(onFormSubmit)} className="space-y-6 pb-32">
+      {/* Progress indicator */}
+      <Card>
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <h3 className="text-sm font-medium text-gray-400">Progression du formulaire</h3>
+            <span className="text-sm text-matrix-green">
+              {[files.preview, files.mp3, files.wav, files.stems, files.cover].filter(Boolean).length}/5 fichiers
+            </span>
+          </div>
+          <div className="h-2 bg-dark-bg rounded-full overflow-hidden">
+            <div
+              className="h-full bg-matrix-green transition-all duration-300"
+              style={{
+                width: `${([files.preview, files.mp3, files.wav, files.stems, files.cover].filter(Boolean).length / 5) * 100}%`
+              }}
+            />
+          </div>
+          <p className="text-xs text-gray-500">
+            {watch('title') ? '✓' : '○'} Titre • 
+            {(watch('genre')?.length || 0) > 0 ? ' ✓' : ' ○'} Genres • 
+            {files.preview && files.mp3 && files.wav && files.stems && files.cover ? ' ✓' : ' ○'} Fichiers
+          </p>
+        </div>
+      </Card>
+
       {/* Informations de base */}
       <Card>
         <h2 className="text-xl font-bold text-white mb-6">Informations de base</h2>
@@ -250,6 +284,96 @@ export const BeatForm: React.FC<BeatFormProps> = ({ initialData, onSubmit, isEdi
                 </option>
               ))}
             </select>
+          </div>
+        </div>
+      </Card>
+
+      {/* Genres, Moods, Tags */}
+      <Card>
+        <h2 className="text-xl font-bold text-white mb-6">Genres et Ambiance</h2>
+        
+        <div className="space-y-6">
+          {/* Genres */}
+          <div>
+            <label className="block text-sm font-medium text-gray-400 mb-3">
+              Genres * (au moins 1 requis)
+            </label>
+            <div className="flex flex-wrap gap-2">
+              {genreOptions.map((genre) => {
+                const isSelected = watch('genre')?.includes(genre);
+                return (
+                  <button
+                    key={genre}
+                    type="button"
+                    onClick={() => {
+                      const current = watch('genre') || [];
+                      if (isSelected) {
+                        setValue('genre', current.filter(g => g !== genre));
+                      } else {
+                        setValue('genre', [...current, genre]);
+                      }
+                    }}
+                    className={clsx(
+                      'px-4 py-2 rounded-lg border transition-all',
+                      isSelected
+                        ? 'bg-matrix-green/20 border-matrix-green text-matrix-green'
+                        : 'bg-dark-bg border-dark-border text-gray-400 hover:border-gray-600'
+                    )}
+                  >
+                    {genre}
+                  </button>
+                );
+              })}
+            </div>
+            {errors.genre && <p className="text-red-400 text-sm mt-2">{errors.genre.message}</p>}
+          </div>
+
+          {/* Moods */}
+          <div>
+            <label className="block text-sm font-medium text-gray-400 mb-3">
+              Ambiance (optionnel)
+            </label>
+            <div className="flex flex-wrap gap-2">
+              {moodOptions.map((mood) => {
+                const isSelected = watch('mood')?.includes(mood);
+                return (
+                  <button
+                    key={mood}
+                    type="button"
+                    onClick={() => {
+                      const current = watch('mood') || [];
+                      if (isSelected) {
+                        setValue('mood', current.filter(m => m !== mood));
+                      } else {
+                        setValue('mood', [...current, mood]);
+                      }
+                    }}
+                    className={clsx(
+                      'px-4 py-2 rounded-lg border transition-all',
+                      isSelected
+                        ? 'bg-matrix-green/20 border-matrix-green text-matrix-green'
+                        : 'bg-dark-bg border-dark-border text-gray-400 hover:border-gray-600'
+                    )}
+                  >
+                    {mood}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Tags */}
+          <div>
+            <label className="block text-sm font-medium text-gray-400 mb-2">
+              Tags (optionnel, séparés par des virgules)
+            </label>
+            <Input
+              placeholder="Ex: dark, trap, 808, piano"
+              onChange={(e) => {
+                const tags = e.target.value.split(',').map(t => t.trim()).filter(Boolean);
+                setValue('tags', tags);
+              }}
+            />
           </div>
         </div>
       </Card>
@@ -394,14 +518,34 @@ export const BeatForm: React.FC<BeatFormProps> = ({ initialData, onSubmit, isEdi
       </Card>
 
       {/* Submit */}
-      <div className="flex items-center justify-end space-x-4">
+      <div className="flex items-center justify-end space-x-4 relative z-50">
         <Button type="button" variant="ghost" onClick={() => window.history.back()}>
           Annuler
         </Button>
-        <Button type="submit" isLoading={isSubmitting}>
+        <Button 
+          type="submit" 
+          isLoading={isSubmitting}
+          disabled={
+            isSubmitting || 
+            !files.preview || 
+            !files.mp3 || 
+            !files.wav || 
+            !files.stems || 
+            !files.cover ||
+            !watch('title') ||
+            (watch('genre')?.length || 0) === 0
+          }
+        >
           {isEdit ? 'Mettre à jour' : 'Créer le beat'}
         </Button>
       </div>
+      {(!files.preview || !files.mp3 || !files.wav || !files.stems || !files.cover || !watch('title') || (watch('genre')?.length || 0) === 0) && (
+        <div className="flex justify-end">
+          <p className="text-sm text-gray-500">
+            Complétez tous les champs requis pour activer le bouton
+          </p>
+        </div>
+      )}
     </form>
   );
 };

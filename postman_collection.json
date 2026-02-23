@@ -1,0 +1,253 @@
+{
+  "name": "Isma Files - Beat Upload API",
+  "description": "Collection pour tester l'API d'upload de beats",
+  "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+  "item": [
+    {
+      "name": "1. Auth - Login Admin",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"password\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/auth/login",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "auth", "login"]
+        },
+        "description": "Login avec un compte admin pour obtenir le JWT token"
+      },
+      "response": []
+    },
+    {
+      "name": "2. Upload - MP3 only",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "description": "JWT token obtenu depuis le login"
+          }
+        ],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "mp3",
+              "type": "file",
+              "src": "/path/to/your/beat.mp3",
+              "description": "Fichier MP3 (max 50MB)"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/beats/{{beatId}}/upload",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "beats", "{{beatId}}", "upload"]
+        },
+        "description": "Upload uniquement le fichier MP3"
+      },
+      "response": []
+    },
+    {
+      "name": "3. Upload - WAV only",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "wav",
+              "type": "file",
+              "src": "/path/to/your/beat.wav",
+              "description": "Fichier WAV (max 200MB)"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/beats/{{beatId}}/upload",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "beats", "{{beatId}}", "upload"]
+        },
+        "description": "Upload uniquement le fichier WAV"
+      },
+      "response": []
+    },
+    {
+      "name": "4. Upload - Stems only",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "stems",
+              "type": "file",
+              "src": "/path/to/your/stems.zip",
+              "description": "Fichier ZIP contenant les stems (max 500MB)"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/beats/{{beatId}}/upload",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "beats", "{{beatId}}", "upload"]
+        },
+        "description": "Upload uniquement le fichier Stems (ZIP)"
+      },
+      "response": []
+    },
+    {
+      "name": "5. Upload - All files (MP3 + WAV + Stems)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "mp3",
+              "type": "file",
+              "src": "/path/to/your/beat.mp3"
+            },
+            {
+              "key": "wav",
+              "type": "file",
+              "src": "/path/to/your/beat.wav"
+            },
+            {
+              "key": "stems",
+              "type": "file",
+              "src": "/path/to/your/stems.zip"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/beats/{{beatId}}/upload",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "beats", "{{beatId}}", "upload"]
+        },
+        "description": "Upload tous les fichiers en une seule requête"
+      },
+      "response": []
+    },
+    {
+      "name": "6. Test - Upload sans token (devrait échouer)",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "mp3",
+              "type": "file",
+              "src": "/path/to/your/beat.mp3"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/beats/{{beatId}}/upload",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "beats", "{{beatId}}", "upload"]
+        },
+        "description": "Test de sécurité - devrait retourner 401 Unauthorized"
+      },
+      "response": []
+    },
+    {
+      "name": "7. Test - Upload fichier invalide (devrait échouer)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "mp3",
+              "type": "file",
+              "src": "/path/to/invalid.txt",
+              "description": "Fichier avec extension invalide"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/beats/{{beatId}}/upload",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "beats", "{{beatId}}", "upload"]
+        },
+        "description": "Test de validation - devrait retourner 400 avec message d'erreur"
+      },
+      "response": []
+    },
+    {
+      "name": "8. Get Beat Details",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/admin/beats/{{beatId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "admin", "beats", "{{beatId}}"]
+        },
+        "description": "Vérifier les URLs des fichiers après upload"
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000",
+      "type": "string",
+      "description": "URL de base de l'application (local ou production)"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string",
+      "description": "JWT token obtenu depuis le login (à remplir après la requête #1)"
+    },
+    {
+      "key": "beatId",
+      "value": "",
+      "type": "string",
+      "description": "ID MongoDB du beat à modifier (à remplir avec un ID existant)"
+    }
+  ]
+}

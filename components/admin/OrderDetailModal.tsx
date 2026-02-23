@@ -5,6 +5,7 @@ import { Modal } from '@/components/ui/Modal';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { IOrder } from '@/types';
+import { formatPriceIntl } from '@/lib/utils/formatPrice';
 
 type PopulatedOrder = IOrder & {
   userId?: {
@@ -22,13 +23,6 @@ interface OrderDetailModalProps {
 
 export const OrderDetailModal: React.FC<OrderDetailModalProps> = ({ order, isOpen, onClose }) => {
   if (!order) return null;
-
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('fr-FR', {
-      style: 'currency',
-      currency: 'EUR',
-    }).format(amount / 100);
-  };
 
   const formatDate = (date: string | Date) => {
     return new Date(date).toLocaleDateString('fr-FR', {
@@ -107,7 +101,7 @@ export const OrderDetailModal: React.FC<OrderDetailModalProps> = ({ order, isOpe
                   <p className="text-white font-medium mb-1">{item.beatTitle}</p>
                   <p className="text-gray-400 text-sm capitalize">Licence {item.licenseType}</p>
                 </div>
-                <p className="text-white font-semibold">{formatCurrency(item.price)}</p>
+                <p className="text-white font-semibold">{formatPriceIntl(item.price)}</p>
               </div>
             ))}
           </div>
@@ -118,7 +112,7 @@ export const OrderDetailModal: React.FC<OrderDetailModalProps> = ({ order, isOpe
           <div className="flex items-center justify-between">
             <span className="text-white font-semibold text-lg">Total</span>
             <span className="text-primary font-bold text-2xl">
-              {formatCurrency(order.totalAmount)}
+              {formatPriceIntl(order.totalAmount)}
             </span>
           </div>
         </div>

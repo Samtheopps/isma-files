@@ -25,8 +25,17 @@ export async function GET(request: NextRequest) {
     }
 
     await connectDB();
+
+    // Support du filtrage par orderId via query param
+    const { searchParams } = new URL(request.url);
+    const orderId = searchParams.get('orderId');
+
+    const query: any = { userId: decoded.userId };
+    if (orderId) {
+      query.orderId = orderId;
+    }
     
-    const downloads = await Download.find({ userId: decoded.userId })
+    const downloads = await Download.find(query)
       .sort({ createdAt: -1 })
       .populate('beatId', 'title coverImage');
 

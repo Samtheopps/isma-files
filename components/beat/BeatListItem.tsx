@@ -7,6 +7,7 @@ import { Badge, Button } from '@/components/ui';
 import { usePlayer } from '@/context/PlayerContext';
 import { useCart } from '@/context/CartContext';
 import { useFadeInScroll } from '@/lib/hooks/useScrollTrigger';
+import { formatPriceRounded } from '@/lib/utils/formatPrice';
 
 interface BeatListItemProps {
   beat: IBeat;
@@ -52,7 +53,6 @@ export const BeatListItem: React.FC<BeatListItemProps> = ({
   };
 
   const minPrice = Math.min(...beat.licenses.filter((l) => l.available).map((l) => l.price));
-  const formattedPrice = (minPrice / 100).toFixed(0);
 
   if (compact) {
     // Mobile compact layout
@@ -95,7 +95,7 @@ export const BeatListItem: React.FC<BeatListItemProps> = ({
 
         {/* Price */}
         <div className="text-right flex-shrink-0">
-          <span className="text-sm font-semibold text-fresh-sky-500">{formattedPrice}€</span>
+          <span className="text-sm font-semibold text-fresh-sky-500">{formatPriceRounded(minPrice)}</span>
         </div>
       </div>
     );
@@ -134,7 +134,7 @@ export const BeatListItem: React.FC<BeatListItemProps> = ({
         <h3 className="text-sm font-medium text-white truncate group-hover:text-fresh-sky-400 transition-colors">
           {beat.title}
         </h3>
-        <p className="text-xs text-steel-blue-300 truncate">Isma Files</p>
+        <p className="text-xs text-steel-blue-300 truncate">Isma</p>
       </div>
 
       {/* BPM */}
@@ -154,7 +154,7 @@ export const BeatListItem: React.FC<BeatListItemProps> = ({
 
       {/* Price */}
       <div className="w-20 text-right">
-        <span className="text-sm font-semibold text-fresh-sky-500">{formattedPrice}€</span>
+        <span className="text-sm font-semibold text-fresh-sky-500">{formatPriceRounded(minPrice)}</span>
       </div>
 
       {/* Add to cart */}

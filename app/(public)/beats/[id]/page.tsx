@@ -4,11 +4,12 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { IBeat, LicenseType } from '@/types';
-import { WaveformPlayer } from '@/components/player/WaveformPlayer';
+import { SimpleAudioPlayer } from '@/components/player/SimpleAudioPlayer';
 import { Badge, Button } from '@/components/ui';
 import { usePlayer } from '@/context/PlayerContext';
 import { useCart } from '@/context/CartContext';
 import gsap from 'gsap';
+import { formatPrice, formatPriceRounded } from '@/lib/utils/formatPrice';
 
 export default function BeatDetailPage() {
   const params = useParams();
@@ -192,7 +193,7 @@ export default function BeatDetailPage() {
               {/* Beat Title & Info */}
               <div>
                 <h1 className="text-4xl font-bold text-white mb-3">{beat.title}</h1>
-                <p className="text-gray-400 text-sm mb-4">Produced by Isma Files</p>
+                <p className="text-gray-400 text-sm mb-4">Produced by Isma</p>
                 
                 <div className="flex items-center gap-6 text-sm font-mono">
                   <div>
@@ -234,7 +235,7 @@ export default function BeatDetailPage() {
 
               {/* Waveform */}
               <div className="bg-black/60 border border-white/5 rounded-lg p-6">
-                <WaveformPlayer
+                <SimpleAudioPlayer
                   beat={beat}
                   isPlaying={isCurrentBeat && isPlaying}
                   onPlayPause={handlePlayPause}
@@ -339,7 +340,7 @@ export default function BeatDetailPage() {
                           </div>
                         </div>
                         <span className="text-lg font-bold text-matrix-green">
-                          {(license.price / 100).toFixed(0)}€
+                          {formatPriceRounded(license.price)}
                         </span>
                       </div>
                     </button>
@@ -350,16 +351,12 @@ export default function BeatDetailPage() {
                 <div className="border-t border-white/5 pt-6 mb-6">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-gray-400">Subtotal</span>
-                    <span className="text-white">{((selectedLicenseData?.price || 0) / 100).toFixed(2)}€</span>
-                  </div>
-                  <div className="flex items-center justify-between mb-4">
-                    <span className="text-gray-400">Tax (20%)</span>
-                    <span className="text-white">{(((selectedLicenseData?.price || 0) * 0.2) / 100).toFixed(2)}€</span>
+                    <span className="text-white">{formatPrice(selectedLicenseData?.price || 0)}</span>
                   </div>
                   <div className="flex items-center justify-between text-xl">
                     <span className="font-semibold text-white">Total</span>
                     <span className="font-bold text-matrix-green">
-                      {(((selectedLicenseData?.price || 0) * 1.2) / 100).toFixed(2)}€
+                      {formatPrice(selectedLicenseData?.price || 0)}
                     </span>
                   </div>
                 </div>

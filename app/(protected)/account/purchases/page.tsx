@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { IOrder } from '@/types';
 import { Card, Badge, Loader, Button } from '@/components/ui';
+import { formatPrice } from '@/lib/utils/formatPrice';
 
 export default function PurchasesPage() {
   const router = useRouter();
@@ -129,7 +130,7 @@ export default function PurchasesPage() {
 
                   <div className="flex items-center gap-4">
                     <div className="text-right">
-                      <p className="text-2xl font-bold text-white">{(order.totalAmount / 100).toFixed(2)}€</p>
+                      <p className="text-2xl font-bold text-white">{formatPrice(order.totalAmount)}</p>
                     </div>
 
                     {order.status === 'completed' && (

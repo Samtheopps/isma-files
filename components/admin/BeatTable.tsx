@@ -4,6 +4,7 @@ import React from 'react';
 import { IBeat } from '@/types';
 import { Badge } from '@/components/ui/Badge';
 import { clsx } from 'clsx';
+import { formatPrice } from '@/lib/utils/formatPrice';
 
 interface BeatTableProps {
   beats: IBeat[];
@@ -18,12 +19,12 @@ export const BeatTable: React.FC<BeatTableProps> = ({
   onDelete,
   onToggleActive,
 }) => {
-  const formatPrice = (licenses: IBeat['licenses']) => {
+  const formatPriceRange = (licenses: IBeat['licenses']) => {
     const prices = licenses.filter((l) => l.available).map((l) => l.price);
     if (prices.length === 0) return 'N/A';
     const min = Math.min(...prices);
     const max = Math.max(...prices);
-    return min === max ? `${min / 100}€` : `${min / 100}€ - ${max / 100}€`;
+    return min === max ? formatPrice(min) : `${formatPrice(min)} - ${formatPrice(max)}`;
   };
 
   return (
@@ -72,7 +73,7 @@ export const BeatTable: React.FC<BeatTableProps> = ({
                   ))}
                 </div>
               </td>
-              <td className="py-4 px-6 text-white font-mono text-sm">{formatPrice(beat.licenses)}</td>
+              <td className="py-4 px-6 text-white font-mono text-sm">{formatPriceRange(beat.licenses)}</td>
               <td className="py-4 px-6 text-white font-mono">{beat.salesCount}</td>
               <td className="py-4 px-6 text-center">
                 <span
@@ -177,7 +178,7 @@ export const BeatTable: React.FC<BeatTableProps> = ({
             <div className="grid grid-cols-2 gap-4 mb-4 text-sm">
               <div>
                 <p className="text-gray-400 text-xs">Price</p>
-                <p className="text-white font-medium font-mono">{formatPrice(beat.licenses)}</p>
+                <p className="text-white font-medium font-mono">{formatPriceRange(beat.licenses)}</p>
               </div>
               <div>
                 <p className="text-gray-400 text-xs">Sales</p>

@@ -64,7 +64,7 @@ export interface LicenseFeatures {
 export interface IOrder {
   _id: string;
   orderNumber: string; // "ORD-20260211-XXXX"
-  userId: string;
+  userId?: string;
   items: OrderItem[];
   totalAmount: number;
   stripePaymentId: string;
@@ -72,6 +72,11 @@ export interface IOrder {
   status: OrderStatus;
   licenseContract: string; // PDF URL
   deliveryEmail: string;
+  isGuestOrder: boolean;
+  guestEmail?: string;
+  downloadToken?: string;
+  downloadCount: number;
+  downloadExpiry?: Date;
   createdAt: Date;
   updatedAt: Date;
 }
