@@ -1,0 +1,33 @@
+✅ PHASE 2 TERMINÉE - Restructuration app directory
+
+Date: 23/02/2026
+Durée: ~15 minutes
+
+FICHIERS CRÉÉS:
+✓ app/[locale]/layout.tsx (nouveau root layout avec i18n)
+
+FICHIERS DÉPLACÉS:
+✓ app/(public)/ → app/[locale]/(public)/
+✓ app/(protected)/ → app/[locale]/(protected)/
+✓ app/admin/ → app/[locale]/admin/
+✓ app/providers.tsx → app/[locale]/providers.tsx
+✓ app/globals.css → app/[locale]/globals.css
+✓ app/blue-effects.css → app/[locale]/blue-effects.css
+✓ app/ascii-text.css → app/[locale]/ascii-text.css
+
+FICHIERS MODIFIÉS:
+✓ next.config.js (ajout withNextIntl)
+
+FICHIERS SUPPRIMÉS:
+✓ app/layout.tsx (ancien root layout)
+
+INCHANGÉS:
+✓ app/api/* (routes API restent hors [locale])
+
+VÉRIFICATIONS:
+✓ Structure [locale] créée
+✓ Type-checking passe
+✓ Aucune erreur de build
+
+PROCHAINE ÉTAPE:
+→ Phase 3: Migration des pages publiques (homepage, beats, cart, auth)
