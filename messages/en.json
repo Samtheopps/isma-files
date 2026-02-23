@@ -110,6 +110,14 @@
       "mood": "Mood",
       "genre": "Genre",
       "price": "Price",
+      "allGenres": "All Genres",
+      "allBPM": "All BPM",
+      "allKeys": "All Keys",
+      "allMoods": "All Moods",
+      "searchPlaceholder": "Search beats...",
+      "clearAll": "Clear all",
+      "listView": "List view",
+      "gridView": "Grid view",
       "sort": {
         "newest": "Newest",
         "oldest": "Oldest",
@@ -568,6 +576,10 @@
       "unlimited": "Unlimited",
       "exclusive": "Exclusive"
     },
+    "unavailable": "Unavailable",
+    "unlimited": "Unlimited",
+    "yes": "Yes",
+    "no": "No",
     "modal": {
       "title": "Choose a License",
       "selectLicense": "Select",
@@ -612,6 +624,7 @@
     }
   },
   "player": {
+    "addToCart": "Add to Cart",
     "play": "Play",
     "pause": "Pause",
     "stop": "Stop",

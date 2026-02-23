@@ -32,67 +32,67 @@
     "logout": "Déconnexion"
   },
   "homepage": {
-    "badge": "Premium Beat Marketplace",
+    "badge": "Marketplace de Beats Premium",
     "title": "ISMA FILES",
     "subtitle": {
-      "part1": "Professional quality",
-      "part2": "crystal-clear licensing, instant delivery."
+      "part1": "Qualité professionnelle",
+      "part2": "licences claires, livraison instantanée."
     },
     "cta": {
-      "explore": "Explore Catalog",
-      "learnMore": "Learn More"
+      "explore": "Explorer le Catalogue",
+      "learnMore": "En Savoir Plus"
     },
     "stats": {
-      "beats": "Premium Beats",
-      "artists": "Happy Artists",
-      "delivery": "Instant Delivery"
+      "beats": "Beats Premium",
+      "artists": "Artistes Satisfaits",
+      "delivery": "Livraison Instantanée"
     },
     "features": {
       "quality": {
-        "title": "Premium Quality,",
-        "titleAccent": "Every Single Time",
-        "description": "Every beat on Isma Files is professionally produced and mastered. We provide MP3, WAV, and Stems formats—giving you complete creative control over your sound.",
+        "title": "Qualité Premium,",
+        "titleAccent": "À Chaque Fois",
+        "description": "Chaque beat sur Isma Files est produit et masterisé professionnellement. Nous fournissons les formats MP3, WAV et Stems—vous donnant un contrôle créatif total sur votre son.",
         "list": {
-          "production": "Studio-quality production",
-          "formats": "Multiple format options (MP3, WAV, Stems)",
-          "mastering": "Professional mastering included",
-          "royalty": "Royalty-free licensing"
+          "production": "Production qualité studio",
+          "formats": "Formats multiples (MP3, WAV, Stems)",
+          "mastering": "Mastering professionnel inclus",
+          "royalty": "Licence libre de droits"
         }
       },
       "licensing": {
-        "title": "Crystal Clear",
-        "titleAccent": "Licensing",
-        "description": "No confusion, no hidden terms. Choose the license that fits your project—from Basic to Exclusive—with a clear PDF contract included with every purchase.",
+        "title": "Licences",
+        "titleAccent": "Ultra-Claires",
+        "description": "Pas de confusion, pas de conditions cachées. Choisissez la licence qui correspond à votre projet—de Basic à Exclusive—avec un contrat PDF clair inclus à chaque achat.",
         "list": {
-          "transparent": "Transparent pricing structure",
-          "pdf": "Instant PDF license contract",
-          "tiers": "Multiple tiers (Basic to Exclusive)",
-          "distribution": "Unlimited distribution rights"
+          "transparent": "Structure tarifaire transparente",
+          "pdf": "Contrat de licence PDF instantané",
+          "tiers": "Plusieurs niveaux (Basic à Exclusive)",
+          "distribution": "Droits de distribution illimités"
         }
       },
       "delivery": {
-        "title": "Instant Download,",
-        "titleAccent": "Zero Wait",
-        "description": "Purchase and download your beats immediately. No waiting, no delays. Get your files and license contract in seconds—start creating right away.",
+        "title": "Téléchargement Instantané,",
+        "titleAccent": "Zéro Attente",
+        "description": "Achetez et téléchargez vos beats immédiatement. Pas d'attente, pas de délai. Recevez vos fichiers et votre contrat de licence en quelques secondes—commencez à créer tout de suite.",
         "list": {
-          "instant": "Instant delivery after payment",
-          "secure": "Secure Stripe payment processing",
-          "validity": "Download links valid for 30 days",
-          "automated": "24/7 automated system"
+          "instant": "Livraison instantanée après paiement",
+          "secure": "Paiement sécurisé par Stripe",
+          "validity": "Liens de téléchargement valables 30 jours",
+          "automated": "Système automatisé 24/7"
         }
       }
     },
     "finalCta": {
-      "title": "Ready to Create",
-      "titleAccent": "Your Next Hit?",
-      "description": "Browse our complete catalog of premium beats. Find your sound, choose your license, and start creating today.",
-      "browseBeats": "Browse All Beats",
-      "createAccount": "Create Account"
+      "title": "Prêt à Créer",
+      "titleAccent": "Votre Prochain Hit ?",
+      "description": "Parcourez notre catalogue complet de beats premium. Trouvez votre son, choisissez votre licence, et commencez à créer dès aujourd'hui.",
+      "browseBeats": "Voir Tous les Beats",
+      "createAccount": "Créer un Compte"
     },
     "trustBadges": {
-      "secure": "Secure Payment",
-      "instant": "Instant Delivery",
-      "clear": "Clear Licensing"
+      "secure": "Paiement Sécurisé",
+      "instant": "Livraison Instantanée",
+      "clear": "Licences Claires"
     }
   },
   "beats": {
@@ -110,6 +110,14 @@
       "mood": "Ambiance",
       "genre": "Genre",
       "price": "Prix",
+      "allGenres": "Tous les genres",
+      "allBPM": "Tous les BPM",
+      "allKeys": "Toutes les tonalités",
+      "allMoods": "Toutes les ambiances",
+      "searchPlaceholder": "Rechercher des beats...",
+      "clearAll": "Tout effacer",
+      "listView": "Vue liste",
+      "gridView": "Vue grille",
       "sort": {
         "newest": "Plus récent",
         "oldest": "Plus ancien",
@@ -568,6 +576,10 @@
       "unlimited": "Unlimited",
       "exclusive": "Exclusive"
     },
+    "unavailable": "Indisponible",
+    "unlimited": "Illimité",
+    "yes": "Oui",
+    "no": "Non",
     "modal": {
       "title": "Choisir une licence",
       "selectLicense": "Sélectionner",
@@ -612,6 +624,7 @@
     }
   },
   "player": {
+    "addToCart": "Ajouter au panier",
     "play": "Lecture",
     "pause": "Pause",
     "stop": "Arrêter",

@@ -4,11 +4,13 @@ import React, { useRef, useEffect } from 'react';
 import Image from 'next/image';
 import { usePlayer } from '@/context/PlayerContext';
 import { useCart } from '@/context/CartContext';
+import { useTranslations } from 'next-intl';
 import gsap from 'gsap';
 
 export const StickyPlayer: React.FC = () => {
   const { currentBeat, isPlaying, play, pause, resume, currentTime, duration } = usePlayer();
   const { addToCart } = useCart();
+  const t = useTranslations('player');
   const playerRef = useRef<HTMLDivElement>(null);
 
   // Calculate progress percentage
@@ -120,7 +122,7 @@ export const StickyPlayer: React.FC = () => {
             onClick={handleAddToCart}
             className="px-4 py-2 bg-matrix-green text-black text-sm font-semibold rounded-lg hover:bg-matrix-green/90 transition-all flex-shrink-0"
           >
-            Add to Cart
+            {t('addToCart')}
           </button>
         </div>
       </div>

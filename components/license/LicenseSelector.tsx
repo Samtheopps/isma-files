@@ -5,6 +5,7 @@ import { License, LicenseType } from '@/types';
 import { Badge } from '@/components/ui';
 import { clsx } from 'clsx';
 import { formatPrice } from '@/lib/utils/formatPrice';
+import { useTranslations } from 'next-intl';
 
 interface LicenseSelectorProps {
   licenses: License[];
@@ -17,23 +18,18 @@ export const LicenseSelector: React.FC<LicenseSelectorProps> = ({
   selectedLicense,
   onSelect,
 }) => {
+  const t = useTranslations('license');
+
   const getLicenseLabel = (type: LicenseType): string => {
-    const labels: Record<LicenseType, string> = {
-      basic: 'Basic',
-      standard: 'Standard',
-      pro: 'Pro',
-      unlimited: 'Unlimited',
-      exclusive: 'Exclusive',
-    };
-    return labels[type];
+    return t(`types.${type}`);
   };
 
   const formatFeature = (key: string, value: any): string => {
     if (key === 'streams' || key === 'physicalSales') {
-      return value === -1 ? 'Illimité' : value.toLocaleString();
+      return value === -1 ? t('unlimited') : value.toLocaleString();
     }
     if (typeof value === 'boolean') {
-      return value ? 'Oui' : 'Non';
+      return value ? t('yes') : t('no');
     }
     return String(value);
   };
@@ -75,7 +71,7 @@ export const LicenseSelector: React.FC<LicenseSelectorProps> = ({
                   </h3>
                   {!isAvailable && (
                     <Badge variant="danger" size="sm" className="mt-1">
-                      Indisponible
+                      {t('unavailable')}
                     </Badge>
                   )}
                 </div>
