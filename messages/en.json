@@ -1,0 +1,760 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "update": "Update",
+    "search": "Search",
+    "filter": "Filter",
+    "sort": "Sort",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "close": "Close",
+    "confirm": "Confirm",
+    "or": "or",
+    "and": "and"
+  },
+  "nav": {
+    "logo": "Isma Files",
+    "tagline": "// PREMIUM_BEATS",
+    "beats": "Beats",
+    "admin": "Admin",
+    "cart": "Cart",
+    "account": "Account",
+    "login": "Login",
+    "register": "Register",
+    "logout": "Logout"
+  },
+  "homepage": {
+    "badge": "Premium Beat Marketplace",
+    "title": "ISMA FILES",
+    "subtitle": {
+      "part1": "Professional quality",
+      "part2": "crystal-clear licensing, instant delivery."
+    },
+    "cta": {
+      "explore": "Explore Catalog",
+      "learnMore": "Learn More"
+    },
+    "stats": {
+      "beats": "Premium Beats",
+      "artists": "Happy Artists",
+      "delivery": "Instant Delivery"
+    },
+    "features": {
+      "quality": {
+        "title": "Premium Quality,",
+        "titleAccent": "Every Single Time",
+        "description": "Every beat on Isma Files is professionally produced and mastered. We provide MP3, WAV, and Stems formats—giving you complete creative control over your sound.",
+        "list": {
+          "production": "Studio-quality production",
+          "formats": "Multiple format options (MP3, WAV, Stems)",
+          "mastering": "Professional mastering included",
+          "royalty": "Royalty-free licensing"
+        }
+      },
+      "licensing": {
+        "title": "Crystal Clear",
+        "titleAccent": "Licensing",
+        "description": "No confusion, no hidden terms. Choose the license that fits your project—from Basic to Exclusive—with a clear PDF contract included with every purchase.",
+        "list": {
+          "transparent": "Transparent pricing structure",
+          "pdf": "Instant PDF license contract",
+          "tiers": "Multiple tiers (Basic to Exclusive)",
+          "distribution": "Unlimited distribution rights"
+        }
+      },
+      "delivery": {
+        "title": "Instant Download,",
+        "titleAccent": "Zero Wait",
+        "description": "Purchase and download your beats immediately. No waiting, no delays. Get your files and license contract in seconds—start creating right away.",
+        "list": {
+          "instant": "Instant delivery after payment",
+          "secure": "Secure Stripe payment processing",
+          "validity": "Download links valid for 30 days",
+          "automated": "24/7 automated system"
+        }
+      }
+    },
+    "finalCta": {
+      "title": "Ready to Create",
+      "titleAccent": "Your Next Hit?",
+      "description": "Browse our complete catalog of premium beats. Find your sound, choose your license, and start creating today.",
+      "browseBeats": "Browse All Beats",
+      "createAccount": "Create Account"
+    },
+    "trustBadges": {
+      "secure": "Secure Payment",
+      "instant": "Instant Delivery",
+      "clear": "Clear Licensing"
+    }
+  },
+  "beats": {
+    "title": "Premium Beats Catalog",
+    "subtitle": "Browse our collection of professional instrumentals",
+    "search": {
+      "placeholder": "Search for a beat...",
+      "noResults": "No beats found",
+      "resultsCount": "{count} beats found",
+      "loading": "Loading..."
+    },
+    "filters": {
+      "all": "All",
+      "bpm": "BPM",
+      "mood": "Mood",
+      "genre": "Genre",
+      "price": "Price",
+      "sort": {
+        "newest": "Newest",
+        "oldest": "Oldest",
+        "priceAsc": "Price (Low to High)",
+        "priceDesc": "Price (High to Low)",
+        "title": "Title A-Z"
+      }
+    },
+    "card": {
+      "bpm": "BPM",
+      "from": "From",
+      "addToCart": "Add to Cart",
+      "viewDetails": "View Details",
+      "playing": "Playing...",
+      "play": "Play"
+    },
+    "detail": {
+      "description": "Description",
+      "selectLicense": "Select a license",
+      "addToCart": "Add to Cart",
+      "downloadFormats": "Available formats",
+      "loading": "Loading beat...",
+      "backToCatalog": "Back to Catalog",
+      "playPreview": "Play Preview",
+      "pausePreview": "Pause Preview",
+      "details": {
+        "title": "Details",
+        "filesIncluded": "MP3 + WAV + Stems included",
+        "instantDownload": "Instant download after purchase",
+        "licenseIncluded": "PDF license contract included",
+        "commercialUse": "Commercial use allowed"
+      },
+      "genre": "Genre",
+      "mood": "Mood",
+      "tags": "Tags",
+      "license": {
+        "title": "Choose License",
+        "subtotal": "Subtotal",
+        "total": "Total",
+        "addToCart": "Add to Cart",
+        "securePayment": "Secure payment powered by Stripe"
+      }
+    },
+    "empty": "No beats available at the moment"
+  },
+  "cart": {
+    "title": "My Cart",
+    "empty": "Your cart is empty",
+    "emptyDescription": "Add beats to get started",
+    "itemCount": "{count} item(s)",
+    "item": {
+      "license": "{type} License",
+      "remove": "Remove"
+    },
+    "summary": {
+      "subtotal": "Subtotal",
+      "total": "Total",
+      "checkout": "Checkout"
+    },
+    "continueShopping": "Continue Shopping",
+    "clearCart": "Clear Cart"
+  },
+    "summary": {
+      "subtotal": "Subtotal",
+      "total": "Total",
+      "checkout": "Proceed to Checkout"
+    },
+    "continueShopping": "Continue Shopping"
+  },
+  "checkout": {
+    "title": "Checkout",
+    "guestCheckout": "Guest Checkout",
+    "guestInfo": "You can order without creating an account. An email with your download links will be sent to you.",
+    "email": {
+      "label": "Email address",
+      "placeholder": "your@email.com",
+      "required": "Email is required",
+      "invalid": "Invalid email"
+    },
+    "paymentMethod": "Payment Method",
+    "processing": "Processing...",
+    "placeOrder": "Place Order",
+    "orderSummary": "Order Summary",
+    "success": {
+      "title": "Payment Successful!",
+      "message": "Thank you for your purchase. Your files are ready.",
+      "orderNumber": "Order Number",
+      "downloadNow": "Download Now",
+      "emailSent": "A confirmation email has been sent to {email}",
+      "guestNote": "For guest orders, please save your download link (valid for 30 days).",
+      "backToBeats": "Back to Beats",
+      "subtitle": "Thank you for your purchase",
+      "whatNow": {
+        "title": "What happens now?",
+        "emailGuest": "A confirmation email has been sent to {email} with your download link",
+        "emailUser": "A confirmation email has been sent with all order details",
+        "downloadGuest": "Check your email for the download link (valid for 30 days, 3 downloads max)",
+        "downloadUser": "Your files are available immediately in your downloads section",
+        "license": "Your PDF license contract is included with your downloads",
+        "yourEmail": "your email"
+      },
+      "guestNotice": {
+        "title": "💡 Create an account to keep your files forever",
+        "description": "Guest downloads expire after 30 days. Create a free account to get unlimited access to your purchases anytime, anywhere.",
+        "button": "Create My Account"
+      },
+      "transactionRef": "Transaction Reference",
+      "actions": {
+        "viewDownloads": "View My Downloads",
+        "browseMore": "Browse More Beats"
+      },
+      "support": {
+        "question": "Questions?"
+      }
+    },
+    "error": {
+      "title": "Payment Error",
+      "message": "An error occurred during payment. Please try again.",
+      "retry": "Try Again"
+    },
+    "subtitle": "Complete your purchase",
+    "backToCart": "Back to Cart",
+    "loading": "Loading cart...",
+    "guest": {
+      "title": "Guest checkout",
+      "description": "You'll receive an email with a download link valid for 30 days (3 downloads max). Create an account to keep permanent access to your purchases."
+    },
+    "form": {
+      "step1": {
+        "title": "Billing Information",
+        "subtitle": "Enter your details"
+      },
+      "step2": {
+        "title": "Payment",
+        "subtitle": "Secure payment via Stripe",
+        "security": "Secured by 256-bit SSL encryption",
+        "button": "Proceed to Payment",
+        "processing": "Processing..."
+      },
+      "fields": {
+        "email": {
+          "label": "Email *",
+          "guestHint": "to receive your files"
+        },
+        "firstName": {
+          "label": "First Name *"
+        },
+        "lastName": {
+          "label": "Last Name *"
+        },
+        "country": {
+          "label": "Country *"
+        }
+      },
+      "errors": {
+        "invalidEmail": "Please enter a valid email address",
+        "paymentFailed": "Payment failed",
+        "general": "An error occurred"
+      }
+    },
+    "summary": {
+      "title": "Order Summary",
+      "subtotal": "Subtotal ({count} item(s))",
+      "total": "Total",
+      "instantDownload": "Instant download after payment",
+      "licenseIncluded": "License contract included"
+    }
+  },
+  "account": {
+    "title": "My Account",
+    "tabs": {
+      "downloads": "Downloads",
+      "orders": "Orders",
+      "purchases": "My Purchases"
+    },
+    "downloads": {
+      "title": "My Downloads",
+      "empty": "No downloads",
+      "emptyDescription": "You don't have any files to download yet",
+      "beat": "Beat",
+      "license": "License",
+      "date": "Purchase Date",
+      "actions": "Actions",
+      "download": {
+        "mp3": "Download MP3",
+        "wav": "Download WAV",
+        "stems": "Download Stems",
+        "license": "Download License"
+      },
+      "subtitle": "Access your purchased files",
+      "back": "Back",
+      "loading": "Loading your downloads...",
+      "browseBelts": "Browse beats",
+      "files": {
+        "title": "Available files",
+        "mp3": "MP3",
+        "wav": "WAV",
+        "stems": "Stems (ZIP)",
+        "contract": "PDF Contract"
+      },
+      "status": {
+        "unlimited": "✓ Unlimited downloads",
+        "expiresOn": "Expires on: {date}",
+        "expired": "Expired"
+      },
+      "expired": {
+        "message": "This download link has expired (30 days). Contact support if you need assistance."
+      },
+      "support": {
+        "title": "Need help?",
+        "description": "If you encounter problems with your downloads or if your links have expired, feel free to contact us.",
+        "button": "Contact Support"
+      },
+      "errors": {
+        "download": "Error downloading file. Please try again."
+      }
+    },
+    "orders": {
+      "title": "My Orders",
+      "empty": "No orders",
+      "orderNumber": "Order",
+      "date": "Date",
+      "total": "Total",
+      "status": {
+        "pending": "Pending",
+        "completed": "Completed",
+        "failed": "Failed"
+      },
+      "viewDetails": "View Details",
+      "detail": {
+        "title": "Order Details",
+        "back": "Back to orders",
+        "loading": "Loading your order...",
+        "notFound": "Order not found",
+        "notFoundDescription": "This order does not exist or has been deleted.",
+        "backToAccount": "Back to account",
+        "info": {
+          "title": "Information",
+          "purchaseDate": "Purchase Date",
+          "totalAmount": "Total Amount",
+          "deliveryEmail": "Delivery Email",
+          "stripePaymentId": "Stripe Payment ID"
+        },
+        "items": {
+          "title": "Purchased Beats",
+          "preparing": {
+            "title": "Downloads in preparation",
+            "description": "Your files will be available in a few moments. Refresh the page if necessary."
+          },
+          "validUntil": "Valid until",
+          "downloads": "Downloads",
+          "unlimited": "Unlimited ✓",
+          "expired": {
+            "title": "Downloads expired",
+            "description": "Contact support for assistance"
+          },
+          "filesAvailable": "Available files"
+        },
+        "support": {
+          "title": "Need help?",
+          "description": "Contact our support if you have problems with your downloads.",
+          "button": "Contact Support"
+        },
+        "status": {
+          "completed": "Completed",
+          "pending": "Pending",
+          "failed": "Failed",
+          "refunded": "Refunded"
+        },
+        "errors": {
+          "fetch": "Error fetching order",
+          "load": "Unable to load order details",
+          "download": "Download error",
+          "downloadUrl": "Download URL not available"
+        }
+      }
+    },
+    "purchases": {
+      "title": "My Purchases",
+      "empty": "No purchases",
+      "totalSpent": "Total Spent",
+      "beatsOwned": "Beats Owned",
+      "subtitle": "Purchase history",
+      "back": "Back",
+      "loading": "Loading your purchases...",
+      "emptyDescription": "You haven't made any purchases yet",
+      "browseBelts": "Browse beats",
+      "itemCount": "{count} item(s)",
+      "download": "Download",
+      "completed": "completed"
+    },
+    "subtitle": "Manage your profile and purchases",
+    "profile": {
+      "title": "Profile Information",
+      "fullName": "Full Name",
+      "email": "Email",
+      "memberSince": "Member Since",
+      "role": "Role",
+      "logout": "Logout"
+    },
+    "purchaseHistory": {
+      "title": "Purchase History",
+      "count": "{count} order(s)",
+      "table": {
+        "order": "Order",
+        "date": "Date",
+        "items": "Items",
+        "total": "Total",
+        "status": "Status"
+      },
+      "itemCount": "{count} beat(s)",
+      "loading": "Loading orders...",
+      "empty": "No orders yet",
+      "emptyDescription": "You haven't made any purchases",
+      "browseBelts": "Browse Beats"
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Login",
+      "subtitle": "Access your account",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Sign In",
+      "noAccount": "Don't have an account?",
+      "register": "Create Account",
+      "error": "Invalid email or password"
+    },
+    "register": {
+      "title": "Register",
+      "subtitle": "Create your account",
+      "name": "Full Name",
+      "email": "Email",
+      "password": "Password",
+      "confirmPassword": "Confirm Password",
+      "submit": "Sign Up",
+      "hasAccount": "Already have an account?",
+      "login": "Sign In",
+      "passwordMismatch": "Passwords don't match",
+      "weakPassword": "Password must be at least 8 characters",
+      "emailExists": "This email is already in use"
+    }
+  },
+  "downloads": {
+    "guest": {
+      "title": "Your Downloads",
+      "subtitle": "Download your files",
+      "validUntil": "Link valid until {date}",
+      "expired": "This link has expired",
+      "invalid": "Invalid link",
+      "createAccount": "Create an account to keep your purchases permanently",
+      "loading": "Loading...",
+      "orderNumber": "Order: {number}",
+      "status": {
+        "unlimited": "✓ Unlimited downloads",
+        "expires": "Expires in {days} day(s)"
+      },
+      "warning": {
+        "title": "⚠️ Warning",
+        "description": "Your link will expire soon. Create an account to keep permanent access to your purchases."
+      },
+      "cta": {
+        "title": "💡 Create an account for unlimited access",
+        "description": "Save your purchases permanently, download anytime, and enjoy exclusive benefits.",
+        "button": "Create My Account"
+      },
+      "support": {
+        "question": "Questions or problem?"
+      },
+      "error": {
+        "title": "Access Denied",
+        "default": "An error occurred while loading",
+        "download": "Error downloading file. Please try again.",
+        "possibleReasons": "Possible reasons:",
+        "reason1": "Expired link (valid for 30 days)",
+        "reason2": "Invalid or deleted order",
+        "reason3": "Invalid or incorrect link",
+        "support": "Need help? Contact support with your order number.",
+        "backHome": "Back to Home"
+      }
+    }
+  },
+  "admin": {
+    "title": "Administration",
+    "sidebar": {
+      "dashboard": "Dashboard",
+      "beats": "Beats",
+      "orders": "Orders",
+      "stats": "Statistics"
+    },
+    "dashboard": {
+      "title": "Dashboard",
+      "stats": {
+        "totalSales": "Total Sales",
+        "totalOrders": "Orders",
+        "totalBeats": "Beats",
+        "revenue": "Revenue"
+      }
+    },
+    "beats": {
+      "title": "Beat Management",
+      "addNew": "Add Beat",
+      "table": {
+        "title": "Title",
+        "bpm": "BPM",
+        "price": "Price",
+        "status": "Status",
+        "actions": "Actions"
+      },
+      "form": {
+        "title": "Title",
+        "description": "Description",
+        "bpm": "BPM",
+        "mood": "Mood",
+        "genre": "Genre",
+        "price": {
+          "basic": "Basic Price",
+          "standard": "Standard Price",
+          "pro": "Pro Price",
+          "unlimited": "Unlimited Price",
+          "exclusive": "Exclusive Price"
+        },
+        "files": {
+          "mp3": "MP3 File",
+          "wav": "WAV File",
+          "stems": "Stems File"
+        },
+        "save": "Save",
+        "cancel": "Cancel"
+      },
+      "delete": {
+        "confirm": "Are you sure you want to delete this beat?",
+        "success": "Beat deleted",
+        "error": "Error deleting beat"
+      }
+    },
+    "orders": {
+      "title": "Orders",
+      "table": {
+        "orderNumber": "Order #",
+        "customer": "Customer",
+        "date": "Date",
+        "total": "Total",
+        "status": "Status",
+        "actions": "Actions"
+      },
+      "detail": {
+        "title": "Order Details",
+        "customer": "Customer",
+        "email": "Email",
+        "items": "Items",
+        "total": "Total",
+        "status": "Status",
+        "date": "Date"
+      }
+    }
+  },
+  "license": {
+    "types": {
+      "basic": "Basic",
+      "standard": "Standard",
+      "pro": "Pro",
+      "unlimited": "Unlimited",
+      "exclusive": "Exclusive"
+    },
+    "modal": {
+      "title": "Choose a License",
+      "selectLicense": "Select",
+      "features": "Included:",
+      "terms": {
+        "basic": [
+          "High-quality MP3 file",
+          "Up to 50,000 streams",
+          "Up to 500 physical sales",
+          "Beat remains for sale",
+          "Producer credit required"
+        ],
+        "standard": [
+          "MP3 + WAV files",
+          "Up to 100,000 streams",
+          "Up to 1,000 physical sales",
+          "Beat remains for sale",
+          "Producer credit required"
+        ],
+        "pro": [
+          "MP3 + WAV + Stems",
+          "Up to 250,000 streams",
+          "Up to 2,500 physical sales",
+          "Beat remains for sale",
+          "Producer credit required"
+        ],
+        "unlimited": [
+          "MP3 + WAV + Stems",
+          "Unlimited streams",
+          "Unlimited physical sales",
+          "Beat remains for sale",
+          "Producer credit required"
+        ],
+        "exclusive": [
+          "MP3 + WAV + Stems",
+          "Unlimited streams and sales",
+          "Beat removed from sale",
+          "Permanent exclusive rights",
+          "Producer credit required"
+        ]
+      }
+    }
+  },
+  "player": {
+    "play": "Play",
+    "pause": "Pause",
+    "stop": "Stop",
+    "volume": "Volume",
+    "nowPlaying": "Now Playing"
+  },
+  "email": {
+    "orderConfirmation": {
+      "subject": "Order Confirmation - {orderNumber}",
+      "title": "ISMA FILES",
+      "greeting": "Thank you for your purchase! 🎵",
+      "orderConfirmed": "Your order <strong>{orderNumber}</strong> has been confirmed.",
+      "orderDetails": "Order Details:",
+      "total": "Total: {amount}€",
+      "guestNotice": {
+        "title": "ℹ️ Important:",
+        "message": "This download link is valid for <strong>30 days</strong> with <strong>unlimited downloads</strong>. We recommend creating an account to keep permanent access to your purchases."
+      },
+      "downloadCta": "You can download your files by clicking the button below:",
+      "downloadButton": "Download My Files",
+      "validity": {
+        "guest": "Link valid for 30 days - Unlimited downloads",
+        "user": "This link is valid for 30 days with unlimited downloads."
+      },
+      "footer": "© {year} {appName}. All rights reserved."
+    }
+  },
+  "pdf": {
+    "title": "MUSIC LICENSE CONTRACT",
+    "sections": {
+      "parties": "PARTIES",
+      "musicalWork": "MUSICAL WORK",
+      "licenseTerms": "LICENSE TERMS",
+      "generalConditions": "GENERAL CONDITIONS"
+    },
+    "labels": {
+      "producer": "Producer",
+      "licensee": "Licensee",
+      "email": "Email",
+      "title": "Title",
+      "licenseType": "License Type",
+      "price": "Price",
+      "orderNumber": "Order #"
+    },
+    "conditions": {
+      "acceptance": "Licensee acknowledges having read and accepted the terms of this license.",
+      "nonTransferable": "This license is non-transferable and begins on the purchase date.",
+      "credit": "Producer credit must appear as follows: \"(prod. Isma)\"",
+      "platforms": "on all distribution platforms."
+    },
+    "footer": {
+      "copyright": "© {year} ISMA-FILES • All rights reserved • www.isma-files.com",
+      "validity": "Automatically generated document - Contractual value"
+    },
+    "licenseTerms": {
+      "basic": [
+        "High-quality MP3 file included",
+        "Up to 50,000 authorized streams",
+        "Up to 500 authorized physical sales",
+        "Beat remains available for sale",
+        "Producer credit required",
+        "Non-exclusive license"
+      ],
+      "standard": [
+        "High-quality MP3 and WAV files included",
+        "Up to 100,000 authorized streams",
+        "Up to 1,000 authorized physical sales",
+        "Beat remains available for sale",
+        "Producer credit required",
+        "Non-exclusive license"
+      ],
+      "pro": [
+        "MP3, WAV and stems files included",
+        "Up to 250,000 authorized streams",
+        "Up to 2,500 authorized physical sales",
+        "Beat remains available for sale",
+        "Producer credit required",
+        "Non-exclusive license"
+      ],
+      "unlimited": [
+        "MP3, WAV and stems files included",
+        "Unlimited streams",
+        "Unlimited physical sales",
+        "Beat remains available for sale",
+        "Producer credit required",
+        "Non-exclusive license"
+      ],
+      "exclusive": [
+        "MP3, WAV and stems files included",
+        "Unlimited streams and sales",
+        "Beat is removed from sale",
+        "Producer credit required",
+        "EXCLUSIVE License - You are the only one who can use this beat",
+        "Permanent exclusive rights"
+      ]
+    }
+  },
+  "errors": {
+    "generic": "An error occurred",
+    "network": "Connection error",
+    "notFound": "Page not found",
+    "unauthorized": "Unauthorized access",
+    "serverError": "Server error",
+    "validation": "Validation error",
+    "tryAgain": "Try Again"
+  },
+  "metadata": {
+    "home": {
+      "title": "ISMA FILES // SKY BEATS",
+      "description": "[SYSTEM] Premium beat distribution platform // Premium Blue Protocol"
+    },
+    "beats": {
+      "title": "Premium Beats - ISMA FILES",
+      "description": "Browse our catalog of professional beats"
+    },
+    "cart": {
+      "title": "Cart - ISMA FILES",
+      "description": "Your shopping cart"
+    },
+    "checkout": {
+      "title": "Checkout - ISMA FILES",
+      "description": "Complete your order"
+    },
+    "account": {
+      "title": "My Account - ISMA FILES",
+      "description": "Manage your account and downloads"
+    },
+    "auth": {
+      "login": {
+        "title": "Login - ISMA FILES",
+        "description": "Sign in to your account"
+      },
+      "register": {
+        "title": "Register - ISMA FILES",
+        "description": "Create your account"
+      }
+    }
+  }
+}
