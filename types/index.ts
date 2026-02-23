@@ -97,7 +97,7 @@ export interface IDownload {
   beatId: string;
   licenseType: LicenseType;
   downloadCount: number;
-  maxDownloads: number; // Default: 3
+  maxDownloads?: number; // Optionnel - Téléchargements illimités par défaut
   expiresAt: Date; // 30 days after purchase
   files: DownloadFiles;
   createdAt: Date;

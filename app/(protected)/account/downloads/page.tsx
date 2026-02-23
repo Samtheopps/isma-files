@@ -46,7 +46,24 @@ export default function DownloadsPage() {
 
       if (response.ok) {
         const data = await response.json();
-        window.open(data.url, '_blank');
+        
+        // Forcer le téléchargement avec Cloudinary en ajoutant fl_attachment
+        let downloadUrl = data.url;
+        if (downloadUrl.includes('cloudinary.com') && downloadUrl.includes('/upload/')) {
+          downloadUrl = downloadUrl.replace('/upload/', '/upload/fl_attachment/');
+        }
+        
+        // Utiliser un lien temporaire au lieu de window.open pour éviter le popup blocker
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } else {
+        const error = await response.json();
+        alert(error.error || 'Erreur lors du téléchargement. Veuillez réessayer.');
       }
     } catch (error) {
       console.error('Error downloading file:', error);
@@ -59,7 +76,7 @@ export default function DownloadsPage() {
   };
 
   const canDownload = (download: IDownload) => {
-    return !isExpired(download.expiresAt) && download.downloadCount < download.maxDownloads;
+    return !isExpired(download.expiresAt);
   };
 
   if (isLoading) {
@@ -116,14 +133,11 @@ export default function DownloadsPage() {
                           {download.licenseType}
                         </Badge>
                         {expired && <Badge variant="danger">Expiré</Badge>}
-                        {!expired && download.downloadCount >= download.maxDownloads && (
-                          <Badge variant="warning">Limite atteinte</Badge>
-                        )}
                       </div>
 
                       <div className="space-y-2 text-sm text-gray-400">
                         <p>
-                          Téléchargements: {download.downloadCount} / {download.maxDownloads}
+                          <span className="text-matrix-green font-semibold">✓ Téléchargements illimités</span>
                         </p>
                         <p>
                           Expire le:{' '}
@@ -201,15 +215,9 @@ export default function DownloadsPage() {
                     </div>
                   </div>
 
-                  {!downloadable && !expired && (
-                    <div className="mt-4 p-3 bg-yellow-500/10 border border-yellow-500/50 rounded text-sm text-yellow-400">
-                      Vous avez atteint la limite de téléchargements pour ce fichier. Contactez le support si vous avez besoin d'aide.
-                    </div>
-                  )}
-
                   {expired && (
                     <div className="mt-4 p-3 bg-red-500/10 border border-red-500/50 rounded text-sm text-red-400">
-                      Ce lien de téléchargement a expiré. Contactez le support pour obtenir un nouveau lien.
+                      Ce lien de téléchargement a expiré (30 jours). Contactez le support si vous avez besoin d'aide.
                     </div>
                   )}
                 </Card>

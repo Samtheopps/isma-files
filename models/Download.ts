@@ -47,7 +47,8 @@ const DownloadSchema = new Schema<IDownloadDocument>(
     },
     maxDownloads: {
       type: Number,
-      default: 3,
+      required: false,
+      default: undefined,
     },
     expiresAt: {
       type: Date,

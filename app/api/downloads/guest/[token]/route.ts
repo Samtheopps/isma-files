@@ -45,13 +45,7 @@ export async function GET(
       );
     }
 
-    // Vérifier le nombre de téléchargements
-    if (order.downloadCount >= 3) {
-      return NextResponse.json(
-        { error: 'Limite de téléchargements atteinte (3 max)' },
-        { status: 429 }
-      );
-    }
+    // Limite de téléchargements supprimée - téléchargements illimités
 
     // Récupérer les détails des beats
     const beatsWithFiles = await Promise.all(
@@ -85,7 +79,6 @@ export async function GET(
         deliveryEmail: order.deliveryEmail,
         createdAt: order.createdAt,
         downloadCount: order.downloadCount,
-        maxDownloads: 3,
         expiresAt: order.downloadExpiry,
         licenseContract: order.licenseContract,
       },
@@ -120,12 +113,11 @@ export async function POST(
 
     await dbConnect();
 
-    // Trouver et incrémenter le compteur
+    // Trouver et incrémenter le compteur (téléchargements illimités)
     const order = await Order.findOneAndUpdate(
       { 
         downloadToken: token,
         isGuestOrder: true,
-        downloadCount: { $lt: 3 },
         downloadExpiry: { $gt: new Date() },
       },
       { 
@@ -136,7 +128,7 @@ export async function POST(
 
     if (!order) {
       return NextResponse.json(
-        { error: 'Impossible d\'incrémenter le compteur (limite atteinte ou expiré)' },
+        { error: 'Impossible d\'incrémenter le compteur (lien expiré)' },
         { status: 400 }
       );
     }

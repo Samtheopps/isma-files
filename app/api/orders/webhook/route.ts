@@ -187,7 +187,7 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
           beatId: item.beatId,
           licenseType: item.licenseType,
           downloadCount: 0,
-          maxDownloads: 3,
+          // maxDownloads supprimé - téléchargements illimités
           expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 jours
           files: {
             mp3: beat.files.mp3,

@@ -12,7 +12,6 @@ interface OrderData {
     deliveryEmail: string;
     createdAt: string;
     downloadCount: number;
-    maxDownloads: number;
     expiresAt: string;
     licenseContract: string;
   };
@@ -78,18 +77,34 @@ export default function GuestDownloadPage() {
 
   const handleDownload = async (url: string, filename: string) => {
     try {
-      // Incrémenter le compteur
+      // Forcer le téléchargement avec Cloudinary en ajoutant fl_attachment
+      let downloadUrl = url;
+      if (url.includes('cloudinary.com')) {
+        // Ajouter fl_attachment pour forcer le téléchargement au lieu d'ouvrir
+        if (url.includes('/upload/')) {
+          downloadUrl = url.replace('/upload/', '/upload/fl_attachment/');
+        }
+      }
+      
+      // Utiliser un lien temporaire au lieu de window.open pour éviter le popup blocker
+      const link = document.createElement('a');
+      link.href = downloadUrl;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      // Incrémenter le compteur de téléchargements (pour statistiques)
       await fetch(`/api/downloads/guest/${token}`, {
         method: 'POST',
       });
 
-      // Ouvrir le lien de téléchargement
-      window.open(url, '_blank');
-
       // Rafraîchir les données
       await fetchOrderData();
     } catch (err: any) {
-      alert('Erreur lors du téléchargement');
+      console.error('Error downloading file:', err);
+      alert('Erreur lors du téléchargement. Veuillez réessayer.');
     }
   };
 
@@ -125,7 +140,7 @@ export default function GuestDownloadPage() {
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-red-400">•</span>
-                  <span>Limite de téléchargements atteinte (3 max)</span>
+                  <span>Commande invalide ou supprimée</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-red-400">•</span>
@@ -150,7 +165,6 @@ export default function GuestDownloadPage() {
   if (!orderData) return null;
 
   const { order, items } = orderData;
-  const remainingDownloads = order.maxDownloads - order.downloadCount;
   const expiresAt = new Date(order.expiresAt);
   const daysRemaining = Math.ceil((expiresAt.getTime() - Date.now()) / (1000 * 60 * 60 * 24));
 
@@ -173,9 +187,9 @@ export default function GuestDownloadPage() {
 
           {/* Status Badges */}
           <div className="flex flex-wrap gap-3">
-            <div className={`px-4 py-2 rounded-lg border ${remainingDownloads > 0 ? 'bg-matrix-green/10 border-matrix-green/30' : 'bg-red-500/10 border-red-500/30'}`}>
-              <p className={`text-sm font-semibold ${remainingDownloads > 0 ? 'text-matrix-green' : 'text-red-400'}`}>
-                {remainingDownloads} téléchargement{remainingDownloads > 1 ? 's' : ''} restant{remainingDownloads > 1 ? 's' : ''}
+            <div className="px-4 py-2 rounded-lg border bg-matrix-green/10 border-matrix-green/30">
+              <p className="text-sm font-semibold text-matrix-green">
+                ✓ Téléchargements illimités
               </p>
             </div>
             <div className={`px-4 py-2 rounded-lg border ${daysRemaining > 7 ? 'bg-blue-500/10 border-blue-500/30' : 'bg-orange-500/10 border-orange-500/30'}`}>
@@ -186,8 +200,8 @@ export default function GuestDownloadPage() {
           </div>
         </div>
 
-        {/* Warning if low downloads or expiring soon */}
-        {(remainingDownloads <= 1 || daysRemaining <= 7) && (
+        {/* Warning if expiring soon */}
+        {daysRemaining <= 7 && (
           <div className="bg-orange-500/10 border border-orange-500/50 rounded-lg p-4 mb-6">
             <div className="flex items-start gap-3">
               <svg className="w-5 h-5 text-orange-400 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
@@ -196,7 +210,7 @@ export default function GuestDownloadPage() {
               <div>
                 <p className="text-orange-400 font-semibold text-sm mb-1">⚠️ Attention</p>
                 <p className="text-orange-300 text-sm">
-                  Vos accès arrivent bientôt à expiration. Créez un compte pour conserver un accès permanent à vos achats.
+                  Votre lien arrive bientôt à expiration. Créez un compte pour conserver un accès permanent à vos achats.
                 </p>
               </div>
             </div>
@@ -234,7 +248,7 @@ export default function GuestDownloadPage() {
                 <div className="flex-1">
                   <h3 className="text-xl font-semibold text-white mb-1">{item.beatTitle}</h3>
                   <p className="text-gray-400 text-sm capitalize">{item.licenseType} License</p>
-                  <p className="text-gray-500 text-sm">{item.price}€</p>
+                  <p className="text-gray-500 text-sm">{(item.price / 100).toFixed(2)}€</p>
                 </div>
               </div>
 
@@ -242,8 +256,7 @@ export default function GuestDownloadPage() {
                 {item.files.mp3 && (
                   <button
                     onClick={() => handleDownload(item.files.mp3!, `${item.beatTitle}.mp3`)}
-                    disabled={remainingDownloads === 0}
-                    className="flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg px-4 py-3 text-white transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg px-4 py-3 text-white transition-all duration-200"
                   >
                     <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
@@ -254,8 +267,7 @@ export default function GuestDownloadPage() {
                 {item.files.wav && (
                   <button
                     onClick={() => handleDownload(item.files.wav!, `${item.beatTitle}.wav`)}
-                    disabled={remainingDownloads === 0}
-                    className="flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg px-4 py-3 text-white transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg px-4 py-3 text-white transition-all duration-200"
                   >
                     <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
@@ -266,8 +278,7 @@ export default function GuestDownloadPage() {
                 {item.files.stems && (
                   <button
                     onClick={() => handleDownload(item.files.stems!, `${item.beatTitle}_stems.zip`)}
-                    disabled={remainingDownloads === 0}
-                    className="flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg px-4 py-3 text-white transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg px-4 py-3 text-white transition-all duration-200"
                   >
                     <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
@@ -278,8 +289,7 @@ export default function GuestDownloadPage() {
                 {order.licenseContract && (
                   <button
                     onClick={() => handleDownload(order.licenseContract, `license_${order.orderNumber}.pdf`)}
-                    disabled={remainingDownloads === 0}
-                    className="flex items-center justify-center gap-2 bg-matrix-green/10 hover:bg-matrix-green/20 border border-matrix-green/30 rounded-lg px-4 py-3 text-matrix-green transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="flex items-center justify-center gap-2 bg-matrix-green/10 hover:bg-matrix-green/20 border border-matrix-green/30 rounded-lg px-4 py-3 text-matrix-green transition-all duration-200"
                   >
                     <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                       <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
