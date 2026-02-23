@@ -9,7 +9,8 @@ import { Navbar } from './Navbar';
  */
 export function NavbarWrapper() {
   const pathname = usePathname();
-  const isBeatsPage = pathname === '/beats';
+  // Détection avec i18n : /fr/beats ou /en/beats
+  const isBeatsPage = pathname?.includes('/beats');
 
   return <Navbar disableScrollAnimation={isBeatsPage} />;
 }
