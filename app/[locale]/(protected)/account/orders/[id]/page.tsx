@@ -33,6 +33,7 @@ export default function OrderDetailPage() {
   const params = useParams();
   const orderId = params?.id as string;
   const t = useTranslations('account.orders.detail');
+  const tStatus = useTranslations('account.orders.detail.status');
   const format = useFormatter();
 
   const [order, setOrder] = useState<EnrichedOrder | null>(null);
@@ -192,7 +193,6 @@ export default function OrderDetailPage() {
   };
 
   const getStatusBadge = (status: string) => {
-    const tStatus = useTranslations('account.orders.detail.status');
     const variants: Record<string, 'success' | 'warning' | 'danger' | 'default'> = {
       completed: 'success',
       pending: 'warning',

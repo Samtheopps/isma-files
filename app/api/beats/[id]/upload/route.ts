@@ -4,13 +4,6 @@ import Beat from '@/models/Beat';
 import cloudinary from '@/lib/services/cloudinary.service';
 import { getAdminFromRequest } from '@/lib/utils/adminAuth';
 
-// Configuration pour accepter les gros fichiers
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
-
 // Limites de taille en bytes
 const FILE_SIZE_LIMITS = {
   mp3: 50 * 1024 * 1024, // 50MB

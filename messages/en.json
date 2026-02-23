@@ -172,13 +172,6 @@
     "continueShopping": "Continue Shopping",
     "clearCart": "Clear Cart"
   },
-    "summary": {
-      "subtotal": "Subtotal",
-      "total": "Total",
-      "checkout": "Proceed to Checkout"
-    },
-    "continueShopping": "Continue Shopping"
-  },
   "checkout": {
     "title": "Checkout",
     "guestCheckout": "Guest Checkout",
