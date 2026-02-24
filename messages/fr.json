@@ -93,6 +93,49 @@
       "secure": "Paiement Sécurisé",
       "instant": "Livraison Instantanée",
       "clear": "Licences Claires"
+    },
+    "featured": {
+      "title": "Découvrez nos beats les plus populaires",
+      "subtitle": "Sélection de nos meilleurs instrumentaux",
+      "viewAll": "Voir tous les beats"
+    },
+    "howItWorks": {
+      "title": "Comment acheter un beat ?",
+      "step1": {
+        "title": "Choisis ton beat",
+        "description": "Écoute gratuitement"
+      },
+      "step2": {
+        "title": "Licence et paie",
+        "description": "Basic à Exclusive"
+      },
+      "step3": {
+        "title": "Reçois tout de suite",
+        "description": "MP3, WAV, Stems + Contrat PDF"
+      }
+    },
+    "faq": {
+      "title": "Questions fréquentes",
+      "q1": {
+        "question": "Quels formats de fichiers sont inclus ?",
+        "answer": "Selon la licence choisie : MP3 (toutes), WAV (Standard+), Stems (Pro+). Tous les fichiers sont en haute qualité."
+      },
+      "q2": {
+        "question": "Puis-je utiliser les beats commercialement ?",
+        "answer": "Oui ! Toutes nos licences autorisent l'usage commercial. Les limites varient selon le type de licence (streams, ventes physiques, etc.)."
+      },
+      "q3": {
+        "question": "Comment fonctionne le téléchargement ?",
+        "answer": "Après paiement, vous recevez instantanément un email avec vos liens de téléchargement valables 30 jours. Vous pouvez aussi les retrouver dans votre compte."
+      },
+      "q4": {
+        "question": "Les licences sont-elles claires ?",
+        "answer": "Absolument. Chaque achat inclut un contrat PDF détaillant vos droits d'utilisation. Pas de conditions cachées."
+      },
+      "q5": {
+        "question": "Puis-je acheter sans créer de compte ?",
+        "answer": "Oui, la commande invité est possible. Vous recevrez vos fichiers par email. Créer un compte permet de retrouver vos achats à tout moment."
+      }
     }
   },
   "beats": {

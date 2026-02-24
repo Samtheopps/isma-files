@@ -179,10 +179,67 @@ export default function BeatDetailPage() {
       {/* Content */}
       <section className="px-4 py-8">
         <div className="max-w-6xl mx-auto">
+          {/* Mobile: Image en haut centrée + Titre */}
+          <div className="lg:hidden mb-6 space-y-4">
+            {/* Cover Image - Petite sur mobile */}
+            <div className="relative w-48 h-48 mx-auto rounded-lg overflow-hidden border border-white/5">
+              <Image
+                src={beat.coverImage}
+                alt={beat.title}
+                fill
+                className="object-cover"
+                priority
+              />
+            </div>
+            
+            {/* Beat Title & Info */}
+            <div className="text-center">
+              <h1 className="text-3xl font-bold text-white mb-2">{beat.title}</h1>
+              <p className="text-gray-400 text-sm mb-3">Produced by Isma</p>
+              
+              <div className="flex items-center justify-center gap-4 text-sm font-mono">
+                <div>
+                  <span className="text-gray-500">BPM: </span>
+                  <span className="text-white">{beat.bpm}</span>
+                </div>
+                <div>
+                  <span className="text-gray-500">Key: </span>
+                  <span className="text-white">{beat.key}</span>
+                </div>
+                <div>
+                  <span className="text-gray-500">Plays: </span>
+                  <span className="text-white">{beat.playCount}</span>
+                </div>
+              </div>
+            </div>
+            
+            {/* Play Button - Mobile */}
+            <button
+              onClick={handlePlayPause}
+              className="w-full px-6 py-3 bg-matrix-green/10 hover:bg-matrix-green/20 border border-matrix-green/30 rounded-lg flex items-center justify-center gap-3 transition-all group"
+            >
+              {isCurrentBeat && isPlaying ? (
+                <>
+                  <svg className="w-5 h-5 text-matrix-green" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" />
+                  </svg>
+                  <span className="text-matrix-green font-semibold">{t('pausePreview')}</span>
+                </>
+              ) : (
+                <>
+                  <svg className="w-5 h-5 text-matrix-green" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+                  <span className="text-matrix-green font-semibold">{t('playPreview')}</span>
+                </>
+              )}
+            </button>
+          </div>
+          
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Left Column - Cover + Info */}
-            <div ref={leftColRef} className="space-y-6">
-              {/* Cover Image */}
+            {/* Left Column - Desktop only */}
+            <div ref={leftColRef} className="hidden lg:block space-y-6">
+              {/* Cover Image - Desktop */}
               <div className="relative aspect-square rounded-lg overflow-hidden border border-white/5">
                 <Image
                   src={beat.coverImage}
@@ -308,9 +365,9 @@ export default function BeatDetailPage() {
               )}
             </div>
 
-            {/* Right Column - License Selection */}
+            {/* Right Column - License Selection (priorité sur mobile) */}
             <div ref={rightColRef}>
-              <div className="bg-black/80 border border-white/5 rounded-lg p-6 sticky top-24">
+              <div className="bg-black/80 border border-white/5 rounded-lg p-6 lg:sticky lg:top-24">
                 <h2 className="text-xl font-semibold text-white mb-6">{t('license.title')}</h2>
 
                 {/* License Radio Buttons */}
@@ -380,6 +437,82 @@ export default function BeatDetailPage() {
                 </p>
               </div>
             </div>
+          </div>
+
+          {/* Mobile Only: Waveform + Details + Tags */}
+          <div className="lg:hidden mt-8 space-y-6">
+            {/* Waveform */}
+            <div className="bg-black/60 border border-white/5 rounded-lg p-6">
+              <SimpleAudioPlayer
+                beat={beat}
+                isPlaying={isCurrentBeat && isPlaying}
+                onPlayPause={handlePlayPause}
+              />
+            </div>
+
+            {/* Details */}
+            <div className="bg-black/60 border border-white/5 rounded-lg p-6 space-y-4">
+              <h3 className="text-sm uppercase tracking-wider text-gray-500 font-semibold">{t('details.title')}</h3>
+              
+              <div className="space-y-3">
+                <div className="flex items-center gap-2 text-sm">
+                  <svg className="w-4 h-4 text-matrix-green" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                  </svg>
+                  <span className="text-gray-300">{t('details.filesIncluded')}</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm">
+                  <svg className="w-4 h-4 text-matrix-green" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                  </svg>
+                  <span className="text-gray-300">{t('details.instantDownload')}</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm">
+                  <svg className="w-4 h-4 text-matrix-green" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                  </svg>
+                  <span className="text-gray-300">{t('details.licenseIncluded')}</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm">
+                  <svg className="w-4 h-4 text-matrix-green" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                  </svg>
+                  <span className="text-gray-300">{t('details.commercialUse')}</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Genre */}
+            <div className="space-y-3">
+              <h3 className="text-sm uppercase tracking-wider text-gray-500 font-semibold">{t('genre')}</h3>
+              <div className="flex flex-wrap gap-2">
+                {beat.genre.map((g, i) => (
+                  <Badge key={i} variant="primary" size="sm">{g}</Badge>
+                ))}
+              </div>
+            </div>
+
+            {/* Mood */}
+            <div className="space-y-3">
+              <h3 className="text-sm uppercase tracking-wider text-gray-500 font-semibold">{t('mood')}</h3>
+              <div className="flex flex-wrap gap-2">
+                {beat.mood.map((m, i) => (
+                  <Badge key={i} variant="default" size="sm">{m}</Badge>
+                ))}
+              </div>
+            </div>
+
+            {/* Tags */}
+            {beat.tags.length > 0 && (
+              <div className="space-y-3">
+                <h3 className="text-sm uppercase tracking-wider text-gray-500 font-semibold">{t('tags')}</h3>
+                <div className="flex flex-wrap gap-2">
+                  {beat.tags.map((tag, i) => (
+                    <Badge key={i} variant="default" size="sm">{tag}</Badge>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </section>

@@ -93,6 +93,49 @@
       "secure": "Secure Payment",
       "instant": "Instant Delivery",
       "clear": "Clear Licensing"
+    },
+    "featured": {
+      "title": "Discover our most popular beats",
+      "subtitle": "Selection of our best instrumentals",
+      "viewAll": "View all beats"
+    },
+    "howItWorks": {
+      "title": "How to buy a beat?",
+      "step1": {
+        "title": "Choose your beat",
+        "description": "Listen for free"
+      },
+      "step2": {
+        "title": "License and pay",
+        "description": "Basic to Exclusive"
+      },
+      "step3": {
+        "title": "Get it instantly",
+        "description": "MP3, WAV, Stems + PDF Contract"
+      }
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "q1": {
+        "question": "What file formats are included?",
+        "answer": "Depending on the license chosen: MP3 (all), WAV (Standard+), Stems (Pro+). All files are in high quality."
+      },
+      "q2": {
+        "question": "Can I use beats commercially?",
+        "answer": "Yes! All our licenses allow commercial use. Limits vary depending on the license type (streams, physical sales, etc.)."
+      },
+      "q3": {
+        "question": "How does the download work?",
+        "answer": "After payment, you instantly receive an email with your download links valid for 30 days. You can also find them in your account."
+      },
+      "q4": {
+        "question": "Are the licenses clear?",
+        "answer": "Absolutely. Each purchase includes a PDF contract detailing your usage rights. No hidden conditions."
+      },
+      "q5": {
+        "question": "Can I buy without creating an account?",
+        "answer": "Yes, guest checkout is possible. You will receive your files by email. Creating an account allows you to find your purchases anytime."
+      }
     }
   },
   "beats": {
