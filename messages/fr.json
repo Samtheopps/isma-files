@@ -256,7 +256,7 @@
         "yourEmail": "votre email"
       },
       "guestNotice": {
-        "title": "💡 Créez un compte pour conserver vos fichiers pour toujours",
+        "title": "Créez un compte pour conserver vos fichiers pour toujours",
         "description": "Les téléchargements invité expirent après 30 jours. Créez un compte gratuit pour un accès illimité à vos achats, n'importe quand, n'importe où.",
         "button": "Créer mon compte"
       },
@@ -516,7 +516,7 @@
         "description": "Votre lien arrive bientôt à expiration. Créez un compte pour conserver un accès permanent à vos achats."
       },
       "cta": {
-        "title": "💡 Créez un compte pour un accès illimité",
+        "title": "Créez un compte pour un accès illimité",
         "description": "Sauvegardez vos achats de manière permanente, téléchargez quand vous voulez, et profitez d'avantages exclusifs.",
         "button": "Créer mon compte"
       },
@@ -678,7 +678,7 @@
     "order": {
       "subject": "Confirmation de commande - {orderNumber}",
       "title": "ISMA FILES",
-      "thanks": "Merci pour votre achat ! 🎵",
+      "thanks": "Merci pour votre achat !",
       "orderConfirmed": "Votre commande {orderNumber} a été confirmée.",
       "orderDetails": "Détails de la commande :",
       "total": "Total : {amount}",
