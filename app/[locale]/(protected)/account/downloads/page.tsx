@@ -155,67 +155,59 @@ export default function DownloadsPage() {
                     </div>
 
                     {/* Download Buttons */}
-                    <div className="space-y-2">
-                      <h3 className="text-sm font-medium text-gray-400 mb-3">{t('files.title')}</h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                      <h3 className="col-span-full text-sm font-medium text-gray-400 mb-1">{t('files.title')}</h3>
                       
                       {download.files.mp3 && (
-                        <Button
-                          variant="secondary"
-                          size="sm"
-                          fullWidth
+                        <button
                           disabled={!downloadable}
                           onClick={() => handleDownload(download._id, 'mp3')}
+                          className="flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg px-4 py-3 text-white transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                          <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                             <path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
                           </svg>
-                          {t('files.mp3')}
-                        </Button>
+                          <span className="font-semibold">MP3</span>
+                        </button>
                       )}
 
                       {download.files.wav && (
-                        <Button
-                          variant="secondary"
-                          size="sm"
-                          fullWidth
+                        <button
                           disabled={!downloadable}
                           onClick={() => handleDownload(download._id, 'wav')}
+                          className="flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg px-4 py-3 text-white transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                          <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                             <path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
                           </svg>
-                          {t('files.wav')}
-                        </Button>
+                          <span className="font-semibold">WAV</span>
+                        </button>
                       )}
 
                       {download.files.stems && (
-                        <Button
-                          variant="secondary"
-                          size="sm"
-                          fullWidth
+                        <button
                           disabled={!downloadable}
                           onClick={() => handleDownload(download._id, 'stems')}
+                          className="flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg px-4 py-3 text-white transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                          <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                             <path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
                           </svg>
-                          {t('files.stems')}
-                        </Button>
+                          <span className="font-semibold">STEMS</span>
+                        </button>
                       )}
 
-                      <Button
-                        variant="primary"
-                        size="sm"
-                        fullWidth
+                      <button
                         disabled={!downloadable}
                         onClick={() => handleDownload(download._id, 'contract')}
+                        className="flex items-center justify-center gap-2 bg-matrix-green/10 hover:bg-matrix-green/20 border border-matrix-green/30 rounded-lg px-4 py-3 text-matrix-green transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                       >
-                        <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                           <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
                           <path fillRule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clipRule="evenodd" />
                         </svg>
-                        {t('files.contract')}
-                      </Button>
+                        <span className="font-semibold">LICENSE</span>
+                      </button>
                     </div>
                   </div>
 
